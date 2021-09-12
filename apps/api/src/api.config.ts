@@ -1,4 +1,4 @@
-import { ConfigFactory, registerAs } from '@nestjs/config';
+import { registerAs } from '@nestjs/config';
 
 import { Environment, tryGetEnv } from '@libs/common';
 
@@ -22,7 +22,7 @@ export type ApiConfig = {
     };
 };
 
-export const apiConfig = registerAs<ConfigFactory<ApiConfig>>('app', () => ({
+export const apiConfig = registerAs<ApiConfig>('app', () => ({
     environment: tryGetEnv('NODE_ENV') as Environment,
     projectName: tryGetEnv('PROJECT_NAME'),
     redisUrl: tryGetEnv('REDIS_URL'),

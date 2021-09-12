@@ -1,4 +1,4 @@
-import { registerAs, ConfigFactory } from '@nestjs/config';
+import { registerAs } from '@nestjs/config';
 
 import { Environment, tryGetEnv } from '@libs/common';
 
@@ -21,12 +21,9 @@ export type LoggerConfig = {
     readonly enableTraceId: boolean;
 };
 
-export const loggerConfig = registerAs<ConfigFactory<LoggerConfig>>(
-    'logger',
-    () => ({
-        databaseLogLevel: tryGetEnv('DATABASE_LOG_LEVEL') as LogLevel,
-        enableTraceId: Boolean(tryGetEnv('ENABLE_REQUEST_TRACING')),
-        environment: tryGetEnv('NODE_ENV') as Environment,
-        logLevel: tryGetEnv('LOG_LEVEL') as LogLevel,
-    }),
-);
+export const loggerConfig = registerAs<LoggerConfig>('logger', () => ({
+    databaseLogLevel: tryGetEnv('DATABASE_LOG_LEVEL') as LogLevel,
+    enableTraceId: Boolean(tryGetEnv('ENABLE_REQUEST_TRACING')),
+    environment: tryGetEnv('NODE_ENV') as Environment,
+    logLevel: tryGetEnv('LOG_LEVEL') as LogLevel,
+}));

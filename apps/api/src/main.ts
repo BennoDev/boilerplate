@@ -31,7 +31,7 @@ const context = 'Bootstrap:Api';
 const API_PREFIX = 'api';
 
 async function bootstrap(): Promise<void> {
-    const app = await NestFactory.create(ApiModule);
+    const app = await NestFactory.create(ApiModule, { bufferLogs: true });
     const logger = app.get(Logger);
     app.useLogger(new NestLoggerProxy(logger));
 
