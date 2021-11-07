@@ -2,6 +2,9 @@
 **/cache/*.ts.json
 temp
 
+# Docker volumes
+docker/volumes
+
 # environment files
 .env
 .env.*

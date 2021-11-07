@@ -13,4 +13,8 @@ export class Migration20210618212853 extends Migration {
             'alter table "User" add constraint "User_email_unique" unique ("email");',
         );
     }
+
+    async down(): Promise<void> {
+        this.addSql('drop table "User";');
+    }
 }

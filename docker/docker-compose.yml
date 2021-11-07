@@ -1,7 +1,7 @@
 version: '3.8'
 services:
     postgres:
-        image: sameersbn/postgresql:latest
+        image: postgres:13.4
         container_name: pgsql_${COMPOSE_PROJECT_NAME}
         ports:
             - 5432:5432
