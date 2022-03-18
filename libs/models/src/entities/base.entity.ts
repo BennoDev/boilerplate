@@ -7,6 +7,8 @@ import {
 } from '@mikro-orm/core';
 import * as uuid from 'uuid';
 
+export type BaseOptionalProps = 'createdAt' | 'updatedAt';
+
 /**
  * Base class for entities, provides identity and basic created / update auditing fields.
  */

@@ -1,6 +1,6 @@
-import { Property, Entity, Enum } from '@mikro-orm/core';
+import { Property, Entity, Enum, OptionalProps } from '@mikro-orm/core';
 
-import { BaseEntity } from './base.entity';
+import { BaseEntity, BaseOptionalProps } from './base.entity';
 
 export enum UserState {
     Registering = 'REGISTERING',
@@ -10,6 +10,8 @@ export enum UserState {
 
 @Entity()
 export class User extends BaseEntity<User> {
+    [OptionalProps]: BaseOptionalProps;
+
     @Property({ unique: true })
     email!: string;
 
