@@ -1,5 +1,5 @@
 import { anything, instance, mock, reset, when } from 'ts-mockito';
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { UserRepository, UserState } from '@libs/models';

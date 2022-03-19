@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { mock, instance, when, anything, reset } from 'ts-mockito';
-import * as bcrypt from 'bcrypt';
+import { hash } from 'bcrypt';
 
 import { Logger } from '@libs/logger';
 import { UserRepository } from '@libs/models';
@@ -57,7 +57,7 @@ describe('ChangePasswordHandler', () => {
                 newPassword: 'my_new_password',
             };
             const user = createTestUser({
-                password: bcrypt.hashSync(request.oldPassword, 10),
+                password: await hash(request.oldPassword, 10),
             });
 
             when(userRepository.findOneOrFail(anything())).thenResolve(user);
