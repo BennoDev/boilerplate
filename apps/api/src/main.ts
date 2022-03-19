@@ -172,5 +172,7 @@ function getRedisClient(config: ApiConfig): IORedis.Redis {
 bootstrap();
 
 type IORedis = IORedis.Redis & {
-    call: (...args: string[]) => Promise<number | string | Array<number | string>>;
+    call: (
+        ...args: string[]
+    ) => Promise<number | string | Array<number | string>>;
 };
