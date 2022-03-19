@@ -42,26 +42,6 @@ export class ModelsModule {
         };
     }
 
-    private static getDebugOptions(
-        environment: Environment,
-    ): LoggerNamespace[] | boolean {
-        return [
-            Environment.Local,
-            Environment.Development,
-            Environment.Test,
-        ].includes(environment)
-            ? true
-            : ['info'];
-    }
-
-    private static getHighlighter(
-        environment: Environment,
-    ): Highlighter | undefined {
-        return [Environment.Local, Environment.Test].includes(environment)
-            ? new SqlHighlighter()
-            : undefined;
-    }
-
     /**
      * Use this method to register a database module for an integration test.
      * The difference between this and `register` is that there is no
@@ -82,11 +62,39 @@ export class ModelsModule {
                     useFactory: (config: ModelsConfig) => ({
                         ...config,
                         entities,
+                        allowGlobalContext: true,
                     }),
                 }),
                 MikroOrmModule.forFeature(entities),
             ],
             exports: [MikroOrmModule],
         };
+    }
+
+    /**
+     * Configures debug (logging) options based on environment for MikroORM db queries.
+     */
+    private static getDebugOptions(
+        environment: Environment,
+    ): LoggerNamespace[] | boolean {
+        return [
+            Environment.Local,
+            Environment.Development,
+            Environment.Test,
+        ].includes(environment)
+            ? true
+            : ['info'];
+    }
+
+    /**
+     * Gets a highlighter for logged queries to increase readability.
+     * Disabled / enabled based on environment.
+     */
+    private static getHighlighter(
+        environment: Environment,
+    ): Highlighter | undefined {
+        return [Environment.Local, Environment.Test].includes(environment)
+            ? new SqlHighlighter()
+            : undefined;
     }
 }
