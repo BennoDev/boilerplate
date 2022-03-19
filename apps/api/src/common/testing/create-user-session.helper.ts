@@ -1,17 +1,18 @@
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
+import { mergeDeepRight } from 'ramda';
 
 import { UserState } from '@libs/models';
 
 import { UserSession } from '../common.types';
 
 export function createTestUserSession(
-    overrides?: Partial<UserSession>,
+    overrides: Partial<UserSession> = {},
 ): UserSession {
-    return {
-        userId: overrides?.userId || faker.datatype.uuid(),
-        email: overrides?.email || faker.internet.email(),
-        state: overrides?.state || UserState.Active,
-        firstName: overrides?.firstName || faker.name.firstName(),
-        lastName: overrides?.lastName || faker.name.lastName(),
-    };
+    return mergeDeepRight({
+        userId: faker.datatype.uuid(),
+        email: faker.internet.email(),
+        state: UserState.Active,
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+    }, overrides);
 }
