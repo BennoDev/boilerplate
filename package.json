@@ -94,7 +94,7 @@
         "@typescript-eslint/parser": "^5.15.0",
         "cross-env": "^7.0.3",
         "dotenv-safe": "^8.2.0",
-        "eslint": "^8.11.0",
+        "eslint": "^7.32.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.25.4",
         "jest": "^27.5.1",
