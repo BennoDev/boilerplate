@@ -68,20 +68,15 @@ export class Logger {
                     ? basePropsToRedact
                     : [...basePropsToRedact, ...secretsToRedact],
             },
-            prettyPrint: isLocalEnvironment
-                ? ({
-                      translateTime: 'yyyy-mm-dd HH:MM:ss',
-                      messageFormat: '[{context}]: {message}',
-                      base: null,
-                      // Doing this so DB queries are more readably printed in console
-                      customPrettifiers: {
-                          query: (value: unknown): string =>
-                              typeof value === 'string'
-                                  ? value
-                                  : JSON.stringify(value),
+            transport: isLocalEnvironment
+                ? {
+                      target: 'pino-pretty',
+                      options: {
+                          translateTime: 'yyyy-mm-dd HH:MM:ss',
+                          messageFormat: '[{context}]: {message}',
                       },
-                  } as pino.PrettyOptions)
-                : false,
+                  }
+                : undefined,
             level: this.config.logLevel,
             messageKey: 'message',
             mixin: this.metaMixin.bind(this),
@@ -92,14 +87,10 @@ export class Logger {
                 },
             },
             serializers: {
-                error: (value: unknown): unknown =>
-                    value instanceof Error
-                        ? {
-                              name: value.name,
-                              message: value.message,
-                              stack: value.stack,
-                          }
-                        : value,
+                error: pino.stdSerializers.err,
+                err: pino.stdSerializers.err,
+                failureReasons: (errors: Error[]) =>
+                    errors.map(pino.stdSerializers.err),
             },
         });
     }
@@ -182,7 +173,11 @@ export class Logger {
         this.logger.trace(meta, message);
     }
 
-    metaMixin(): { environment: string; traceId: string } {
+    /**
+     * Returns information that will be added to every single log message.
+     * These are generally supportive fields such as trace ids, or environment information.
+     */
+    private metaMixin(): { environment: string; traceId: string } {
         return {
             environment: this.formattedEnvironment,
             traceId: this.namespace.get(traceIdKey),
