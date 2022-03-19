@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NestFactory } from '@nestjs/core';
 import {
     INestApplication,
@@ -6,15 +5,14 @@ import {
     BadRequestException,
 } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as helmet from 'helmet';
+import helmet from 'helmet';
 import * as compression from 'compression';
-import * as rateLimit from 'express-rate-limit';
-import * as redisStore from 'rate-limit-redis';
-import throng from 'throng';
-import * as basicAuth from 'express-basic-auth';
+import rateLimit from 'express-rate-limit';
+import redisRateLimitStore from 'rate-limit-redis';
+import basicAuth from 'express-basic-auth';
 import * as session from 'express-session';
-import * as redis from 'redis';
 import * as connectRedis from 'connect-redis';
+import IORedis from 'ioredis';
 
 import { Environment, tryGetEnv } from '@libs/common';
 import { Logger, NestLoggerProxy } from '@libs/logger';
@@ -41,16 +39,14 @@ async function bootstrap(): Promise<void> {
     const config = app.get<ApiConfig>(apiConfig.KEY);
 
     if (!isProductionLikeEnvironment) {
-        logger.info('Initializing swagger', { context });
         addSwaggerDocs(app, logger, config);
     }
 
-    logger.info('Initializing middleware', { context });
-    addGlobalMiddleware(app, config);
+    addGlobalMiddleware(app, logger, config);
     addSessionMiddleware(app, logger, config);
 
     await app.listen(config.api.port);
-    logger.info(`App running on port [${config.api.port}]`, { context });
+    logger.info('App running', { context, port: config.api.port });
 }
 
 function addSwaggerDocs(
@@ -58,6 +54,8 @@ function addSwaggerDocs(
     logger: Logger,
     config: ApiConfig,
 ): void {
+    logger.info('Initializing Swagger...', { context });
+    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     const fullSwaggerPath = `${API_PREFIX}/${config.swagger.path!}`;
     const isLocalEnvironment = [Environment.Local, Environment.Test].includes(
         config.environment,
@@ -84,19 +82,32 @@ function addSwaggerDocs(
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup(fullSwaggerPath, app, document);
 
-    logger.info(`Swagger running at [${fullSwaggerPath}]`, { context });
+    logger.info('Swagger running', { context, path: fullSwaggerPath });
+    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 }
 
-function addGlobalMiddleware(app: INestApplication, config: ApiConfig): void {
+function addGlobalMiddleware(
+    app: INestApplication,
+    logger: Logger,
+    config: ApiConfig,
+): void {
+    logger.info('Initializing global middleware', { context });
+
+    // Due to a bug in the ioredis typings we have to use our own extended type.
+    const client = getRedisClient(config) as IORedis;
+
     app.enableCors({
         origin: config.api.allowedOrigins,
         methods: ['OPTIONS', 'HEAD', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         credentials: true,
     });
+
     app.use(
         rateLimit({
             max: config.api.rateLimit,
-            store: new redisStore({ redisURL: config.redisUrl }),
+            store: new redisRateLimitStore({
+                sendCommand: (...args: []) => client.call(...args),
+            }),
         }),
     );
     app.use(helmet());
@@ -123,9 +134,7 @@ function addSessionMiddleware(
     config: ApiConfig,
 ) {
     const RedisStore = connectRedis(session);
-    // Have to mark client as any because of an error in the typings of redis | connect-redis
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const client: any = redis.createClient({ url: config.redisUrl });
+    const client = getRedisClient(config);
 
     app.use(
         session({
@@ -136,6 +145,7 @@ function addSessionMiddleware(
                 maxAge: config.session.expiresIn,
                 secure: 'auto',
                 httpOnly: true,
+                sameSite: true,
             },
             store: new RedisStore({ client }),
         }),
@@ -144,16 +154,23 @@ function addSessionMiddleware(
     client.on('error', logger.error);
 }
 
-function run(): void {
-    if (isProductionLikeEnvironment) {
-        throng({
-            workers: process.env.WORKERS || 1,
-            start: bootstrap,
-            lifetime: Infinity,
+// Don't directly access, only access via `getRedisClient`
+let redisClient: IORedis.Redis | null = null;
+
+function getRedisClient(config: ApiConfig): IORedis.Redis {
+    if (!redisClient) {
+        redisClient = new IORedis({
+            host: config.redis.host,
+            port: config.redis.port,
+            password: config.redis.password,
         });
-    } else {
-        bootstrap();
     }
+
+    return redisClient;
 }
 
-run();
+bootstrap();
+
+type IORedis = IORedis.Redis & {
+    call: (...args: string[]) => Promise<number | string | Array<number | string>>;
+};
