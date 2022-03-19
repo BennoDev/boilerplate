@@ -46,8 +46,8 @@ const secretsToRedact = [
 
 @Injectable()
 export class Logger {
-    private logger: pino.Logger;
-    private formattedEnvironment: string;
+    private readonly logger: pino.Logger;
+    private readonly formattedEnvironment: string;
 
     constructor(
         @Inject(namespaceToken) private readonly namespace: Namespace,
