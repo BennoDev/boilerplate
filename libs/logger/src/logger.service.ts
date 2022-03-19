@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Namespace } from 'cls-hooked';
-import * as pino from 'pino';
+import pino from 'pino';
 
 import { Environment } from '@libs/common';
 
