@@ -60,7 +60,7 @@ describe('SessionSerializer', () => {
         await serializer.use(req, {} as any, mockNext);
 
         expect(mockNext).toHaveBeenCalled();
-        expect(req.user).toEqual(session);
+        expect(session).toMatchObject(req.user);
     });
 
     it('should continue if no cookie is present', async () => {
