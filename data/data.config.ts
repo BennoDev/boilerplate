@@ -1,22 +1,18 @@
-import { Options } from '@mikro-orm/core';
+import { EntityCaseNamingStrategy, Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { join } from 'path';
 import { config } from 'dotenv-safe';
 
-import { migrationFileName } from './data.utils';
+import { migrationFileName, toPascalCase } from './data.utils';
 import { MigrationGenerator } from './migration-generator';
 
-/**
- * The environments here have to be the same as mentioned in libs/common/common.constants.ts.
- */
+// The environments here have to be the same as mentioned in libs/common/common.constants.ts.
 const isRemoteEnvironment = ['staging', 'production'].includes(
     process.env.NODE_ENV as string,
 );
 
-/**
- * Get the env file according to current environment, if there is no specified, default to LOCAL
- */
+// Get the env file according to current environment, if there is no specified, default to LOCAL
 if (!isRemoteEnvironment) {
     config({
         example: join(__dirname, './.env.example'),
@@ -24,11 +20,12 @@ if (!isRemoteEnvironment) {
     });
 }
 
-type Target = 'migrations' | 'seeds_dev' | 'seeds_stag' | 'seeds_prod';
+type Target = 'migrations' | 'seeds-dev' | 'seeds-stag' | 'seeds-prod';
 const target: Target = (process.env.TARGET as Target) || 'migrations';
 
 const migrationsPath = join(__dirname, target.toLowerCase());
 const baseConfig: Options<PostgreSqlDriver> = {
+    namingStrategy: EntityCaseNamingStrategy,
     baseDir: process.cwd(),
     clientUrl: process.env.DATABASE_URL,
     driverOptions: {
@@ -45,11 +42,14 @@ const baseConfig: Options<PostgreSqlDriver> = {
         allOrNothing: false,
         disableForeignKeys: false,
         path: migrationsPath,
-        tableName: target.toLowerCase(),
+        // Change from kebab case to pascal case for the table name, for consistency with casing strategy.
+        // This would change seeds-dev to SeedsDev for example.
+        tableName: toPascalCase(target.toLowerCase()),
         snapshot: false,
         fileName: () => migrationFileName(migrationsPath),
         generator: MigrationGenerator,
     },
+    seeder: {},
     type: 'postgresql',
 };
 

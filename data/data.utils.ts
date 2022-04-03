@@ -49,7 +49,7 @@ export function migrationFileName(path: string) {
     let name = '';
     while (!name) {
         name = question(
-            '\nWhat is the name of the new migrations (kebab-cased)\n> ',
+            '\nWhat is the name of the new migration (kebab-cased)\n> ',
         )
             .replace(/\s+/gi, DELIMITER) // Replace any number of whitespace characters with the delimiter
             .toLowerCase();
@@ -61,7 +61,12 @@ export function migrationFileName(path: string) {
     // New line to find question in logs easier
     console.log();
 
-    return `${(counter || 1).toString().padStart(4, '0')}-${name}.migration`;
+    // Get the appropriate postfix for the generated file from the TARGET env, which should be set by the CLI command.
+    const fileType = process.env.TARGET?.includes('seeds')
+        ? 'seeds'
+        : 'migration';
+
+    return `${(counter || 1).toString().padStart(4, '0')}-${name}.${fileType}`;
 }
 
 /**
