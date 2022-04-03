@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 
 import { clearData, insertData } from '../data.utils';
 
-const entityName = 'User';
+const entityName = 'user';
 const path = `${__dirname}/users.json`;
 const data = JSON.parse(readFileSync(path).toString());
 
