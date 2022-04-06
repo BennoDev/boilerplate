@@ -1,12 +1,13 @@
-import { anything, instance, mock, reset, when } from 'ts-mockito';
 import { faker } from '@faker-js/faker';
 import { Test, TestingModule } from '@nestjs/testing';
+import { anything, instance, mock, reset, when } from 'ts-mockito';
 
 import { UserRepository, UserState } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
-import { SessionSerializer } from './session-serializer.middleware';
 import { createTestUserSession } from '../../common/testing';
+
+import { SessionSerializer } from './session-serializer.middleware';
 
 describe('SessionSerializer', () => {
     let module: TestingModule;

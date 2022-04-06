@@ -9,15 +9,32 @@ module.exports = {
         'plugin:import/warnings',
     ],
     rules: {
+        // TypeScript
+        '@typescript-eslint/no-use-before-define': 'off',
+        '@typescript-eslint/interface-name-prefix': 'off',
+        '@typescript-eslint/no-unused-vars': [
+            'warn',
+            { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+        ],
+        '@typescript-eslint/no-empty-function': 'warn',
+        '@typescript-eslint/ban-types': 'warn',
+        // Imports
+        'import/first': 'error',
+        'import/no-internal-modules': [
+            'error',
+            { allow: ['@mikro-orm/**', '@nestjs/**', 'rxjs/**'] },
+        ],
         'import/no-unused-modules': 'warn',
         'import/no-default-export': 'error',
         'import/order': [
             'error',
             {
+                alphabetize: { caseInsensitive: true, order: 'asc' },
                 groups: [
                     ['builtin', 'external'],
                     ['internal'],
-                    ['parent', 'sibling', 'index'],
+                    ['parent'],
+                    ['sibling', 'index'],
                 ],
                 pathGroups: [
                     {
@@ -29,17 +46,17 @@ module.exports = {
                 'newlines-between': 'always',
             },
         ],
-        'prefer-arrow-callback': 'warn',
-        '@typescript-eslint/no-use-before-define': 'off',
-        '@typescript-eslint/interface-name-prefix': 'off',
-        '@typescript-eslint/no-unused-vars': [
-            'warn',
-            { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+        // Comments
+        'capitalized-comments': [
+            'error',
+            'always',
+            { ignoreConsecutiveComments: true },
         ],
-        '@typescript-eslint/no-empty-function': 'warn',
-        '@typescript-eslint/ban-types': 'warn',
+        'multiline-comment-style': ['error', 'starred-block'],
+        'no-inline-comments': 'error',
+        'spaced-comment': ['error', 'always'],
+        // Misc
+        'prefer-arrow-callback': 'warn',
     },
-    env: {
-        node: true,
-    },
+    env: { node: true },
 };

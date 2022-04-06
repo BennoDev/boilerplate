@@ -26,7 +26,7 @@ export type ApiConfig = {
     };
 };
 
-export const apiConfig = registerAs<ApiConfig>('app', () => ({
+export const apiConfig = registerAs<ApiConfig>('api', () => ({
     environment: tryGetEnv('NODE_ENV') as Environment,
     projectName: tryGetEnv('PROJECT_NAME'),
     redis: {

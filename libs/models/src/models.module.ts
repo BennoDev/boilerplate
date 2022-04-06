@@ -1,16 +1,16 @@
+import { Highlighter, LoggerNamespace } from '@mikro-orm/core';
+import { AnyEntity, EntityClass } from '@mikro-orm/core/typings';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { DynamicModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { Highlighter, LoggerNamespace } from '@mikro-orm/core';
-import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { AnyEntity, EntityClass } from '@mikro-orm/core/typings';
 import { join } from 'path';
 
-import { Logger } from '@libs/logger';
 import { Environment } from '@libs/common';
+import { Logger } from '@libs/logger';
 
-import { ModelsConfig, modelsConfig } from './models.config';
 import { User } from './entities';
+import { ModelsConfig, modelsConfig } from './models.config';
 
 // Add all entities to this array, to register them and their repositories.
 const entities: Array<EntityClass<AnyEntity>> = [User];

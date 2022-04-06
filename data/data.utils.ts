@@ -51,7 +51,8 @@ export function migrationFileName(path: string) {
         name = question(
             '\nWhat is the name of the new migration (kebab-cased)\n> ',
         )
-            .replace(/\s+/gi, DELIMITER) // Replace any number of whitespace characters with the delimiter
+            // Replace any number of whitespace characters with the delimiter
+            .replace(/\s+/gi, DELIMITER)
             .toLowerCase();
     }
 
@@ -71,7 +72,7 @@ export function migrationFileName(path: string) {
 
 /**
  * Transforms text to PascalCase.
- * Courtesy of: https://stackoverflow.com/a/53952925
+ * Courtesy of https://stackoverflow.com/a/53952925
  * @param text Text that will be transformed.
  */
 export function toPascalCase(text: string) {

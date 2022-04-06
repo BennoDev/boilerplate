@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
-import { UserRepository, User, UserState } from '@libs/models';
-import { Logger } from '@libs/logger';
 import { IHandler } from '@libs/common';
+import { Logger } from '@libs/logger';
+import { UserRepository, User, UserState } from '@libs/models';
 
 import { UserStateNotAllowed } from '../auth.errors';
 import { LoginRequest } from '../dto';

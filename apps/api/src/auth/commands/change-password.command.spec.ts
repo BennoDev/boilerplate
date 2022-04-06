@@ -1,16 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { mock, instance, when, anything, reset } from 'ts-mockito';
 import { hash } from 'bcrypt';
+import { mock, instance, when, anything, reset } from 'ts-mockito';
 
 import { Logger } from '@libs/logger';
 import { UserRepository } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
+import { createTestUserSession } from '../../common/testing';
 import { InvalidOldPassword } from '../auth.errors';
 import { ChangePasswordRequest } from '../dto';
-import { ChangePasswordHandler } from './change-password.command';
-import { createTestUserSession } from '../../common/testing';
 import { HashService } from '../services';
+
+import { ChangePasswordHandler } from './change-password.command';
 
 describe('ChangePasswordHandler', () => {
     let module: TestingModule;

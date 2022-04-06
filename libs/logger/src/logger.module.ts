@@ -2,9 +2,9 @@ import { DynamicModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { createNamespace } from 'cls-hooked';
 
-import { Logger } from './logger.service';
 import { loggerConfig } from './logger.config';
 import { namespaceToken } from './logger.constants';
+import { Logger } from './logger.service';
 import { TraceMiddleware } from './trace.middleware';
 
 let registered = false;

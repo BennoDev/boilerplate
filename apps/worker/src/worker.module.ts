@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
 import { join } from 'path';
 
-import { LoggerModule } from '@libs/logger';
 import { Environment, tryGetEnv } from '@libs/common';
+import { LoggerModule } from '@libs/logger';
 
 import { workerConfig } from './worker.config';
 

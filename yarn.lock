@@ -1150,6 +1150,13 @@
     optional "0.1.4"
     tslib "2.3.1"
 
+"@nestjs/throttler@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/throttler/-/throttler-2.0.1.tgz#97611c4bdffdb1df00fcaeb7ac55fcfee1864bf6"
+  integrity sha512-ginW73rmOjBN27USuGidetEoa8VSGzxW3kEuCquEd5mETEtBfgIm4901b9tuLDnsczttE01imCHZ53J7+AuLJg==
+  dependencies:
+    md5 "^2.2.1"
+
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.4.tgz#d4b3549a5db5de2683e0c1071ab4f140904bbf69"
@@ -1424,13 +1431,6 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.51.tgz#cfd70924a25a3fd32b218e5e420e6897e1ac4f40"
   integrity sha512-CuPgU6f3eT/XgKKPqKd/gLZV1Xmvf1a2R5POBOGQa6uv82xpls89HU5zKeVoyR8XzHd1RGNOlQlvUe3CFkjWNQ==
 
-"@types/express-rate-limit@3":
-  version "3.3.5"
-  resolved "https://registry.yarnpkg.com/@types/express-rate-limit/-/express-rate-limit-3.3.5.tgz#947db7b9aed962c2f5eaca3c68fd0a739706e190"
-  integrity sha512-v6M28DcbdATYvzTN5lFJhN2EP6BgY8MbTskcKJ/m5bmGuzFKHfbEVXF3po8U8ivOyyeT5o6HV0janPlFBBN5yg==
-  dependencies:
-    "@types/express" "*"
-
 "@types/express-serve-static-core@^4.17.18":
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.19.tgz#00acfc1632e729acac4f1530e9e16f6dd1508a1d"
@@ -1569,15 +1569,6 @@
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
-
-"@types/rate-limit-redis@^1.7.4":
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/@types/rate-limit-redis/-/rate-limit-redis-1.7.4.tgz#6f6451481e067359522ff1e1fcf4009daf7418d0"
-  integrity sha512-TDsh9CJHHhx+sGHlqF6MI+PgEv91o/wQ67e2IR02ebYPzWQ8Rk0pcVY+WBy2pjxa+cAkPwjcOFDd21VToKaOzQ==
-  dependencies:
-    "@types/express-rate-limit" "3"
-    "@types/ioredis" "*"
-    "@types/redis" "^2.8.0"
 
 "@types/readline-sync@^1.4.4":
   version "1.4.4"
@@ -2599,6 +2590,11 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+charenc@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
+  integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
+
 chokidar@3.5.3, chokidar@^3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.3.tgz#1cf37c8707b932bd1af1ae22c0432e2acd1903bd"
@@ -2987,6 +2983,11 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.1, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+crypt@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/crypt/-/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
+  integrity sha1-iNf/fsDfuG9xPch7u0LQRNPmxBs=
 
 crypto-random-string@^2.0.0:
   version "2.0.0"
@@ -3683,11 +3684,6 @@ express-basic-auth@^1.2.1:
   integrity sha512-L6YQ1wQ/mNjVLAmK3AG1RK6VkokA1BIY6wmiH304Xtt/cLTps40EusZsU1Uop+v9lTDPxdtzbFmdXfFO3KEnwA==
   dependencies:
     basic-auth "^2.0.1"
-
-express-rate-limit@^6.3.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-6.3.0.tgz#253387ce4d36c9c2cc77c7c676068deb36cc0821"
-  integrity sha512-932Io1VGKjM3ppi7xW9sb1J5nVkEJSUiOtHw2oE+JyHks1e+AXuOBSXbJKM0mcXwEnW1TibJibQ455Ow1YFjfg==
 
 express-session@^1.17.2:
   version "1.17.2"
@@ -4544,6 +4540,11 @@ is-boolean-object@^1.1.0:
   integrity sha512-a7Uprx8UtD+HWdyYwnD1+ExtTgqQtD2k/1yJgtXP6wnMm8byhkoTZRl+95LLThpzNZJ5aEvi46cdH+ayMFRwmA==
   dependencies:
     call-bind "^1.0.0"
+
+is-buffer@~1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
+  integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
 
 is-callable@^1.1.4:
   version "1.2.3"
@@ -5613,6 +5614,15 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
+md5@^2.2.1:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/md5/-/md5-2.3.0.tgz#c3da9a6aae3a30b46b7b0c349b87b110dc3bda4f"
+  integrity sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==
+  dependencies:
+    charenc "0.0.2"
+    crypt "0.0.2"
+    is-buffer "~1.1.6"
+
 media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
@@ -5870,6 +5880,11 @@ neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
+
+nestjs-throttler-storage-redis@^0.1.18:
+  version "0.1.18"
+  resolved "https://registry.yarnpkg.com/nestjs-throttler-storage-redis/-/nestjs-throttler-storage-redis-0.1.18.tgz#708b1823d0f72f8d2340833047a04e2afd86b1f7"
+  integrity sha512-BHYYN+fuJcBi96J2sOoID8VcI5jbMKfQ63Zsi5dzJ6dEnK4hqc6w4MbSKsBd8P8+eCDsSNFmnnmdhLcz/WwAaQ==
 
 node-addon-api@^3.1.0:
   version "3.1.0"
@@ -6743,11 +6758,6 @@ range-parser@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
-
-rate-limit-redis@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/rate-limit-redis/-/rate-limit-redis-3.0.1.tgz#f12425417e03c1a4b9a7cdfa153113fd649a898c"
-  integrity sha512-L6yhOUBrAZ8VEMX9DwlM3X6hfm8yq+gBO4LoOW7+JgmNq59zE7QmLz4v5VnwYPvLeSh/e7PDcrzUI3UumJw1iw==
 
 raw-body@2.4.3:
   version "2.4.3"

@@ -1,16 +1,17 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { mock, instance, when, anything, reset } from 'ts-mockito';
 import { faker } from '@faker-js/faker';
-import { hash } from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { hash } from 'bcrypt';
+import { mock, instance, when, anything, reset } from 'ts-mockito';
 
 import { Logger } from '@libs/logger';
 import { UserRepository, UserState } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
 import { UserStateNotAllowed } from '../auth.errors';
-import { LoginHandler } from './login.command';
 import { HashService } from '../services';
+
+import { LoginHandler } from './login.command';
 
 describe('LoginHandler', () => {
     let module: TestingModule;

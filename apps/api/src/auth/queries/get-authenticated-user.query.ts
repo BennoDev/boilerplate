@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { UserRepository } from '@libs/models';
 import { IHandler } from '@libs/common';
+import { UserRepository } from '@libs/models';
 
-import { AuthenticatedUserResponse } from '../dto';
 import { UnexpectedNull } from '../../common/common.errors';
+import { AuthenticatedUserResponse } from '../dto';
 
 export type GetAuthenticatedUserQuery = {
     data: { userId: string };

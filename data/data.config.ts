@@ -1,8 +1,8 @@
 import { EntityCaseNamingStrategy, Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
-import { join } from 'path';
 import { config } from 'dotenv-safe';
+import { join } from 'path';
 
 import { migrationFileName, toPascalCase } from './data.utils';
 import { MigrationGenerator } from './migration-generator';
@@ -42,8 +42,10 @@ const baseConfig: Options<PostgreSqlDriver> = {
         allOrNothing: false,
         disableForeignKeys: false,
         path: migrationsPath,
-        // Change from kebab case to pascal case for the table name, for consistency with casing strategy.
-        // This would change seeds-dev to SeedsDev for example.
+        /*
+         * Change from kebab case to pascal case for the table name, for consistency with casing strategy.
+         * This would change seeds-dev to SeedsDev for example.
+         */
         tableName: toPascalCase(target.toLowerCase()),
         snapshot: false,
         fileName: () => migrationFileName(migrationsPath),
@@ -71,5 +73,6 @@ const dataConfig: Options<PostgreSqlDriver> = isRemoteEnvironment
     ? { ...baseConfig, ...remoteConfig }
     : { ...baseConfig, ...localConfig };
 
+// We need a default export here for the config, in order for MikroORM to process this.
 // eslint-disable-next-line import/no-default-export
 export default dataConfig;

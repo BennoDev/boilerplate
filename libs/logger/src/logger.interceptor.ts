@@ -5,9 +5,9 @@ import {
     CallHandler,
     HttpStatus,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { Request } from 'express';
 
 import { Logger } from '@libs/logger';
 

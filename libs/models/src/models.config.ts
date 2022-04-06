@@ -1,5 +1,5 @@
-import { MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { EntityCaseNamingStrategy } from '@mikro-orm/core';
+import { MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { registerAs } from '@nestjs/config';
 
 import { Environment, tryGetEnv } from '@libs/common';

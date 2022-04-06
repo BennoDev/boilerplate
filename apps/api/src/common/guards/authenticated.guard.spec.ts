@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { mock, when, instance, reset } from 'ts-mockito';
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
+import { Test, TestingModule } from '@nestjs/testing';
+import { mock, when, instance, reset } from 'ts-mockito';
 
 import { UserState } from '@libs/models';
 

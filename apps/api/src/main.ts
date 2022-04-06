@@ -1,24 +1,22 @@
-import { NestFactory } from '@nestjs/core';
 import {
     INestApplication,
     ValidationPipe,
     BadRequestException,
 } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import helmet from 'helmet';
 import * as compression from 'compression';
-import rateLimit from 'express-rate-limit';
-import redisRateLimitStore from 'rate-limit-redis';
+import * as connectRedis from 'connect-redis';
 import basicAuth from 'express-basic-auth';
 import * as session from 'express-session';
-import * as connectRedis from 'connect-redis';
-import IORedis from 'ioredis';
+import helmet from 'helmet';
 
 import { Environment, tryGetEnv } from '@libs/common';
 import { Logger, NestLoggerProxy } from '@libs/logger';
 
-import { ApiModule } from './api.module';
 import { apiConfig, ApiConfig } from './api.config';
+import { ApiModule } from './api.module';
+import { getRedisClient } from './redis.client';
 
 const isProductionLikeEnvironment = [
     Environment.Production,
@@ -55,8 +53,19 @@ function addSwaggerDocs(
     config: ApiConfig,
 ): void {
     logger.info('Initializing Swagger...', { context });
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
-    const fullSwaggerPath = `${API_PREFIX}/${config.swagger.path!}`;
+
+    /*
+     * We cast here to circumvent having to deal with these values being possibly undefined.
+     * If they are truly undefined this will be very easily notice by trying to access the docs.
+     * This is a case where the extra effort for type safety is not worth it.
+     */
+    const { path, username, password } = config.swagger as {
+        path: string;
+        username: string;
+        password: string;
+    };
+
+    const fullSwaggerPath = `${API_PREFIX}/${path}`;
     const isLocalEnvironment = [Environment.Local, Environment.Test].includes(
         config.environment,
     );
@@ -67,7 +76,7 @@ function addSwaggerDocs(
             basicAuth({
                 challenge: true,
                 users: {
-                    [config.swagger.username!]: config.swagger.password!,
+                    [username]: password,
                 },
             }),
         );
@@ -83,7 +92,6 @@ function addSwaggerDocs(
     SwaggerModule.setup(fullSwaggerPath, app, document);
 
     logger.info('Swagger running', { context, path: fullSwaggerPath });
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
 }
 
 function addGlobalMiddleware(
@@ -93,23 +101,12 @@ function addGlobalMiddleware(
 ): void {
     logger.info('Initializing global middleware', { context });
 
-    // Due to a bug in the ioredis typings we have to use our own extended type.
-    const client = getRedisClient(config) as IORedis;
-
     app.enableCors({
         origin: config.api.allowedOrigins,
         methods: ['OPTIONS', 'HEAD', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         credentials: true,
     });
 
-    app.use(
-        rateLimit({
-            max: config.api.rateLimit,
-            store: new redisRateLimitStore({
-                sendCommand: (...args: []) => client.call(...args),
-            }),
-        }),
-    );
     app.use(helmet());
     app.useGlobalPipes(
         new ValidationPipe({
@@ -154,25 +151,4 @@ function addSessionMiddleware(
     client.on('error', logger.error);
 }
 
-// Don't directly access, only access via `getRedisClient`
-let redisClient: IORedis.Redis | null = null;
-
-function getRedisClient(config: ApiConfig): IORedis.Redis {
-    if (!redisClient) {
-        redisClient = new IORedis({
-            host: config.redis.host,
-            port: config.redis.port,
-            password: config.redis.password,
-        });
-    }
-
-    return redisClient;
-}
-
 bootstrap();
-
-type IORedis = IORedis.Redis & {
-    call: (
-        ...args: string[]
-    ) => Promise<number | string | Array<number | string>>;
-};

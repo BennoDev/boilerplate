@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-import { UserRepository } from '@libs/models';
-import { Logger } from '@libs/logger';
 import { IHandler } from '@libs/common';
+import { Logger } from '@libs/logger';
+import { UserRepository } from '@libs/models';
 
-import { ChangePasswordRequest } from '../dto';
-import { InvalidOldPassword } from '../auth.errors';
 import { UserSession } from '../../common/common.types';
+import { InvalidOldPassword } from '../auth.errors';
+import { ChangePasswordRequest } from '../dto';
 import { HashService } from '../services';
 
 const context = 'ChangePasswordHandler';

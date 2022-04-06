@@ -1,7 +1,7 @@
 import { NestMiddleware, Inject, Injectable } from '@nestjs/common';
+import { Namespace } from 'cls-hooked';
 import { Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
-import { Namespace } from 'cls-hooked';
 
 import {
     namespaceToken,

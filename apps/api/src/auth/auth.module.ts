@@ -1,9 +1,10 @@
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 
-import { AuthController } from './auth.controller';
 import { CommonModule } from '../common/common.module';
-import { SessionSerializer } from './middleware';
+
+import { AuthController } from './auth.controller';
 import { LoginHandler, ChangePasswordHandler } from './commands';
+import { SessionSerializer } from './middleware';
 import { GetAuthenticatedUserHandler } from './queries';
 import { HashService } from './services';
 
