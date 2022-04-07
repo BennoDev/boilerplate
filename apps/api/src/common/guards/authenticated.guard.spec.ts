@@ -1,6 +1,5 @@
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
-import { Test, TestingModule } from '@nestjs/testing';
 import { mock, when, instance, reset } from 'ts-mockito';
 
 import { UserState } from '@libs/models';
@@ -8,22 +7,10 @@ import { UserState } from '@libs/models';
 import { AuthenticatedGuard } from './authenticated.guard';
 
 describe('AuthenticationGuard', () => {
-    let module: TestingModule;
-    let guard: AuthenticatedGuard;
     const context = mock<ExecutionContext>();
     const argumentsHost = mock<HttpArgumentsHost>();
 
-    beforeAll(async () => {
-        module = await Test.createTestingModule({
-            providers: [AuthenticatedGuard],
-        }).compile();
-
-        guard = module.get(AuthenticatedGuard);
-    });
-
-    afterAll(async () => {
-        await module.close();
-    });
+    const guard = new AuthenticatedGuard();
 
     afterEach(() => {
         reset(context);

@@ -1,4 +1,3 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { hash } from 'bcrypt';
 import { mock, instance, when, anything, reset } from 'ts-mockito';
 
@@ -14,37 +13,14 @@ import { HashService } from '../services';
 import { ChangePasswordHandler } from './change-password.command';
 
 describe('ChangePasswordHandler', () => {
-    let module: TestingModule;
-    let handler: ChangePasswordHandler;
-
     const userRepository = mock(UserRepository);
     const hashService = mock(HashService);
 
-    beforeAll(async () => {
-        module = await Test.createTestingModule({
-            providers: [
-                ChangePasswordHandler,
-                {
-                    provide: HashService,
-                    useValue: instance(hashService),
-                },
-                {
-                    provide: Logger,
-                    useValue: instance(mock(Logger)),
-                },
-                {
-                    provide: UserRepository,
-                    useValue: instance(userRepository),
-                },
-            ],
-        }).compile();
-
-        handler = module.get(ChangePasswordHandler);
-    });
-
-    afterAll(async () => {
-        await module.close();
-    });
+    const handler = new ChangePasswordHandler(
+        instance(userRepository),
+        instance(hashService),
+        instance(mock(Logger)),
+    );
 
     afterEach(() => {
         reset(userRepository);

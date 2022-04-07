@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { UnauthorizedException } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
 import { hash } from 'bcrypt';
 import { mock, instance, when, anything, reset } from 'ts-mockito';
 
@@ -14,37 +13,14 @@ import { HashService } from '../services';
 import { LoginHandler } from './login.command';
 
 describe('LoginHandler', () => {
-    let module: TestingModule;
-    let handler: LoginHandler;
-
     const userRepository = mock(UserRepository);
     const hashService = mock(HashService);
 
-    beforeAll(async () => {
-        module = await Test.createTestingModule({
-            providers: [
-                LoginHandler,
-                {
-                    provide: Logger,
-                    useValue: instance(mock(Logger)),
-                },
-                {
-                    provide: UserRepository,
-                    useValue: instance(userRepository),
-                },
-                {
-                    provide: HashService,
-                    useValue: instance(hashService),
-                },
-            ],
-        }).compile();
-
-        handler = module.get(LoginHandler);
-    });
-
-    afterAll(async () => {
-        await module.close();
-    });
+    const handler = new LoginHandler(
+        instance(userRepository),
+        instance(hashService),
+        instance(mock(Logger)),
+    );
 
     afterEach(() => {
         reset(userRepository);

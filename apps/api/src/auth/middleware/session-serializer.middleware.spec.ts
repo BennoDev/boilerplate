@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker';
-import { Test, TestingModule } from '@nestjs/testing';
 import { anything, instance, mock, reset, when } from 'ts-mockito';
 
 import { UserRepository, UserState } from '@libs/models';
@@ -10,28 +9,9 @@ import { createTestUserSession } from '../../common/testing';
 import { SessionSerializer } from './session-serializer.middleware';
 
 describe('SessionSerializer', () => {
-    let module: TestingModule;
-    let serializer: SessionSerializer;
-
     const userRepository = mock(UserRepository);
 
-    beforeAll(async () => {
-        module = await Test.createTestingModule({
-            providers: [
-                SessionSerializer,
-                {
-                    provide: UserRepository,
-                    useValue: instance(userRepository),
-                },
-            ],
-        }).compile();
-
-        serializer = module.get(SessionSerializer);
-    });
-
-    afterAll(async () => {
-        await module.close();
-    });
+    const serializer = new SessionSerializer(instance(userRepository));
 
     afterEach(() => {
         reset(userRepository);
