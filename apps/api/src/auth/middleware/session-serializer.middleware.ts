@@ -9,7 +9,6 @@ import { UserSession } from '../../common/common.types';
 export class SessionSerializer implements NestMiddleware {
     constructor(private readonly userRepository: UserRepository) {}
 
-    // Overwriting session because the merged interfaces are broken in our CI/CD.
     async use(
         req: {
             user: UserSession | null;
