@@ -41,10 +41,10 @@ export class LoggerInterceptor implements NestInterceptor {
                 this.logger.warn(formatLogMessage, {
                     context,
                     status:
-                        error?.response?.statusCode ||
+                        error?.response?.statusCode ??
                         HttpStatus.INTERNAL_SERVER_ERROR,
-                    code: error?.response?.error || 'Unknown error',
-                    description: error?.response?.message || 'No description',
+                    code: error?.response?.error ?? 'Unknown error',
+                    description: error?.response?.message ?? 'No description',
                     duration: `${this.calculateRequestDuration(startTime)}ms`,
                     params: req.params,
                     query: req.query,

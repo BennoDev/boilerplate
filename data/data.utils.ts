@@ -67,7 +67,7 @@ export function migrationFileName(path: string) {
         ? 'seeds'
         : 'migration';
 
-    return `${(counter || 1).toString().padStart(4, '0')}-${name}.${fileType}`;
+    return `${(counter ?? 1).toString().padStart(4, '0')}-${name}.${fileType}`;
 }
 
 /**

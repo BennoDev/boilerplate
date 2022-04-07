@@ -9,7 +9,7 @@ export class MigrationGenerator extends TSMigrationGenerator {
     ): string {
         return super.generateMigrationFile(
             // MIGRATION_NAME environment variable should have been set before this point, in the `migrationFileName` function.
-            toPascalCase(process.env.MIGRATION_NAME || className),
+            toPascalCase(process.env.MIGRATION_NAME ?? className),
             diff,
         );
     }

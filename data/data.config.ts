@@ -21,7 +21,7 @@ if (!isRemoteEnvironment) {
 }
 
 type Target = 'migrations' | 'seeds-dev' | 'seeds-stag' | 'seeds-prod';
-const target: Target = (process.env.TARGET as Target) || 'migrations';
+const target: Target = (process.env.TARGET as Target) ?? 'migrations';
 
 const migrationsPath = join(__dirname, target.toLowerCase());
 const baseConfig: Options<PostgreSqlDriver> = {
