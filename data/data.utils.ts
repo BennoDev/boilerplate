@@ -31,6 +31,7 @@ export async function clearData(knex: Knex, entityName: string): Promise<void> {
 /**
  * Allows us to properly name our migrations rather than the default Migration<TimeStamp> MikroORM uses.
  * Courtesy of https://github.com/mikro-orm/mikro-orm/issues/914#issuecomment-815129660.
+ *
  * @param path Path where the migration will be located.
  */
 export function migrationFileName(path: string) {
@@ -73,6 +74,7 @@ export function migrationFileName(path: string) {
 /**
  * Transforms text to PascalCase.
  * Courtesy of https://stackoverflow.com/a/53952925
+ *
  * @param text Text that will be transformed.
  */
 export function toPascalCase(text: string) {

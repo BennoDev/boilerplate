@@ -59,6 +59,7 @@ export class LoggerInterceptor implements NestInterceptor {
 
     /**
      * Calculates the amount of time it took to handle a request.
+     *
      * @param startTime UNIX timestamp of when the request came in.
      */
     private calculateRequestDuration(startTime: number): number {

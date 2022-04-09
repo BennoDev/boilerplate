@@ -14,9 +14,10 @@ export class ContextStore {
     constructor(private readonly storage: AsyncLocalStorage<Context>) {}
 
     /**
-     * Gets the data for the currently active context. If no context is active an error will be thrown.
+     * Gets the data for the currently active context.
+     * If no context is active an error will be thrown.
+     *
      * @throws {@link NoContextFound}
-     * @returns Data for the current context.
      */
     getContext(): Context {
         const context = this.storage.getStore();
@@ -28,8 +29,8 @@ export class ContextStore {
     }
 
     /**
-     * Gets the data for the currently active context. If no context is active, it will return an empty object.
-     * @returns Data for the current context.
+     * Gets the data for the currently active context.
+     * If no context is active, it will return an empty object.
      */
     getContextOrDefault(): Context | Record<string, never> {
         return this.storage.getStore() || {};

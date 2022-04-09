@@ -97,6 +97,7 @@ export class Logger {
     /**
      * Highest level of logging, use this in case something absolutely critical happens that
      * basically means the entire platform / application **can not function and can not automatically recover**.
+     *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
@@ -109,6 +110,7 @@ export class Logger {
      *
      * For example:
      * Connection lost to a database or a redis instance.
+     *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
@@ -123,6 +125,7 @@ export class Logger {
      * - Most business exceptions (for example user not found, or user doesnt have access to operation / resource).
      * - External API is not responding.
      * - Database query errors / slow queries.
+     *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
@@ -137,6 +140,7 @@ export class Logger {
      * For example:
      * - General application startup information
      * - HTTP request logging
+     *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
@@ -151,6 +155,7 @@ export class Logger {
      * For example:
      * - Logs that expose useful information to follow the flows of business logic during development, and to serve as an aid to pinpoint where the application breaks.
      * - Database query logs (succesful queries).
+     *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
@@ -160,6 +165,7 @@ export class Logger {
 
     /**
      * Lowest level of logging, only for absolute details. In most cases, prefer `debug`.
+     *
      * @param message Message for this log
      * @param meta Extra useful information for this log²²
      */
@@ -168,7 +174,7 @@ export class Logger {
     }
 
     /**
-     * Returns information that will be added to every single log message.
+     * Returns information that should be added to every single log message.
      * These are generally supportive fields such as trace ids, or environment information.
      */
     private metaMixin(): { environment: string; traceId?: string } {
