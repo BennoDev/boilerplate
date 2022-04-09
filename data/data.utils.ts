@@ -21,9 +21,9 @@ export async function clearData(knex: Knex, entityName: string): Promise<void> {
     console.info(`Truncating table "${entityName}": started`);
     try {
         await knex.raw(`truncate table "${entityName}" cascade`);
-        console.info(`Inserting data for ${entityName}: success`);
+        console.info(`Truncating data for ${entityName}: success`);
     } catch (error) {
-        console.error(`Inserting data for ${entityName}: failed`);
+        console.error(`Truncating data for ${entityName}: failed`);
         throw error;
     }
 }
