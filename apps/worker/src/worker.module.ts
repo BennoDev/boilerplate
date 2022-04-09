@@ -25,6 +25,6 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
     : { envFilePath: [join(__dirname, '.env')], ...baseConfigOptions };
 
 @Module({
-    imports: [ConfigModule.forRoot(configOptions), LoggerModule.register()],
+    imports: [ConfigModule.forRoot(configOptions), LoggerModule],
 })
 export class WorkerModule {}

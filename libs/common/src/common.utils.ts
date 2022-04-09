@@ -3,7 +3,6 @@ import { MissingEnvVar } from './common.errors';
 /**
  * Tries to get an environment variable with the given name.
  * Throws an error if the variable was not found.
- *
  * @param varName Name of the environment variable to look for
  * @returns Value of the environment variable
  */
@@ -18,7 +17,7 @@ export function tryGetEnv(varName: string): string {
 
 /**
  * Awaits an array of promises and groups them by fulfilled and rejected.
- * @param results List of promise that will be awaited
+ * @param promises List of promise that will be awaited
  * @returns Record of fulfilled and rejected promises
  */
 export const allSettled = async <Result = unknown>(

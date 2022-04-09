@@ -44,7 +44,7 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
                 ),
             }),
         }),
-        LoggerModule.register(),
+        LoggerModule,
         AuthModule,
     ],
     providers: [

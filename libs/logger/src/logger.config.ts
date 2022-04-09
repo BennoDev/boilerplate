@@ -18,12 +18,12 @@ export type LoggerConfig = {
      * Enable middleware that will add trace id's to all incoming requests, and subsequent logs within the request cycle.
      * In most cases this enabled is the desired behaviour, however, for hosted / background services, this could be disabled
      */
-    readonly enableTraceId: boolean;
+    readonly enableRequestTracing: boolean;
 };
 
 export const loggerConfig = registerAs<LoggerConfig>('logger', () => ({
     databaseLogLevel: tryGetEnv('DATABASE_LOG_LEVEL') as LogLevel,
-    enableTraceId: Boolean(tryGetEnv('ENABLE_REQUEST_TRACING')),
+    enableRequestTracing: Boolean(tryGetEnv('ENABLE_REQUEST_TRACING')),
     environment: tryGetEnv('NODE_ENV') as Environment,
     logLevel: tryGetEnv('LOG_LEVEL') as LogLevel,
 }));

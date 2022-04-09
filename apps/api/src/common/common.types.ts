@@ -1,7 +1,7 @@
 import { UserState } from '@libs/models';
 
 /**
- * Deserialized session for a request.
+ * Deserialized user session for a request.
  */
 export type UserSession = {
     userId: string;

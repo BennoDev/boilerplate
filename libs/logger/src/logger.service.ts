@@ -1,11 +1,10 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Namespace } from 'cls-hooked';
 import pino from 'pino';
 
 import { Environment } from '@libs/common';
 
+import { ContextStore } from './context-store.service';
 import { LoggerConfig, loggerConfig } from './logger.config';
-import { namespaceToken, traceIdKey } from './logger.constants';
 
 type LogMeta = Record<string, unknown> & {
     /**
@@ -50,9 +49,9 @@ export class Logger {
     private readonly formattedEnvironment: string;
 
     constructor(
-        @Inject(namespaceToken) private readonly namespace: Namespace,
         @Inject(loggerConfig.KEY)
         private readonly config: LoggerConfig,
+        private readonly contextStore: ContextStore,
     ) {
         this.formattedEnvironment = this.config.environment.toUpperCase();
 
@@ -98,7 +97,6 @@ export class Logger {
     /**
      * Highest level of logging, use this in case something absolutely critical happens that
      * basically means the entire platform / application **can not function and can not automatically recover**.
-     *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
@@ -111,7 +109,6 @@ export class Logger {
      *
      * For example:
      * Connection lost to a database or a redis instance.
-     *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
@@ -126,7 +123,6 @@ export class Logger {
      * - Most business exceptions (for example user not found, or user doesnt have access to operation / resource).
      * - External API is not responding.
      * - Database query errors / slow queries.
-     *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
@@ -141,7 +137,6 @@ export class Logger {
      * For example:
      * - General application startup information
      * - HTTP request logging
-     *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
@@ -156,7 +151,6 @@ export class Logger {
      * For example:
      * - Logs that expose useful information to follow the flows of business logic during development, and to serve as an aid to pinpoint where the application breaks.
      * - Database query logs (succesful queries).
-     *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
@@ -167,7 +161,7 @@ export class Logger {
     /**
      * Lowest level of logging, only for absolute details. In most cases, prefer `debug`.
      * @param message Message for this log
-     * @param meta Extra useful information for this log
+     * @param meta Extra useful information for this log²²
      */
     trace(message: string, meta: LogMeta): void {
         this.logger.trace(meta, message);
@@ -177,10 +171,10 @@ export class Logger {
      * Returns information that will be added to every single log message.
      * These are generally supportive fields such as trace ids, or environment information.
      */
-    private metaMixin(): { environment: string; traceId: string } {
+    private metaMixin(): { environment: string; traceId?: string } {
         return {
             environment: this.formattedEnvironment,
-            traceId: this.namespace.get(traceIdKey),
+            traceId: this.contextStore.getContextOrDefault()?.traceId,
         };
     }
 }
