@@ -47,12 +47,6 @@ module.exports = {
             },
         ],
         // Comments
-        'capitalized-comments': [
-            'error',
-            'always',
-            { ignoreConsecutiveComments: true },
-        ],
-        'multiline-comment-style': ['error', 'starred-block'],
         'no-inline-comments': 'error',
         'spaced-comment': ['error', 'always'],
         // Misc
