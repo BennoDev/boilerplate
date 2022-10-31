@@ -95,7 +95,7 @@ export class Logger {
     }
 
     /**
-     * Highest level of logging, use this in case something absolutely critical happens that
+     * Most urgent level of logging, use this in case something absolutely critical happens that
      * basically means the entire platform / application **can not function and can not automatically recover**.
      *
      * @param message Message for this log

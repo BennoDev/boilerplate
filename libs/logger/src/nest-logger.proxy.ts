@@ -25,18 +25,22 @@ export class NestLoggerProxy implements NestLoggerService {
     log(message: string, context?: string): void {
         this.logger.info(message, { context: context ?? defaultContext });
     }
+
     error(message: string, trace?: string, context?: string): void {
         this.logger.error(message, {
             context: context ?? defaultContext,
             error: trace,
         });
     }
+
     warn(message: string, context?: string): void {
         this.logger.warn(message, { context: context ?? defaultContext });
     }
+
     debug?(message: string, context?: string): void {
         this.logger.debug(message, { context: context ?? defaultContext });
     }
+
     verbose?(message: string, context?: string): void {
         this.logger.trace(message, { context: context ?? defaultContext });
     }
