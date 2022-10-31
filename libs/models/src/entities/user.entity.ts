@@ -12,7 +12,7 @@ export enum UserState {
 
 @Entity({ customRepository: () => UserRepository })
 export class User extends BaseEntity<User> {
-    [OptionalProps]: BaseOptionalProps;
+    [OptionalProps]!: BaseOptionalProps;
 
     @Property({ unique: true })
     email!: string;
