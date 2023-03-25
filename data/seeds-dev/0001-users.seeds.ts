@@ -1,5 +1,6 @@
+import { readFileSync } from 'node:fs';
+
 import { Migration } from '@mikro-orm/migrations';
-import { readFileSync } from 'fs';
 
 import { clearData, insertData } from '../data.utils';
 

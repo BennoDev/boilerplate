@@ -1,15 +1,16 @@
-import { EntityCaseNamingStrategy, Options } from '@mikro-orm/core';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { join } from 'node:path';
+
+import { EntityCaseNamingStrategy, type Options } from '@mikro-orm/core';
+import { type PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { config } from 'dotenv-safe';
-import { join } from 'path';
 
 import { migrationFileName, toPascalCase } from './data.utils';
 import { MigrationGenerator } from './migration-generator';
 
 // The environments here have to be the same as mentioned in libs/common/common.constants.ts.
 const isRemoteEnvironment = ['staging', 'production'].includes(
-    process.env.NODE_ENV as string,
+    process.env.NODE_ENV!,
 );
 
 // Get the env file according to current environment, if there is no specified, default to LOCAL

@@ -1,12 +1,13 @@
+import { AsyncLocalStorage } from 'node:async_hooks';
+
 import {
     Global,
     Inject,
-    MiddlewareConsumer,
+    type MiddlewareConsumer,
     Module,
-    NestModule,
+    type NestModule,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AsyncLocalStorage } from 'async_hooks';
 
 import { ContextStoreMiddleware } from './context-store.middleware';
 import { ContextStore } from './context-store.service';

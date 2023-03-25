@@ -1,5 +1,6 @@
-import { readdirSync } from 'fs';
-import { Knex } from 'knex';
+import { readdirSync } from 'node:fs';
+
+import { type Knex } from 'knex';
 import { question } from 'readline-sync';
 
 export async function insertData(

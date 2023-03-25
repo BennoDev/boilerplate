@@ -1,14 +1,15 @@
+import { join } from 'node:path';
+
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
+import { ConfigModule, type ConfigModuleOptions } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
-import { join } from 'path';
 
 import { Environment, tryGetEnv } from '@libs/common';
 import { LoggerInterceptor, LoggerModule } from '@libs/logger';
 
-import { ApiConfig, apiConfig } from './api.config';
+import { type ApiConfig, apiConfig } from './api.config';
 import { AuthModule } from './auth/auth.module';
 import { getRedisClient } from './redis.client';
 

@@ -1,4 +1,4 @@
-import { LogLevel } from './logger.types';
+import { type LogLevel } from './logger.types';
 
 /**
  * Key for incoming request's trace id header.

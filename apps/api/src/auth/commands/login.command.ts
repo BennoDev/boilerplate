@@ -1,18 +1,18 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
-import { IHandler } from '@libs/common';
+import { type IHandler } from '@libs/common';
 import { Logger } from '@libs/logger';
-import { UserRepository, User, UserState } from '@libs/models';
+import { UserRepository, type User, UserState } from '@libs/models';
 
-import { UserStateNotAllowed } from '../auth.errors';
-import { LoginRequest } from '../dto';
+import { InvalidUserState } from '../auth.errors';
+import { type LoginRequest } from '../dto';
 import { HashService } from '../services';
 
 const context = 'LoginHandler';
 
-export type LoginCommand = {
+export interface LoginCommand {
     data: LoginRequest;
-};
+}
 
 @Injectable()
 export class LoginHandler implements IHandler<LoginCommand> {
@@ -36,7 +36,7 @@ export class LoginHandler implements IHandler<LoginCommand> {
                 state: user.state,
                 allowedStates: [UserState.Active],
             });
-            throw new UserStateNotAllowed();
+            throw new InvalidUserState();
         }
 
         const isValidPassword = await this.hashService.compare(

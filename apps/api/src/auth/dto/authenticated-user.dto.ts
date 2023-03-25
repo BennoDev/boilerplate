@@ -1,4 +1,4 @@
-import { UserState } from '@libs/models';
+import { type UserState } from '@libs/models';
 
 import { BaseEntityResponse } from '../../common/dto';
 

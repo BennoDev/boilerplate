@@ -1,6 +1,7 @@
+import { join } from 'node:path';
+
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
-import { join } from 'path';
+import { ConfigModule, type ConfigModuleOptions } from '@nestjs/config';
 
 import { Environment, tryGetEnv } from '@libs/common';
 import { LoggerModule } from '@libs/logger';

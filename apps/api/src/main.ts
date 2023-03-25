@@ -1,5 +1,5 @@
 import {
-    INestApplication,
+    type INestApplication,
     ValidationPipe,
     BadRequestException,
 } from '@nestjs/common';
@@ -14,7 +14,7 @@ import helmet from 'helmet';
 import { Environment, tryGetEnv } from '@libs/common';
 import { Logger, NestLoggerProxy } from '@libs/logger';
 
-import { apiConfig, ApiConfig } from './api.config';
+import { apiConfig, type ApiConfig } from './api.config';
 import { ApiModule } from './api.module';
 import { getRedisClient } from './redis.client';
 

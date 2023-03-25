@@ -1,9 +1,10 @@
-import { NestMiddleware, Injectable } from '@nestjs/common';
-import { AsyncLocalStorage } from 'async_hooks';
-import { Request, Response } from 'express';
+import { AsyncLocalStorage } from 'node:async_hooks';
+
+import { type NestMiddleware, Injectable } from '@nestjs/common';
+import { type Request, type Response } from 'express';
 import { v4 as uuid } from 'uuid';
 
-import { Context } from './context-store.service';
+import { type Context } from './context-store.service';
 import { traceIdHeaderName } from './logger.constants';
 
 /**

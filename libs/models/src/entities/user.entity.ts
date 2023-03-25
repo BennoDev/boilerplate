@@ -2,7 +2,7 @@ import { Property, Entity, Enum, OptionalProps } from '@mikro-orm/core';
 
 import { UserRepository } from '../repositories/user.repository';
 
-import { BaseEntity, BaseOptionalProps } from './base.entity';
+import { BaseEntity, type BaseOptionalProps } from './base.entity';
 
 export enum UserState {
     Registering = 'REGISTERING',

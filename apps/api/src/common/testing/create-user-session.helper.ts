@@ -3,7 +3,7 @@ import { mergeDeepRight } from 'ramda';
 
 import { UserState } from '@libs/models';
 
-import { UserSession } from '../common.types';
+import { type UserSession } from '../common.types';
 
 export function createTestUserSession(
     overrides: Partial<UserSession> = {},

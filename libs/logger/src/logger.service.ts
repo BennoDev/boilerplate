@@ -180,7 +180,7 @@ export class Logger {
     private metaMixin(): { environment: string; traceId?: string } {
         return {
             environment: this.formattedEnvironment,
-            traceId: this.contextStore.getContextOrDefault()?.traceId,
+            traceId: this.contextStore.getContextOrDefault().traceId,
         };
     }
 }

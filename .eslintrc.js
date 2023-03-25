@@ -1,11 +1,17 @@
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint'],
+    parserOptions: {
+        project: './tsconfig.json',
+        emitDecoratorMetadata: true,
+    },
+    plugins: ['@typescript-eslint', 'unicorn'],
     extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'plugin:@typescript-eslint/strict',
         'plugin:import/warnings',
     ],
     rules: {
@@ -18,6 +24,13 @@ module.exports = {
         ],
         '@typescript-eslint/no-empty-function': 'warn',
         '@typescript-eslint/ban-types': 'warn',
+        '@typescript-eslint/consistent-type-imports': [
+            'error',
+            {
+                prefer: 'type-imports',
+                fixStyle: 'inline-type-imports',
+            },
+        ],
         // Imports
         'import/first': 'error',
         'import/no-internal-modules': [
@@ -31,7 +44,8 @@ module.exports = {
             {
                 alphabetize: { caseInsensitive: true, order: 'asc' },
                 groups: [
-                    ['builtin', 'external'],
+                    ['builtin'],
+                    ['external'],
                     ['internal'],
                     ['parent'],
                     ['sibling', 'index'],
@@ -46,6 +60,8 @@ module.exports = {
                 'newlines-between': 'always',
             },
         ],
+        // Unicorn
+        'unicorn/prefer-node-protocol': 'error',
         // Comments
         'no-inline-comments': 'error',
         'spaced-comment': ['error', 'always'],

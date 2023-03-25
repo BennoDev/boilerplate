@@ -1,4 +1,4 @@
-import { Injectable, LoggerService as NestLoggerService } from '@nestjs/common';
+import { Injectable, type LoggerService as NestLoggerService } from '@nestjs/common';
 
 import { Logger } from './logger.service';
 

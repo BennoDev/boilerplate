@@ -7,7 +7,7 @@ import { createTestUser } from '@libs/testing';
 
 import { createTestUserSession } from '../../common/testing';
 import { InvalidOldPassword } from '../auth.errors';
-import { ChangePasswordRequest } from '../dto';
+import { type ChangePasswordRequest } from '../dto';
 import { HashService } from '../services';
 
 import { ChangePasswordHandler } from './change-password.command';

@@ -1,9 +1,9 @@
-import { NestMiddleware, Injectable } from '@nestjs/common';
-import { Response, Request } from 'express';
+import { type NestMiddleware, Injectable } from '@nestjs/common';
+import { type Response, type Request } from 'express';
 
 import { UserRepository } from '@libs/models';
 
-import { UserSession } from '../../common/common.types';
+import { type UserSession } from '../../common/common.types';
 
 @Injectable()
 export class SessionSerializer implements NestMiddleware {

@@ -1,12 +1,12 @@
-import { UserState } from '@libs/models';
+import { type UserState } from '@libs/models';
 
 /**
  * Deserialized user session for a request.
  */
-export type UserSession = {
+export interface UserSession {
     userId: string;
     email: string;
     state: UserState;
     firstName: string;
     lastName: string;
-};
+}

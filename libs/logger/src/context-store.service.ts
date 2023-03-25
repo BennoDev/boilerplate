@@ -1,5 +1,6 @@
+import { AsyncLocalStorage } from 'node:async_hooks';
+
 import { Injectable } from '@nestjs/common';
-import { AsyncLocalStorage } from 'async_hooks';
 
 import { NoContextFound } from './logger.errors';
 
@@ -7,7 +8,7 @@ import { NoContextFound } from './logger.errors';
  * Represents the continuous context for a given HTTP request,
  * or a given job being processed by a queue, etc...
  */
-export type Context = { traceId: string };
+export interface Context { traceId: string }
 
 @Injectable()
 export class ContextStore {

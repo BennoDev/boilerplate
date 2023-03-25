@@ -7,7 +7,7 @@ import { Logger } from '@libs/logger';
 import { UserRepository, UserState } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
-import { UserStateNotAllowed } from '../auth.errors';
+import { InvalidUserState } from '../auth.errors';
 import { HashService } from '../services';
 
 import { LoginHandler } from './login.command';
@@ -66,7 +66,7 @@ describe('LoginHandler', () => {
                 handler.execute({
                     data: { email, password },
                 }),
-            ).rejects.toThrowError(UserStateNotAllowed);
+            ).rejects.toThrowError(InvalidUserState);
         });
 
         it('should throw an error when the passwords do not match', async () => {

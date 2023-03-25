@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
-import { IHandler } from '@libs/common';
+import { type IHandler } from '@libs/common';
 import { UserRepository } from '@libs/models';
 
 import { UnexpectedNull } from '../../common/common.errors';
-import { AuthenticatedUserResponse } from '../dto';
+import { type AuthenticatedUserResponse } from '../dto';
 
-export type GetAuthenticatedUserQuery = {
+export interface GetAuthenticatedUserQuery {
     data: { userId: string };
-};
+}
 
 @Injectable()
 export class GetAuthenticatedUserHandler

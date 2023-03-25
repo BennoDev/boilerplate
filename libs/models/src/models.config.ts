@@ -1,8 +1,8 @@
 import { EntityCaseNamingStrategy } from '@mikro-orm/core';
-import { MikroOrmModuleOptions } from '@mikro-orm/nestjs';
+import { type MikroOrmModuleOptions } from '@mikro-orm/nestjs';
 import { registerAs } from '@nestjs/config';
 
-import { Environment, tryGetEnv } from '@libs/common';
+import { type Environment, tryGetEnv } from '@libs/common';
 
 export type ModelsConfig = MikroOrmModuleOptions & { environment: Environment };
 

@@ -1,10 +1,10 @@
 import { registerAs } from '@nestjs/config';
 
-import { Environment, tryGetEnv } from '@libs/common';
+import { type Environment, tryGetEnv } from '@libs/common';
 
-import { LogLevel } from './logger.types';
+import { type LogLevel } from './logger.types';
 
-export type LoggerConfig = {
+export interface LoggerConfig {
     readonly environment: Environment;
     readonly logLevel: LogLevel;
     /**
@@ -19,7 +19,7 @@ export type LoggerConfig = {
      * In most cases this enabled is the desired behaviour, however, for hosted / background services, this could be disabled
      */
     readonly enableRequestTracing: boolean;
-};
+}
 
 export const loggerConfig = registerAs<LoggerConfig>('logger', () => ({
     databaseLogLevel: tryGetEnv('DATABASE_LOG_LEVEL') as LogLevel,

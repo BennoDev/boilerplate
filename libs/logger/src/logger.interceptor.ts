@@ -1,12 +1,12 @@
 import {
     Injectable,
-    NestInterceptor,
-    ExecutionContext,
-    CallHandler,
+    type NestInterceptor,
+    type ExecutionContext,
+    type CallHandler,
     HttpStatus,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { Observable, throwError } from 'rxjs';
+import { type Request } from 'express';
+import { type Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 
 import { Logger } from '@libs/logger';

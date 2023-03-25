@@ -3,7 +3,7 @@ import {
     Property,
     BaseEntity as MikroOrmBaseEntity,
     Entity,
-    AnyEntity,
+    type AnyEntity,
 } from '@mikro-orm/core';
 import { v4 as uuid } from 'uuid';
 

@@ -1,6 +1,6 @@
 import IORedis from 'ioredis';
 
-import { ApiConfig } from './api.config';
+import { type ApiConfig } from './api.config';
 
 let redisClient: IORedis | null = null;
 

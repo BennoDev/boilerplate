@@ -1,14 +1,14 @@
 import {
-    ExecutionContext,
+    type ExecutionContext,
     Injectable,
-    CanActivate,
+    type CanActivate,
     UnauthorizedException,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
+import { type Response, type Request } from 'express';
 
 import { UserState } from '@libs/models';
 
-import { UserSession } from '../common.types';
+import { type UserSession } from '../common.types';
 
 @Injectable()
 export class AuthenticatedGuard implements CanActivate {

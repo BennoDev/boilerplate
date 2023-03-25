@@ -20,7 +20,7 @@ import { ChangePasswordHandler, LoginHandler } from './commands';
 import {
     LoginRequest,
     ChangePasswordRequest,
-    AuthenticatedUserResponse,
+    type AuthenticatedUserResponse,
 } from './dto';
 import { GetAuthenticatedUserHandler } from './queries';
 

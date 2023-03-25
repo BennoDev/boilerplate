@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 
-import { IHandler } from '@libs/common';
+import { type IHandler } from '@libs/common';
 import { Logger } from '@libs/logger';
 import { UserRepository } from '@libs/models';
 
-import { UserSession } from '../../common/common.types';
+import { type UserSession } from '../../common/common.types';
 import { InvalidOldPassword } from '../auth.errors';
-import { ChangePasswordRequest } from '../dto';
+import { type ChangePasswordRequest } from '../dto';
 import { HashService } from '../services';
 
 const context = 'ChangePasswordHandler';
 
-export type ChangePasswordCommand = {
+export interface ChangePasswordCommand {
     data: ChangePasswordRequest;
     session: UserSession;
-};
+}
 
 @Injectable()
 export class ChangePasswordHandler implements IHandler<ChangePasswordCommand> {

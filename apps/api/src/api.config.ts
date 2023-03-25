@@ -1,8 +1,8 @@
 import { registerAs } from '@nestjs/config';
 
-import { Environment, tryGetEnv } from '@libs/common';
+import { type Environment, tryGetEnv } from '@libs/common';
 
-export type ApiConfig = {
+export interface ApiConfig {
     environment: Environment;
     projectName: string;
     redis: {
@@ -24,7 +24,7 @@ export type ApiConfig = {
         username?: string;
         password?: string;
     };
-};
+}
 
 export const apiConfig = registerAs<ApiConfig>('api', () => ({
     environment: tryGetEnv('NODE_ENV') as Environment,

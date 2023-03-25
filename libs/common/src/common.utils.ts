@@ -21,14 +21,14 @@ export function tryGetEnv(varName: string): string {
  * @param promises List of promise that will be awaited
  */
 export const allSettled = async <Result = unknown>(
-    promises: Array<Promise<Result>>,
+    promises: Promise<Result>[],
 ): Promise<{
-    fulfilled: Array<PromiseFulfilledResult<Result>>;
+    fulfilled: PromiseFulfilledResult<Result>[];
     rejected: PromiseRejectedResult[];
 }> => {
     const results = await Promise.allSettled(promises);
 
-    const fulfilled: Array<PromiseFulfilledResult<Result>> = [];
+    const fulfilled: PromiseFulfilledResult<Result>[] = [];
     const rejected: PromiseRejectedResult[] = [];
     results.forEach(result => {
         if (result.status === 'fulfilled') {

@@ -1,5 +1,5 @@
-import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { HttpArgumentsHost } from '@nestjs/common/interfaces';
+import { type ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { type HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { mock, when, instance, reset } from 'ts-mockito';
 
 import { UserState } from '@libs/models';
@@ -19,7 +19,7 @@ describe('AuthenticationGuard', () => {
 
     it('should authenticate incoming requests', async () => {
         when(context.switchToHttp()).thenReturn(instance(argumentsHost));
-        when(argumentsHost.getRequest<any>()).thenReturn({
+        when(argumentsHost.getRequest()).thenReturn({
             isAuthenticated: () => true,
             user: {
                 state: UserState.Active,
@@ -33,14 +33,14 @@ describe('AuthenticationGuard', () => {
 
     it('should destroy session and throw error when not authenticated', async () => {
         when(context.switchToHttp()).thenReturn(instance(argumentsHost));
-        when(argumentsHost.getRequest<any>()).thenReturn({
+        when(argumentsHost.getRequest()).thenReturn({
             isAuthenticated: () => false,
             logout: () => null,
             session: {
                 destroy: (cb: Function): void => cb(),
             },
         });
-        when(argumentsHost.getResponse<any>()).thenReturn({
+        when(argumentsHost.getResponse()).thenReturn({
             clearCookie: (_cookieName: string) => null,
         });
 
@@ -51,7 +51,7 @@ describe('AuthenticationGuard', () => {
 
     it('should destroy session and throw error when not in ACTIVE state', async () => {
         when(context.switchToHttp()).thenReturn(instance(argumentsHost));
-        when(argumentsHost.getRequest<any>()).thenReturn({
+        when(argumentsHost.getRequest()).thenReturn({
             isAuthenticated: () => false,
             logout: () => null,
             user: {
@@ -61,7 +61,7 @@ describe('AuthenticationGuard', () => {
                 destroy: (cb: Function): void => cb(),
             },
         });
-        when(argumentsHost.getResponse<any>()).thenReturn({
+        when(argumentsHost.getResponse()).thenReturn({
             clearCookie: (_cookieName: string) => null,
         });
 
