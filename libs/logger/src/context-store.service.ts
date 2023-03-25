@@ -8,7 +8,9 @@ import { NoContextFound } from './logger.errors';
  * Represents the continuous context for a given HTTP request,
  * or a given job being processed by a queue, etc...
  */
-export interface Context { traceId: string }
+export interface Context {
+    traceId: string;
+}
 
 @Injectable()
 export class ContextStore {
