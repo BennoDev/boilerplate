@@ -23,15 +23,20 @@ const isProductionLikeEnvironment = [
     Environment.Staging,
 ].includes(tryGetEnv('NODE_ENV') as Environment);
 
-const context = 'Bootstrap:Api';
 const API_PREFIX = 'api';
 
 async function bootstrap(): Promise<void> {
-    const app = await NestFactory.create(ApiModule, { bufferLogs: true });
-    const logger = app.get(Logger);
-    app.useLogger(new NestLoggerProxy(logger));
+    const app = await NestFactory.create(ApiModule, {
+        bufferLogs: true,
+        autoFlushLogs: true,
+    });
+    const logger = await app.resolve(Logger);
+    logger.setContext('Bootstrap:Api');
+    console.log('MCTEST');
 
-    logger.info('Successfully created nest app', { context });
+    app.useLogger(new NestLoggerProxy(await app.resolve(Logger)));
+
+    logger.info('Successfully created nest app');
 
     app.setGlobalPrefix(API_PREFIX);
     const config = app.get<ApiConfig>(apiConfig.KEY);
@@ -41,10 +46,10 @@ async function bootstrap(): Promise<void> {
     }
 
     addGlobalMiddleware(app, logger, config);
-    addSessionMiddleware(app, logger, config);
+    addSessionMiddleware(app, config);
 
     await app.listen(config.api.port);
-    logger.info('App running', { context, port: config.api.port });
+    logger.info('App running', { port: config.api.port });
 }
 
 function addSwaggerDocs(
@@ -52,7 +57,7 @@ function addSwaggerDocs(
     logger: Logger,
     config: ApiConfig,
 ): void {
-    logger.info('Initializing Swagger...', { context });
+    logger.info('Initializing Swagger...');
 
     /*
      * We cast here to circumvent having to deal with these values being possibly undefined.
@@ -91,7 +96,7 @@ function addSwaggerDocs(
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup(fullSwaggerPath, app, document);
 
-    logger.info('Swagger running', { context, path: fullSwaggerPath });
+    logger.info('Swagger running', { path: fullSwaggerPath });
 }
 
 function addGlobalMiddleware(
@@ -99,13 +104,15 @@ function addGlobalMiddleware(
     logger: Logger,
     config: ApiConfig,
 ): void {
-    logger.info('Initializing global middleware', { context });
+    logger.info('Initializing global middleware');
 
     app.enableCors({
         origin: config.api.allowedOrigins,
         methods: ['OPTIONS', 'HEAD', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         credentials: true,
     });
+
+    app.enableVersioning();
 
     app.use(helmet());
     app.useGlobalPipes(
@@ -125,11 +132,10 @@ function addGlobalMiddleware(
     app.use(compression());
 }
 
-function addSessionMiddleware(
+async function addSessionMiddleware(
     app: INestApplication,
-    logger: Logger,
     config: ApiConfig,
-) {
+): Promise<void> {
     const RedisStore = connectRedis(session);
     const client = getRedisClient(config);
 
@@ -148,8 +154,10 @@ function addSessionMiddleware(
         }),
     );
 
+    const logger = await app.resolve(Logger);
+    logger.setContext('Redis');
     client.on('error', (error: Error) =>
-        logger.error('Redis error occurred', { context: 'Redis', error }),
+        logger.error('Redis error occurred', { error }),
     );
 }
 

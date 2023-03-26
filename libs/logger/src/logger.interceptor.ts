@@ -11,11 +11,11 @@ import { tap, catchError } from 'rxjs/operators';
 
 import { Logger } from '@libs/logger';
 
-const context = 'Request';
-
 @Injectable()
 export class LoggerInterceptor implements NestInterceptor {
-    constructor(private readonly logger: Logger) {}
+    constructor(private readonly logger: Logger) {
+        this.logger.setContext('Request');
+    }
 
     intercept(
         executionContext: ExecutionContext,
@@ -27,7 +27,6 @@ export class LoggerInterceptor implements NestInterceptor {
         return next.handle().pipe(
             tap(() => {
                 this.logger.info(formatLogMessage, {
-                    context,
                     status: executionContext.switchToHttp().getResponse()
                         .statusCode,
                     duration: `${this.calculateRequestDuration(startTime)}ms`,
@@ -39,7 +38,6 @@ export class LoggerInterceptor implements NestInterceptor {
             }),
             catchError(error => {
                 this.logger.warn(formatLogMessage, {
-                    context,
                     status:
                         error?.response?.statusCode ??
                         HttpStatus.INTERNAL_SERVER_ERROR,

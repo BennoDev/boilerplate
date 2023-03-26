@@ -5,8 +5,6 @@ import {
 
 import { Logger } from './logger.service';
 
-const defaultContext = 'Nest';
-
 /**
  * This allows us to proxy NestJS logs to our own logger.
  * This proxy needs to exist because the type signature for our custom LoggerService does not
@@ -17,34 +15,36 @@ const defaultContext = 'Nest';
  * Example main.ts:
  * ```
  * const app = await NestFactory.create(AppModule, getAppOptions());
- * const logger = app.get(LoggerService);
+ * const logger = app.resolve(Logger);
  * app.useLogger(new NestLoggerProxy(logger));
  * ```
  */
 @Injectable()
 export class NestLoggerProxy implements NestLoggerService {
-    constructor(private readonly logger: Logger) {}
+    constructor(private readonly logger: Logger) {
+        this.logger.setContext('Nest');
+    }
 
     log(message: string, context?: string): void {
-        this.logger.info(message, { context: context ?? defaultContext });
+        this.logger.info(message, { context });
     }
 
     error(message: string, trace?: string, context?: string): void {
         this.logger.error(message, {
-            context: context ?? defaultContext,
+            context,
             error: trace,
         });
     }
 
     warn(message: string, context?: string): void {
-        this.logger.warn(message, { context: context ?? defaultContext });
+        this.logger.warn(message, { context });
     }
 
     debug?(message: string, context?: string): void {
-        this.logger.debug(message, { context: context ?? defaultContext });
+        this.logger.debug(message, { context });
     }
 
     verbose?(message: string, context?: string): void {
-        this.logger.trace(message, { context: context ?? defaultContext });
+        this.logger.trace(message, { context });
     }
 }

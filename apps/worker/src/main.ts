@@ -8,7 +8,7 @@ const context = 'Bootstrap:Worker';
 
 async function bootstrap() {
     const app = await NestFactory.createApplicationContext(WorkerModule);
-    const logger = app.get(Logger);
+    const logger = app.resolve(Logger);
     app.useLogger(new NestLoggerProxy(logger));
 
     logger.info('Worker running...', { context });

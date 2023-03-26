@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, Scope } from '@nestjs/common';
 import { pino } from 'pino';
 
 import { Environment } from '@libs/common';
@@ -9,8 +9,10 @@ import { LoggerConfig, loggerConfig } from './logger.config';
 type LogMeta = Record<string, unknown> & {
     /**
      * Added as a label to the message, easy to search by.
+     * Ideally this would be set logger-instance level by calling {@link setContext} in the constructor of the consuming class.
+     * It can be overwritten here at individual log-level if necessary.
      */
-    context: string;
+    context?: string;
     /**
      * Id for the request or operation this log belongs to.
      * If none is passed, it will default to the idea found in the active namespace (if one is active).
@@ -43,10 +45,11 @@ const secretsToRedact = [
     '*.refreshToken',
 ];
 
-@Injectable()
+@Injectable({ scope: Scope.TRANSIENT })
 export class Logger {
     private readonly logger: pino.Logger;
     private readonly formattedEnvironment: string;
+    private context = 'MISSING_CONTEXT';
 
     constructor(
         @Inject(loggerConfig.KEY)
@@ -73,6 +76,7 @@ export class Logger {
                       options: {
                           translateTime: 'yyyy-mm-dd HH:MM:ss',
                           messageFormat: '[{context}]: {message}',
+                          messageKey: 'message',
                       },
                   }
                 : undefined,
@@ -95,13 +99,22 @@ export class Logger {
     }
 
     /**
+     * Sets a shared context for all messages called for this logger instance.
+     * Can be overwritten on a per-log basis by passing ´context´ as part of the log ´meta´.
+     * @param context The context for the current Logger instance
+     */
+    setContext(context: string): void {
+        this.context = context;
+    }
+
+    /**
      * Most urgent level of logging, use this in case something absolutely critical happens that
      * basically means the entire platform / application **can not function and can not automatically recover**.
      *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
-    fatal(message: string, meta: LogMeta): void {
+    fatal(message: string, meta: LogMeta = {}): void {
         this.logger.fatal(meta, message);
     }
 
@@ -114,7 +127,7 @@ export class Logger {
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
-    error(message: string, meta: LogMeta): void {
+    error(message: string, meta: LogMeta = {}): void {
         this.logger.error(meta, message);
     }
 
@@ -129,7 +142,7 @@ export class Logger {
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
-    warn(message: string, meta: LogMeta): void {
+    warn(message: string, meta: LogMeta = {}): void {
         this.logger.warn(meta, message);
     }
 
@@ -144,7 +157,7 @@ export class Logger {
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
-    info(message: string, meta: LogMeta): void {
+    info(message: string, meta: LogMeta = {}): void {
         this.logger.info(meta, message);
     }
 
@@ -159,7 +172,7 @@ export class Logger {
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
-    debug(message: string, meta: LogMeta): void {
+    debug(message: string, meta: LogMeta = {}): void {
         this.logger.debug(meta, message);
     }
 
@@ -169,7 +182,7 @@ export class Logger {
      * @param message Message for this log
      * @param meta Extra useful information for this log²²
      */
-    trace(message: string, meta: LogMeta): void {
+    trace(message: string, meta: LogMeta = {}): void {
         this.logger.trace(meta, message);
     }
 
@@ -177,8 +190,13 @@ export class Logger {
      * Returns information that should be added to every single log message.
      * These are generally supportive fields such as trace ids, or environment information.
      */
-    private metaMixin(): { environment: string; traceId?: string } {
+    private metaMixin(): {
+        context: string;
+        environment: string;
+        traceId?: string;
+    } {
         return {
+            context: this.context,
             environment: this.formattedEnvironment,
             traceId: this.contextStore.getContextOrDefault().traceId,
         };

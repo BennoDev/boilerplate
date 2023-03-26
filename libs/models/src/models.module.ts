@@ -24,15 +24,20 @@ export class ModelsModule {
                 MikroOrmModule.forRootAsync({
                     imports: [ConfigModule.forFeature(modelsConfig)],
                     inject: [Logger, modelsConfig.KEY],
-                    useFactory: (logger: Logger, config: ModelsConfig) => ({
-                        ...config,
-                        autoLoadEntities: true,
-                        logger: message =>
-                            logger.info(message, { context: 'Database' }),
-                        debug: this.getDebugOptions(config.environment),
-                        forceUtcTimezone: true,
-                        highlighter: this.getHighlighter(config.environment),
-                    }),
+                    useFactory: (logger: Logger, config: ModelsConfig) => {
+                        logger.setContext('Database');
+
+                        return {
+                            ...config,
+                            autoLoadEntities: true,
+                            logger: message => logger.info(message),
+                            debug: this.getDebugOptions(config.environment),
+                            forceUtcTimezone: true,
+                            highlighter: this.getHighlighter(
+                                config.environment,
+                            ),
+                        };
+                    },
                 }),
                 MikroOrmModule.forFeature(entities),
             ],

@@ -9,8 +9,6 @@ import { InvalidOldPassword } from '../auth.errors';
 import { type ChangePasswordRequest } from '../dto';
 import { HashService } from '../services';
 
-const context = 'ChangePasswordHandler';
-
 export interface ChangePasswordCommand {
     data: ChangePasswordRequest;
     session: UserSession;
@@ -22,7 +20,9 @@ export class ChangePasswordHandler implements IHandler<ChangePasswordCommand> {
         private readonly userRepository: UserRepository,
         private readonly hashService: HashService,
         private readonly logger: Logger,
-    ) {}
+    ) {
+        this.logger.setContext('ChangePasswordHandler');
+    }
 
     async execute({ data, session }: ChangePasswordCommand): Promise<void> {
         const user = await this.userRepository.findOneOrFail(session.userId);
@@ -35,7 +35,7 @@ export class ChangePasswordHandler implements IHandler<ChangePasswordCommand> {
         if (!isCorrectOldPassword) {
             this.logger.warn(
                 'Invalid old password for change password attempt',
-                { context, userId: session.userId },
+                { userId: session.userId },
             );
             throw new InvalidOldPassword();
         }

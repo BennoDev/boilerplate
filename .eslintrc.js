@@ -79,7 +79,7 @@ module.exports = {
                 'no-inline-comments': 'error',
                 'spaced-comment': ['error', 'always'],
                 // Misc
-                'prefer-arrow-callback': 'warn',
+                'prefer-arrow-callback': 'error',
                 eqeqeq: ['error', 'always'],
             },
         },

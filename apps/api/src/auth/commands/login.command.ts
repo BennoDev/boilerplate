@@ -8,8 +8,6 @@ import { InvalidUserState } from '../auth.errors';
 import { type LoginRequest } from '../dto';
 import { HashService } from '../services';
 
-const context = 'LoginHandler';
-
 export interface LoginCommand {
     data: LoginRequest;
 }
@@ -20,7 +18,9 @@ export class LoginHandler implements IHandler<LoginCommand> {
         private readonly userRepository: UserRepository,
         private readonly hashService: HashService,
         private readonly logger: Logger,
-    ) {}
+    ) {
+        this.logger.setContext('LoginHandler');
+    }
 
     async execute({ data }: LoginCommand): Promise<User> {
         const { email, password } = data;
@@ -32,7 +32,6 @@ export class LoginHandler implements IHandler<LoginCommand> {
 
         if (![UserState.Active].includes(user.state)) {
             this.logger.warn('This action is not allowed for this user', {
-                context,
                 state: user.state,
                 allowedStates: [UserState.Active],
             });
@@ -44,10 +43,7 @@ export class LoginHandler implements IHandler<LoginCommand> {
             user.password,
         );
         if (!isValidPassword) {
-            this.logger.warn('Invalid password for login attempt', {
-                context,
-                email,
-            });
+            this.logger.warn('Invalid password for login attempt', { email });
             throw new UnauthorizedException();
         }
 
