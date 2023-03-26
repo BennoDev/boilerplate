@@ -3,7 +3,7 @@ import { type Response, type Request } from 'express';
 
 import { UserRepository } from '@libs/models';
 
-import { type UserSession } from '../../common/common.types';
+import { type UserSession } from '../../common';
 
 @Injectable()
 export class SessionSerializer implements NestMiddleware {

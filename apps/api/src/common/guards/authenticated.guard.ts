@@ -8,12 +8,12 @@ import { type Response, type Request } from 'express';
 
 import { UserState } from '@libs/models';
 
-import { type UserSession } from '../common.types';
+import { type ApiRequest, type UserSession } from '../common.types';
 
 @Injectable()
 export class AuthenticatedGuard implements CanActivate {
     public async canActivate(context: ExecutionContext): Promise<boolean> {
-        const request = context.switchToHttp().getRequest();
+        const request = context.switchToHttp().getRequest<ApiRequest>();
         const response = context.switchToHttp().getResponse<Response>();
         const session: UserSession | undefined = request.user;
 

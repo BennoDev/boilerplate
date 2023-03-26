@@ -24,10 +24,7 @@ export class ModelsModule {
                 MikroOrmModule.forRootAsync({
                     imports: [ConfigModule.forFeature(modelsConfig)],
                     inject: [Logger, modelsConfig.KEY],
-                    useFactory: async (
-                        logger: Logger,
-                        config: ModelsConfig,
-                    ) => ({
+                    useFactory: (logger: Logger, config: ModelsConfig) => ({
                         ...config,
                         autoLoadEntities: true,
                         logger: message =>

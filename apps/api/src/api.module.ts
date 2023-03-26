@@ -10,7 +10,7 @@ import { Environment, tryGetEnv } from '@libs/common';
 import { LoggerInterceptor, LoggerModule } from '@libs/logger';
 
 import { type ApiConfig, apiConfig } from './api.config';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth';
 import { getRedisClient } from './redis.client';
 
 const isRemoteEnvironment = [

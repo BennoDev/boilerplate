@@ -36,6 +36,6 @@ export class ContextStore {
      * If no context is active, it will return an empty object.
      */
     getContextOrDefault(): Context | Record<string, never> {
-        return this.storage.getStore() || {};
+        return this.storage.getStore() ?? {};
     }
 }

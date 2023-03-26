@@ -5,7 +5,7 @@ import { Logger } from '@libs/logger';
 import { UserRepository } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
-import { createTestUserSession } from '../../common/testing';
+import { createTestUserSession } from '../../common';
 import { InvalidOldPassword } from '../auth.errors';
 import { type ChangePasswordRequest } from '../dto';
 import { HashService } from '../services';

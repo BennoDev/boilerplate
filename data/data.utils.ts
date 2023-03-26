@@ -40,7 +40,7 @@ export function migrationFileName(path: string) {
 
     // Get the last migration
     const lastFileName = readdirSync(path).pop();
-    let counter = 0;
+    let counter = 1;
 
     if (lastFileName) {
         // Increment the counter based on the last migration
@@ -58,9 +58,6 @@ export function migrationFileName(path: string) {
             .toLowerCase();
     }
 
-    // Setting it to an environment variable allows us to also use the name in the MigrationGenerator.
-    process.env.MIGRATION_NAME = name;
-
     // New line to find question in logs easier
     console.log();
 
@@ -69,7 +66,7 @@ export function migrationFileName(path: string) {
         ? 'seeds'
         : 'migration';
 
-    return `${(counter ?? 1).toString().padStart(4, '0')}-${name}.${fileType}`;
+    return `${counter.toString().padStart(4, '0')}-${name}.${fileType}`;
 }
 
 /**
@@ -85,6 +82,8 @@ export function toPascalCase(text: string) {
         .replace(
             new RegExp(/\s+(.)(\w*)/, 'g'),
             (_, second, third) =>
+                // Fixing the ESLint issues here is simply not worth the effort as we are dealing with multiple different rules.
+                // eslint-disable-next-line
                 `${second.toUpperCase() + third.toLowerCase()}`,
         )
         .replace(new RegExp(/\w/), s => s.toUpperCase());

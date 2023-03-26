@@ -31,6 +31,11 @@ class IsNonNegativeIntegerConstraint implements ValidatorConstraintInterface {
     }
 
     defaultMessage?(validationArguments: ValidationArguments): string {
+        /**
+         * Allowed in this context as we are truly dealing with "any" here,
+         * and the worst case is that it would print "[object Object] is not a proper ..." which is valid information for validation purposes.
+         */
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         return `${validationArguments.value} is not a proper non-negative integer, must be 0 or larger and integer`;
     }
 }

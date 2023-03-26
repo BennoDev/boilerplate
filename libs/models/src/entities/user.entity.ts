@@ -1,6 +1,6 @@
 import { Property, Entity, Enum, OptionalProps } from '@mikro-orm/core';
 
-import { UserRepository } from '../repositories/user.repository';
+import { UserRepository } from '../repositories';
 
 import { BaseEntity, type BaseOptionalProps } from './base.entity';
 

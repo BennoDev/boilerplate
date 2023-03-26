@@ -1,6 +1,6 @@
 import { type UserState } from '@libs/models';
 
-import { BaseEntityResponse } from '../../common/dto';
+import { BaseEntityResponse } from '../../common';
 
 export class AuthenticatedUserResponse extends BaseEntityResponse {
     readonly email!: string;

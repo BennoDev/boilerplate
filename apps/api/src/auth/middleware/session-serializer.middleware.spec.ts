@@ -4,7 +4,7 @@ import { anything, instance, mock, reset, when } from 'ts-mockito';
 import { UserRepository, UserState } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
-import { createTestUserSession } from '../../common/testing';
+import { createTestUserSession } from '../../common';
 
 import { SessionSerializer } from './session-serializer.middleware';
 

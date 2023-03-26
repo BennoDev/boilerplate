@@ -4,7 +4,7 @@ import { type IHandler } from '@libs/common';
 import { Logger } from '@libs/logger';
 import { UserRepository } from '@libs/models';
 
-import { type UserSession } from '../../common/common.types';
+import { type UserSession } from '../../common';
 import { InvalidOldPassword } from '../auth.errors';
 import { type ChangePasswordRequest } from '../dto';
 import { HashService } from '../services';

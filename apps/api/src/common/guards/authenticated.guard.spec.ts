@@ -37,7 +37,7 @@ describe('AuthenticationGuard', () => {
             isAuthenticated: () => false,
             logout: () => null,
             session: {
-                destroy: (cb: Function): void => cb(),
+                destroy: (cb: (...args: any[]) => void): void => cb(),
             },
         });
         when(argumentsHost.getResponse()).thenReturn({
@@ -58,7 +58,7 @@ describe('AuthenticationGuard', () => {
                 state: UserState.Inactive,
             },
             session: {
-                destroy: (cb: Function): void => cb(),
+                destroy: (cb: (...args: any[]) => void): void => cb(),
             },
         });
         when(argumentsHost.getResponse()).thenReturn({

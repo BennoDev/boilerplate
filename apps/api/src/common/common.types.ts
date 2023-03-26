@@ -1,3 +1,5 @@
+import { type Request } from 'express';
+
 import { type UserState } from '@libs/models';
 
 /**
@@ -9,4 +11,8 @@ export interface UserSession {
     state: UserState;
     firstName: string;
     lastName: string;
+}
+
+export interface ApiRequest extends Request {
+    user?: UserSession;
 }

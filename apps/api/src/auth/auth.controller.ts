@@ -12,9 +12,7 @@ import {
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Response, Request } from 'express';
 
-import { UserSession } from '../common/common.types';
-import { GetUserSession } from '../common/decorators';
-import { AuthenticatedGuard, destroyExpressSession } from '../common/guards';
+import { UserSession , GetUserSession , AuthenticatedGuard, destroyExpressSession } from '../common';
 
 import { ChangePasswordHandler, LoginHandler } from './commands';
 import {

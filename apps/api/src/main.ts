@@ -148,7 +148,9 @@ function addSessionMiddleware(
         }),
     );
 
-    client.on('error', logger.error);
+    client.on('error', (error: Error) =>
+        logger.error('Redis error occurred', { context: 'Redis', error }),
+    );
 }
 
 bootstrap();

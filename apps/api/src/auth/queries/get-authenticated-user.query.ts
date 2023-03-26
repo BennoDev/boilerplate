@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { type IHandler } from '@libs/common';
 import { UserRepository } from '@libs/models';
 
-import { UnexpectedNull } from '../../common/common.errors';
+import { UnexpectedNull } from '../../common';
 import { type AuthenticatedUserResponse } from '../dto';
 
 export interface GetAuthenticatedUserQuery {
