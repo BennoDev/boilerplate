@@ -48,7 +48,7 @@ module.exports = {
                 'import/first': 'error',
                 'import/no-internal-modules': [
                     'error',
-                    { allow: ['@mikro-orm/**', '@nestjs/**', 'rxjs/**'] },
+                    { allow: ['@mikro-orm/**', '@nestjs/**', 'rxjs/**', '@libs/common/*'] },
                 ],
                 'import/no-unused-modules': 'error',
                 'import/no-default-export': 'error',
