@@ -4,7 +4,7 @@ import { Logger, NestLoggerProxy } from '@libs/logger';
 
 import { WorkerModule } from './worker.module';
 
-async function bootstrap() {
+const bootstrap = async (): Promise<void> => {
     const app = await NestFactory.createApplicationContext(WorkerModule, {
         bufferLogs: true,
         autoFlushLogs: true,
@@ -18,6 +18,6 @@ async function bootstrap() {
     app.enableShutdownHooks();
 
     logger.info('Worker running...');
-}
+};
 
 bootstrap();

@@ -7,8 +7,9 @@ import {
 
 const validatorName = 'IsPassword';
 
-export function IsPassword(validationOptions?: ValidationOptions) {
-    return function (object: object, propertyName: string): void {
+export const IsPassword =
+    (validationOptions?: ValidationOptions) =>
+    (object: object, propertyName: string): void => {
         registerDecorator({
             name: validatorName,
             target: object.constructor,
@@ -17,7 +18,6 @@ export function IsPassword(validationOptions?: ValidationOptions) {
             validator: IsPasswordConstraint,
         });
     };
-}
 
 @ValidatorConstraint({ name: validatorName, async: false })
 class IsPasswordConstraint implements ValidatorConstraintInterface {

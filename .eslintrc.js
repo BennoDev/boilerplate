@@ -28,6 +28,7 @@ module.exports = {
             },
             rules: {
                 // TypeScript
+                '@typescript-eslint/explicit-function-return-type': 'error',
                 '@typescript-eslint/no-floating-promises': 'off',
                 '@typescript-eslint/no-non-null-assertion': 'off',
                 '@typescript-eslint/no-extraneous-class': 'off',
@@ -81,6 +82,7 @@ module.exports = {
                 // Misc
                 'prefer-arrow-callback': 'error',
                 eqeqeq: ['error', 'always'],
+                'func-style': ['error', 'expression']
             },
         },
         {

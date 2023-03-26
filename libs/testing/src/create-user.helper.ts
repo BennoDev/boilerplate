@@ -4,8 +4,8 @@ import { mergeDeepRight } from 'ramda';
 
 import { User, UserState } from '@libs/models';
 
-export function createTestUser(overrides: Partial<User> = {}): User {
-    return plainToInstance(
+export const createTestUser = (overrides: Partial<User> = {}): User =>
+    plainToInstance(
         User,
         mergeDeepRight(
             {
@@ -21,4 +21,3 @@ export function createTestUser(overrides: Partial<User> = {}): User {
             overrides,
         ),
     );
-}

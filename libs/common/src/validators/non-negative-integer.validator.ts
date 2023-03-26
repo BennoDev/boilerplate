@@ -8,8 +8,9 @@ import {
 
 const validatorName = 'NonNegativeInteger';
 
-export function IsNonNegativeInteger(validationOptions?: ValidationOptions) {
-    return function (object: object, propertyName: string): void {
+export const IsNonNegativeInteger =
+    (validationOptions?: ValidationOptions) =>
+    (object: object, propertyName: string): void => {
         registerDecorator({
             name: validatorName,
             target: object.constructor,
@@ -18,7 +19,6 @@ export function IsNonNegativeInteger(validationOptions?: ValidationOptions) {
             validator: IsNonNegativeIntegerConstraint,
         });
     };
-}
 
 @ValidatorConstraint({ name: validatorName })
 class IsNonNegativeIntegerConstraint implements ValidatorConstraintInterface {

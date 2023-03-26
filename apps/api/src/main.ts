@@ -25,7 +25,7 @@ const isProductionLikeEnvironment = [
 
 const API_PREFIX = 'api';
 
-async function bootstrap(): Promise<void> {
+const bootstrap = async (): Promise<void> => {
     const app = await NestFactory.create(ApiModule, {
         bufferLogs: true,
         autoFlushLogs: true,
@@ -53,13 +53,13 @@ async function bootstrap(): Promise<void> {
 
     await app.listen(config.api.port);
     logger.info('App running', { port: config.api.port });
-}
+};
 
-function addSwaggerDocs(
+const addSwaggerDocs = (
     app: INestApplication,
     logger: Logger,
     config: ApiConfig,
-): void {
+): void => {
     logger.info('Initializing Swagger...');
 
     /*
@@ -99,13 +99,13 @@ function addSwaggerDocs(
     SwaggerModule.setup(fullSwaggerPath, app, document);
 
     logger.info('Swagger running', { path: fullSwaggerPath });
-}
+};
 
-function addGlobalMiddleware(
+const addGlobalMiddleware = (
     app: INestApplication,
     logger: Logger,
     config: ApiConfig,
-): void {
+): void => {
     logger.info('Initializing global middleware');
 
     app.enableCors({
@@ -130,12 +130,12 @@ function addGlobalMiddleware(
         }),
     );
     app.use(compression());
-}
+};
 
-async function addSessionMiddleware(
+const addSessionMiddleware = async (
     app: INestApplication,
     config: ApiConfig,
-): Promise<void> {
+): Promise<void> => {
     const client = getRedisClient(config);
 
     app.use(
@@ -160,6 +160,6 @@ async function addSessionMiddleware(
     client.on('error', (error: Error) =>
         logger.error('Redis error occurred', { error }),
     );
-}
+};
 
 bootstrap();

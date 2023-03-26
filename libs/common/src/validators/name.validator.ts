@@ -8,8 +8,9 @@ import {
 
 const validatorName = 'IsName';
 
-export function IsName(validationOptions?: ValidationOptions) {
-    return function (object: object, propertyName: string): void {
+export const IsName =
+    (validationOptions?: ValidationOptions) =>
+    (object: object, propertyName: string): void => {
         registerDecorator({
             name: validatorName,
             target: object.constructor,
@@ -18,7 +19,6 @@ export function IsName(validationOptions?: ValidationOptions) {
             validator: IsNameConstraint,
         });
     };
-}
 
 @ValidatorConstraint({ name: validatorName, async: false })
 class IsNameConstraint implements ValidatorConstraintInterface {

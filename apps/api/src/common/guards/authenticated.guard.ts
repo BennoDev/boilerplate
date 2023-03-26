@@ -28,13 +28,13 @@ export class AuthenticatedGuard implements CanActivate {
 }
 
 /**
- * This function invalidates everything that is related to a session: clear cookie, remove cookie from redis
+ * This function invalidates everything that is related to a session: clears the cookie & removes entry from redis
  */
-export function destroyExpressSession(
+export const destroyExpressSession = (
     request: Request,
     response: Response,
-): Promise<void> {
-    return new Promise((resolve, reject) => {
+): Promise<void> =>
+    new Promise((resolve, reject) => {
         try {
             request.session.destroy(() => {
                 response.clearCookie('connect.sid');
@@ -44,4 +44,3 @@ export function destroyExpressSession(
             reject(error);
         }
     });
-}

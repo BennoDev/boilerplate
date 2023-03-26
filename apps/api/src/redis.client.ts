@@ -4,7 +4,7 @@ import { type ApiConfig } from './api.config';
 
 let redisClient: IORedis | null = null;
 
-export function getRedisClient(config: ApiConfig): IORedis {
+export const getRedisClient = (config: ApiConfig): IORedis => {
     if (!redisClient) {
         redisClient = new IORedis({
             host: config.redis.host,
@@ -14,4 +14,4 @@ export function getRedisClient(config: ApiConfig): IORedis {
     }
 
     return redisClient;
-}
+};

@@ -3,11 +3,11 @@ import { readdirSync } from 'node:fs';
 import { type Knex } from 'knex';
 import { question } from 'readline-sync';
 
-export async function insertData(
+export const insertData = async (
     knex: Knex,
     data: unknown[],
     entityName: string,
-): Promise<void> {
+): Promise<void> => {
     console.info(`Inserting data for ${entityName}: started`);
     try {
         await knex.table(entityName).insert(data);
@@ -16,9 +16,12 @@ export async function insertData(
         console.error(`Inserting data for ${entityName}: failed`);
         throw error;
     }
-}
+};
 
-export async function clearData(knex: Knex, entityName: string): Promise<void> {
+export const clearData = async (
+    knex: Knex,
+    entityName: string,
+): Promise<void> => {
     console.info(`Truncating table "${entityName}": started`);
     try {
         await knex.raw(`truncate table "${entityName}" cascade`);
@@ -27,7 +30,7 @@ export async function clearData(knex: Knex, entityName: string): Promise<void> {
         console.error(`Truncating data for ${entityName}: failed`);
         throw error;
     }
-}
+};
 
 /**
  * Allows us to properly name our migrations rather than the default Migration<TimeStamp> MikroORM uses.
@@ -35,7 +38,7 @@ export async function clearData(knex: Knex, entityName: string): Promise<void> {
  *
  * @param path Path where the migration will be located.
  */
-export function migrationFileName(path: string) {
+export const migrationFileName = (path: string): string => {
     const DELIMITER = '-';
 
     // Get the last migration
@@ -73,7 +76,7 @@ export function migrationFileName(path: string) {
         : 'migration';
 
     return `${counter.toString().padStart(4, '0')}-${name}.${fileType}`;
-}
+};
 
 /**
  * Transforms text to PascalCase.
@@ -81,7 +84,7 @@ export function migrationFileName(path: string) {
  *
  * @param text Text that will be transformed.
  */
-export function toPascalCase(text: string) {
+export const toPascalCase = (text: string): string => {
     return `${text}`
         .replace(new RegExp(/[-_]+/, 'g'), ' ')
         .replace(new RegExp(/[^\w\s]/, 'g'), '')
@@ -93,4 +96,4 @@ export function toPascalCase(text: string) {
                 `${second.toUpperCase() + third.toLowerCase()}`,
         )
         .replace(new RegExp(/\w/), s => s.toUpperCase());
-}
+};

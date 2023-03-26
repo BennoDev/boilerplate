@@ -6,14 +6,14 @@ import { MissingEnvVar } from './common.errors';
  *
  * @param varName Name of the environment variable to look for
  */
-export function tryGetEnv(varName: string): string {
+export const tryGetEnv = (varName: string): string => {
     const envVar = process.env[varName];
     if (envVar) {
         return envVar;
     }
 
     throw new MissingEnvVar(varName);
-}
+};
 
 /**
  * Awaits an array of promises and groups them by fulfilled and rejected.

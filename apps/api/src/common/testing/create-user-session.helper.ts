@@ -5,10 +5,10 @@ import { UserState } from '@libs/models';
 
 import { type UserSession } from '../common.types';
 
-export function createTestUserSession(
+export const createTestUserSession = (
     overrides: Partial<UserSession> = {},
-): UserSession {
-    return mergeDeepRight(
+): UserSession =>
+    mergeDeepRight(
         {
             userId: faker.datatype.uuid(),
             email: faker.internet.email(),
@@ -18,4 +18,3 @@ export function createTestUserSession(
         },
         overrides,
     );
-}
