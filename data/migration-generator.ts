@@ -8,8 +8,11 @@ export class MigrationGenerator extends TSMigrationGenerator {
         diff: { up: string[]; down: string[] },
     ): string {
         return super.generateMigrationFile(
-            // MIGRATION_NAME environment variable should have been set before this point, in the `migrationFileName` function.
-            toPascalCase(className),
+            /**
+             * MIGRATION_NAME environment variable should have been set before this point,
+             * in the `migrationFileName` function in `data.config.ts`.
+             */
+            toPascalCase(process.env.MIGRATION_NAME ?? className),
             diff,
         );
     }

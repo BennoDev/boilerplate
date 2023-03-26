@@ -58,6 +58,12 @@ export function migrationFileName(path: string) {
             .toLowerCase();
     }
 
+    /**
+     * Assigning to an environment variable here so we can easily access it in other files.
+     * There is no risk of conflicts as any existing variable would be overwritten here for the duration of the script.
+     */
+    process.env.MIGRATION_NAME = name;
+
     // New line to find question in logs easier
     console.log();
 
