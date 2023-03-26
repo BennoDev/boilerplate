@@ -4,8 +4,9 @@ import {
     type ExecutionContext,
     type CallHandler,
     HttpStatus,
+    type HttpException,
 } from '@nestjs/common';
-import { type Request } from 'express';
+import { type Response, type Request } from 'express';
 import { type Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 
@@ -27,8 +28,9 @@ export class LoggerInterceptor implements NestInterceptor {
         return next.handle().pipe(
             tap(() => {
                 this.logger.info(formatLogMessage, {
-                    status: executionContext.switchToHttp().getResponse()
-                        .statusCode,
+                    status: executionContext
+                        .switchToHttp()
+                        .getResponse<Response>().statusCode,
                     duration: `${this.calculateRequestDuration(startTime)}ms`,
                     params: req.params,
                     query: req.query,
@@ -36,13 +38,19 @@ export class LoggerInterceptor implements NestInterceptor {
                     host: req.hostname,
                 });
             }),
-            catchError(error => {
+            catchError((error: HttpException) => {
+                const errorResponse = error.getResponse() as {
+                    statusCode?: number;
+                    error?: string;
+                    message?: string;
+                };
+
                 this.logger.warn(formatLogMessage, {
                     status:
-                        error?.response?.statusCode ??
+                        errorResponse.statusCode ??
                         HttpStatus.INTERNAL_SERVER_ERROR,
-                    code: error?.response?.error ?? 'Unknown error',
-                    description: error?.response?.message ?? 'No description',
+                    code: errorResponse.error ?? 'Unknown error',
+                    description: errorResponse.message ?? 'No description',
                     duration: `${this.calculateRequestDuration(startTime)}ms`,
                     params: req.params,
                     query: req.query,
@@ -50,7 +58,7 @@ export class LoggerInterceptor implements NestInterceptor {
                     host: req.hostname,
                 });
 
-                return throwError(error);
+                return throwError(() => error);
             }),
         );
     }
