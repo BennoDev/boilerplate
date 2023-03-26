@@ -11,6 +11,7 @@ import { LoggerInterceptor, LoggerModule } from '@libs/logger';
 
 import { type ApiConfig, apiConfig } from './api.config';
 import { AuthModule } from './auth';
+import { HealthModule } from './health';
 import { getRedisClient } from './redis.client';
 
 const isRemoteEnvironment = [
@@ -46,6 +47,7 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
             }),
         }),
         LoggerModule,
+        HealthModule,
         AuthModule,
     ],
     providers: [
