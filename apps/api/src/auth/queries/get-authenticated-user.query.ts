@@ -19,20 +19,18 @@ export class GetAuthenticatedUserHandler
     async execute({
         data,
     }: GetAuthenticatedUserQuery): Promise<AuthenticatedUserResponse> {
-        const user = await this.userRepository
-            .createQueryBuilder('u')
-            .select([
-                'u.id',
-                'u.createdAt',
-                'u.updatedAt',
-                'u.email',
-                'u.state',
-                'u.firstName',
-                'u.lastName',
-            ])
-            .where({ id: data.userId })
-            .getSingleResult();
+        const user = await this.userRepository.findOne(data.userId);
+
         if (!user) throw new UnexpectedNull();
-        return user;
+
+        return {
+            id: user.id,
+            email: user.email,
+            state: user.state,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+        };
     }
 }

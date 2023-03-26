@@ -4,14 +4,20 @@ import { Logger, NestLoggerProxy } from '@libs/logger';
 
 import { WorkerModule } from './worker.module';
 
-const context = 'Bootstrap:Worker';
-
 async function bootstrap() {
-    const app = await NestFactory.createApplicationContext(WorkerModule);
-    const logger = app.resolve(Logger);
-    app.useLogger(new NestLoggerProxy(logger));
+    const app = await NestFactory.createApplicationContext(WorkerModule, {
+        bufferLogs: true,
+        autoFlushLogs: true,
+    });
 
-    logger.info('Worker running...', { context });
+    const logger = await app.resolve(Logger);
+    logger.setContext('Bootstrap:Worker');
+
+    app.useLogger(new NestLoggerProxy(await app.resolve(Logger)));
+
+    app.enableShutdownHooks();
+
+    logger.info('Worker running...');
 }
 
 bootstrap();

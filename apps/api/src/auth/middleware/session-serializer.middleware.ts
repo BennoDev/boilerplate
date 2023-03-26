@@ -29,7 +29,10 @@ export class SessionSerializer implements NestMiddleware {
     private async composeUserSession(
         userId: string,
     ): Promise<UserSession | null> {
-        const user = await this.userRepository.findOne(userId);
+        const user = await this.userRepository.findOne(userId, {
+            // This request happens outside of a MikroORM request scope, so we disable the identity map.
+            disableIdentityMap: true,
+        });
         if (!user) return null;
         return {
             userId: user.id,

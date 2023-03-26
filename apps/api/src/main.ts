@@ -6,7 +6,7 @@ import {
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as compression from 'compression';
-import * as connectRedis from 'connect-redis';
+import RedisStore from 'connect-redis';
 import basicAuth from 'express-basic-auth';
 import * as session from 'express-session';
 import helmet from 'helmet';
@@ -29,10 +29,11 @@ async function bootstrap(): Promise<void> {
     const app = await NestFactory.create(ApiModule, {
         bufferLogs: true,
         autoFlushLogs: true,
+        forceCloseConnections: true,
     });
+
     const logger = await app.resolve(Logger);
     logger.setContext('Bootstrap:Api');
-    console.log('MCTEST');
 
     app.useLogger(new NestLoggerProxy(await app.resolve(Logger)));
 
@@ -47,6 +48,8 @@ async function bootstrap(): Promise<void> {
 
     addGlobalMiddleware(app, logger, config);
     addSessionMiddleware(app, config);
+
+    app.enableShutdownHooks();
 
     await app.listen(config.api.port);
     logger.info('App running', { port: config.api.port });
@@ -90,7 +93,6 @@ function addSwaggerDocs(
     const options = new DocumentBuilder()
         .setTitle(config.projectName)
         .setDescription('Swagger documentation')
-        .setVersion('1.0')
         .addCookieAuth()
         .build();
     const document = SwaggerModule.createDocument(app, options);
@@ -111,8 +113,6 @@ function addGlobalMiddleware(
         methods: ['OPTIONS', 'HEAD', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         credentials: true,
     });
-
-    app.enableVersioning();
 
     app.use(helmet());
     app.useGlobalPipes(
@@ -136,7 +136,6 @@ async function addSessionMiddleware(
     app: INestApplication,
     config: ApiConfig,
 ): Promise<void> {
-    const RedisStore = connectRedis(session);
     const client = getRedisClient(config);
 
     app.use(
@@ -150,7 +149,9 @@ async function addSessionMiddleware(
                 httpOnly: true,
                 sameSite: true,
             },
-            store: new RedisStore({ client }),
+            // @ts-expect-error Bypassing invalid typings in @types/connect-redis
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            store: new RedisStore({ client, prefix: `${config.projectName}:` }),
         }),
     );
 
