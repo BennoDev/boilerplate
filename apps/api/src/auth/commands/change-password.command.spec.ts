@@ -1,49 +1,26 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { hash } from 'bcrypt';
 import { mock, instance, when, anything, reset } from 'ts-mockito';
-import * as bcrypt from 'bcrypt';
 
 import { Logger } from '@libs/logger';
 import { UserRepository } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
+import { createTestUserSession } from '../../common';
 import { InvalidOldPassword } from '../auth.errors';
-import { ChangePasswordRequest } from '../dto';
-import { ChangePasswordHandler } from './change-password.command';
-import { createTestUserSession } from '../../common/testing';
+import { type ChangePasswordRequest } from '../dto';
 import { HashService } from '../services';
 
-describe('ChangePasswordHandler', () => {
-    let module: TestingModule;
-    let handler: ChangePasswordHandler;
+import { ChangePasswordHandler } from './change-password.command';
 
+describe('ChangePasswordHandler', () => {
     const userRepository = mock(UserRepository);
     const hashService = mock(HashService);
 
-    beforeAll(async () => {
-        module = await Test.createTestingModule({
-            providers: [
-                ChangePasswordHandler,
-                {
-                    provide: HashService,
-                    useValue: instance(hashService),
-                },
-                {
-                    provide: Logger,
-                    useValue: instance(mock(Logger)),
-                },
-                {
-                    provide: UserRepository,
-                    useValue: instance(userRepository),
-                },
-            ],
-        }).compile();
-
-        handler = module.get(ChangePasswordHandler);
-    });
-
-    afterAll(async () => {
-        await module.close();
-    });
+    const handler = new ChangePasswordHandler(
+        instance(userRepository),
+        instance(hashService),
+        instance(mock(Logger)),
+    );
 
     afterEach(() => {
         reset(userRepository);
@@ -57,7 +34,7 @@ describe('ChangePasswordHandler', () => {
                 newPassword: 'my_new_password',
             };
             const user = createTestUser({
-                password: bcrypt.hashSync(request.oldPassword, 10),
+                password: await hash(request.oldPassword, 10),
             });
 
             when(userRepository.findOneOrFail(anything())).thenResolve(user);

@@ -1,12 +1,18 @@
-import { UserState } from '@libs/models';
+import { type Request } from 'express';
+
+import { type UserState } from '@libs/models';
 
 /**
- * Deserialized session for a request.
+ * Deserialized user session for a request.
  */
-export type UserSession = {
+export interface UserSession {
     userId: string;
     email: string;
     state: UserState;
     firstName: string;
     lastName: string;
-};
+}
+
+export interface ApiRequest extends Request {
+    user?: UserSession;
+}

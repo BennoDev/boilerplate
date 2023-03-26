@@ -1,36 +1,17 @@
+import { faker } from '@faker-js/faker';
 import { anything, instance, mock, reset, when } from 'ts-mockito';
-import * as faker from 'faker';
-import { Test, TestingModule } from '@nestjs/testing';
 
 import { UserRepository, UserState } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
+import { createTestUserSession } from '../../common';
+
 import { SessionSerializer } from './session-serializer.middleware';
-import { createTestUserSession } from '../../common/testing';
 
 describe('SessionSerializer', () => {
-    let module: TestingModule;
-    let serializer: SessionSerializer;
-
     const userRepository = mock(UserRepository);
 
-    beforeAll(async () => {
-        module = await Test.createTestingModule({
-            providers: [
-                SessionSerializer,
-                {
-                    provide: UserRepository,
-                    useValue: instance(userRepository),
-                },
-            ],
-        }).compile();
-
-        serializer = module.get(SessionSerializer);
-    });
-
-    afterAll(async () => {
-        await module.close();
-    });
+    const serializer = new SessionSerializer(instance(userRepository));
 
     afterEach(() => {
         reset(userRepository);
@@ -60,7 +41,7 @@ describe('SessionSerializer', () => {
         await serializer.use(req, {} as any, mockNext);
 
         expect(mockNext).toHaveBeenCalled();
-        expect(req.user).toEqual(session);
+        expect(session).toMatchObject(req.user);
     });
 
     it('should continue if no cookie is present', async () => {

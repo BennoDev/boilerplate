@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 
 const saltRounds = 10;
 
 @Injectable()
 export class HashService {
     hash(text: string): Promise<string> {
-        return bcrypt.hash(text, saltRounds);
+        return hash(text, saltRounds);
     }
 
     compare(text: string, hashed: string): Promise<boolean> {
-        return bcrypt.compare(text, hashed);
+        return compare(text, hashed);
     }
 }

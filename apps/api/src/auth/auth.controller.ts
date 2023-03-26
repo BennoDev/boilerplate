@@ -13,14 +13,18 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Response, Request } from 'express';
 
 import {
+    UserSession,
+    GetUserSession,
+    AuthenticatedGuard,
+    destroyExpressSession,
+} from '../common';
+
+import { ChangePasswordHandler, LoginHandler } from './commands';
+import {
     LoginRequest,
     ChangePasswordRequest,
-    AuthenticatedUserResponse,
+    type AuthenticatedUserResponse,
 } from './dto';
-import { UserSession } from '../common/common.types';
-import { AuthenticatedGuard, destroyExpressSession } from '../common/guards';
-import { GetUserSession } from '../common/decorators';
-import { ChangePasswordHandler, LoginHandler } from './commands';
 import { GetAuthenticatedUserHandler } from './queries';
 
 @ApiTags('Auth')
@@ -36,7 +40,6 @@ export class AuthController {
     @Post('login')
     async login(
         @Body() body: LoginRequest,
-        // Overwriting session because the merged interfaces are broken in our CI/CD.
         @Req() request: Request & { session: { userId: string } },
     ): Promise<AuthenticatedUserResponse> {
         const user = await this.loginHandler.execute({ data: body });

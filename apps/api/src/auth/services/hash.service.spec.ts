@@ -1,17 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-
 import { HashService } from './hash.service';
 
 describe('HashService', () => {
-    let module: TestingModule;
-    let service: HashService;
-
-    beforeAll(async () => {
-        module = await Test.createTestingModule({
-            providers: [HashService],
-        }).compile();
-        service = module.get(HashService);
-    });
+    const service = new HashService();
 
     describe('hash', () => {
         it('should correctly hash a value', async () => {

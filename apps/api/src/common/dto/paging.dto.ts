@@ -1,6 +1,6 @@
-import { IsOptional, IsString, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { IsOptional, IsString, IsEnum } from 'class-validator';
 
 import { IsNonNegativeInteger } from '@libs/common/validators';
 

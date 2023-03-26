@@ -1,17 +1,18 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { Namespace } from 'cls-hooked';
-import * as pino from 'pino';
+import { Injectable, Inject, Scope } from '@nestjs/common';
+import { pino } from 'pino';
 
 import { Environment } from '@libs/common';
 
+import { ContextStore } from './context-store.service';
 import { LoggerConfig, loggerConfig } from './logger.config';
-import { namespaceToken, traceIdKey } from './logger.constants';
 
 type LogMeta = Record<string, unknown> & {
     /**
      * Added as a label to the message, easy to search by.
+     * Ideally this would be set logger-instance level by calling {@link setContext} in the constructor of the consuming class.
+     * It can be overwritten here at individual log-level if necessary.
      */
-    context: string;
+    context?: string;
     /**
      * Id for the request or operation this log belongs to.
      * If none is passed, it will default to the idea found in the active namespace (if one is active).
@@ -44,15 +45,16 @@ const secretsToRedact = [
     '*.refreshToken',
 ];
 
-@Injectable()
+@Injectable({ scope: Scope.TRANSIENT })
 export class Logger {
-    private logger: pino.Logger;
-    private formattedEnvironment: string;
+    private readonly logger: pino.Logger;
+    private readonly formattedEnvironment: string;
+    private context = 'MISSING_CONTEXT';
 
     constructor(
-        @Inject(namespaceToken) private readonly namespace: Namespace,
         @Inject(loggerConfig.KEY)
         private readonly config: LoggerConfig,
+        private readonly contextStore: ContextStore,
     ) {
         this.formattedEnvironment = this.config.environment.toUpperCase();
 
@@ -68,20 +70,16 @@ export class Logger {
                     ? basePropsToRedact
                     : [...basePropsToRedact, ...secretsToRedact],
             },
-            prettyPrint: isLocalEnvironment
-                ? ({
-                      translateTime: 'yyyy-mm-dd HH:MM:ss',
-                      messageFormat: '[{context}]: {message}',
-                      base: null,
-                      // Doing this so DB queries are more readably printed in console
-                      customPrettifiers: {
-                          query: (value: unknown): string =>
-                              typeof value === 'string'
-                                  ? value
-                                  : JSON.stringify(value),
+            transport: isLocalEnvironment
+                ? {
+                      target: 'pino-pretty',
+                      options: {
+                          translateTime: 'yyyy-mm-dd HH:MM:ss',
+                          messageFormat: '[{context}]: {message}',
+                          messageKey: 'message',
                       },
-                  } as pino.PrettyOptions)
-                : false,
+                  }
+                : undefined,
             level: this.config.logLevel,
             messageKey: 'message',
             mixin: this.metaMixin.bind(this),
@@ -92,26 +90,31 @@ export class Logger {
                 },
             },
             serializers: {
-                error: (value: unknown): unknown =>
-                    value instanceof Error
-                        ? {
-                              name: value.name,
-                              message: value.message,
-                              stack: value.stack,
-                          }
-                        : value,
+                error: pino.stdSerializers.err,
+                err: pino.stdSerializers.err,
+                failureReasons: (errors: Error[]) =>
+                    errors.map(pino.stdSerializers.err),
             },
         });
     }
 
     /**
-     * Highest level of logging, use this in case something absolutely critical happens that
+     * Sets a shared context for all messages called for this logger instance.
+     * Can be overwritten on a per-log basis by passing ´context´ as part of the log ´meta´.
+     * @param context The context for the current Logger instance
+     */
+    setContext(context: string): void {
+        this.context = context;
+    }
+
+    /**
+     * Most urgent level of logging, use this in case something absolutely critical happens that
      * basically means the entire platform / application **can not function and can not automatically recover**.
      *
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
-    fatal(message: string, meta: LogMeta): void {
+    fatal(message: string, meta: LogMeta = {}): void {
         this.logger.fatal(meta, message);
     }
 
@@ -124,7 +127,7 @@ export class Logger {
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
-    error(message: string, meta: LogMeta): void {
+    error(message: string, meta: LogMeta = {}): void {
         this.logger.error(meta, message);
     }
 
@@ -139,7 +142,7 @@ export class Logger {
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
-    warn(message: string, meta: LogMeta): void {
+    warn(message: string, meta: LogMeta = {}): void {
         this.logger.warn(meta, message);
     }
 
@@ -154,7 +157,7 @@ export class Logger {
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
-    info(message: string, meta: LogMeta): void {
+    info(message: string, meta: LogMeta = {}): void {
         this.logger.info(meta, message);
     }
 
@@ -169,23 +172,33 @@ export class Logger {
      * @param message Message for this log
      * @param meta Extra useful information for this log
      */
-    debug(message: string, meta: LogMeta): void {
+    debug(message: string, meta: LogMeta = {}): void {
         this.logger.debug(meta, message);
     }
 
     /**
      * Lowest level of logging, only for absolute details. In most cases, prefer `debug`.
+     *
      * @param message Message for this log
-     * @param meta Extra useful information for this log
+     * @param meta Extra useful information for this log²²
      */
-    trace(message: string, meta: LogMeta): void {
+    trace(message: string, meta: LogMeta = {}): void {
         this.logger.trace(meta, message);
     }
 
-    metaMixin(): { environment: string; traceId: string } {
+    /**
+     * Returns information that should be added to every single log message.
+     * These are generally supportive fields such as trace ids, or environment information.
+     */
+    private metaMixin(): {
+        context: string;
+        environment: string;
+        traceId?: string;
+    } {
         return {
+            context: this.context,
             environment: this.formattedEnvironment,
-            traceId: this.namespace.get(traceIdKey),
+            traceId: this.contextStore.getContextOrDefault().traceId,
         };
     }
 }

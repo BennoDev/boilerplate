@@ -1,15 +1,16 @@
 import {
-    ValidatorConstraintInterface,
+    type ValidatorConstraintInterface,
     ValidatorConstraint,
-    ValidationArguments,
-    ValidationOptions,
+    type ValidationArguments,
+    type ValidationOptions,
     registerDecorator,
 } from 'class-validator';
 
 const validatorName = 'NonNegativeInteger';
 
-export function IsNonNegativeInteger(validationOptions?: ValidationOptions) {
-    return function (object: object, propertyName: string): void {
+export const IsNonNegativeInteger =
+    (validationOptions?: ValidationOptions) =>
+    (object: object, propertyName: string): void => {
         registerDecorator({
             name: validatorName,
             target: object.constructor,
@@ -18,7 +19,6 @@ export function IsNonNegativeInteger(validationOptions?: ValidationOptions) {
             validator: IsNonNegativeIntegerConstraint,
         });
     };
-}
 
 @ValidatorConstraint({ name: validatorName })
 class IsNonNegativeIntegerConstraint implements ValidatorConstraintInterface {
@@ -31,6 +31,11 @@ class IsNonNegativeIntegerConstraint implements ValidatorConstraintInterface {
     }
 
     defaultMessage?(validationArguments: ValidationArguments): string {
+        /**
+         * Allowed in this context as we are truly dealing with "any" here,
+         * and the worst case is that it would print "[object Object] is not a proper ..." which is valid information for validation purposes.
+         */
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         return `${validationArguments.value} is not a proper non-negative integer, must be 0 or larger and integer`;
     }
 }

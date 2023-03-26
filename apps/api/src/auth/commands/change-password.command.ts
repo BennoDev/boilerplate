@@ -1,20 +1,18 @@
 import { Injectable } from '@nestjs/common';
 
-import { UserRepository } from '@libs/models';
+import { type IHandler } from '@libs/common';
 import { Logger } from '@libs/logger';
-import { IHandler } from '@libs/common';
+import { UserRepository } from '@libs/models';
 
-import { ChangePasswordRequest } from '../dto';
+import { type UserSession } from '../../common';
 import { InvalidOldPassword } from '../auth.errors';
-import { UserSession } from '../../common/common.types';
+import { type ChangePasswordRequest } from '../dto';
 import { HashService } from '../services';
 
-const context = 'ChangePasswordHandler';
-
-export type ChangePasswordCommand = {
+export interface ChangePasswordCommand {
     data: ChangePasswordRequest;
     session: UserSession;
-};
+}
 
 @Injectable()
 export class ChangePasswordHandler implements IHandler<ChangePasswordCommand> {
@@ -22,7 +20,9 @@ export class ChangePasswordHandler implements IHandler<ChangePasswordCommand> {
         private readonly userRepository: UserRepository,
         private readonly hashService: HashService,
         private readonly logger: Logger,
-    ) {}
+    ) {
+        this.logger.setContext('ChangePasswordHandler');
+    }
 
     async execute({ data, session }: ChangePasswordCommand): Promise<void> {
         const user = await this.userRepository.findOneOrFail(session.userId);
@@ -35,7 +35,7 @@ export class ChangePasswordHandler implements IHandler<ChangePasswordCommand> {
         if (!isCorrectOldPassword) {
             this.logger.warn(
                 'Invalid old password for change password attempt',
-                { context, userId: session.userId },
+                { userId: session.userId },
             );
             throw new InvalidOldPassword();
         }

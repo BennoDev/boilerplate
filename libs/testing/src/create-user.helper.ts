@@ -1,18 +1,23 @@
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
+import { plainToInstance } from 'class-transformer';
+import { mergeDeepRight } from 'ramda';
 
 import { User, UserState } from '@libs/models';
 
-export function createTestUser(overrides?: Partial<User>): User {
-    const user = new User();
-
-    user.id = overrides?.id || faker.datatype.uuid();
-    user.email = overrides?.email || faker.internet.email();
-    user.password = overrides?.password || faker.internet.password();
-    user.state = overrides?.state || UserState.Active;
-    user.firstName = overrides?.firstName || faker.name.firstName();
-    user.lastName = overrides?.lastName || faker.name.lastName();
-    user.createdAt = overrides?.createdAt || new Date();
-    user.updatedAt = overrides?.updatedAt || new Date();
-
-    return user;
-}
+export const createTestUser = (overrides: Partial<User> = {}): User =>
+    plainToInstance(
+        User,
+        mergeDeepRight(
+            {
+                id: overrides.id ?? faker.datatype.uuid(),
+                email: overrides.email ?? faker.internet.email(),
+                password: overrides.password ?? faker.internet.password(),
+                state: overrides.state ?? UserState.Active,
+                firstName: overrides.firstName ?? faker.name.firstName(),
+                lastName: overrides.lastName ?? faker.name.lastName(),
+                createdAt: overrides.createdAt ?? new Date(),
+                updatedAt: overrides.updatedAt ?? new Date(),
+            },
+            overrides,
+        ),
+    );

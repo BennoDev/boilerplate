@@ -1,4 +1,4 @@
-import { BadRequestException, MethodNotAllowedException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 export class ResetTokenInvalid extends BadRequestException {
     constructor() {
@@ -21,7 +21,7 @@ export class InvalidOldPassword extends BadRequestException {
     }
 }
 
-export class UserStateNotAllowed extends MethodNotAllowedException {
+export class InvalidUserState extends BadRequestException {
     constructor() {
         super('Action not allowed for this user', 'USER_STATE_NOT_ALLOWED');
     }

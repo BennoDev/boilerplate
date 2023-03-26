@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GetAuthenticatedUserHandler execute should return the correct user 1`] = `
-Object {
+{
   "createdAt": 2020-04-17T12:03:42.124Z,
   "email": "development@boilerplate.com",
   "firstName": "Developer",

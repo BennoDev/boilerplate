@@ -1,23 +1,23 @@
 import {
-    ExecutionContext,
+    type ExecutionContext,
     Injectable,
-    CanActivate,
+    type CanActivate,
     UnauthorizedException,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
+import { type Response, type Request } from 'express';
 
 import { UserState } from '@libs/models';
 
-import { UserSession } from '../common.types';
+import { type ApiRequest, type UserSession } from '../common.types';
 
 @Injectable()
 export class AuthenticatedGuard implements CanActivate {
     public async canActivate(context: ExecutionContext): Promise<boolean> {
-        const request = context.switchToHttp().getRequest();
+        const request = context.switchToHttp().getRequest<ApiRequest>();
         const response = context.switchToHttp().getResponse<Response>();
-        const session: UserSession = request.user;
+        const session: UserSession | undefined = request.user;
 
-        if (!session || session?.state !== UserState.Active) {
+        if (session?.state !== UserState.Active) {
             await destroyExpressSession(request, response);
             // We throw an UnauthorizedException because by not doing it, a ForbiddenException is returned to the client
             throw new UnauthorizedException();
@@ -28,13 +28,13 @@ export class AuthenticatedGuard implements CanActivate {
 }
 
 /**
- * This function invalidates everything that is related to a session: clear cookie, remove cookie from redis
+ * This function invalidates everything that is related to a session: clears the cookie & removes entry from redis
  */
-export function destroyExpressSession(
+export const destroyExpressSession = (
     request: Request,
     response: Response,
-): Promise<void> {
-    return new Promise((resolve, reject) => {
+): Promise<void> =>
+    new Promise((resolve, reject) => {
         try {
             request.session.destroy(() => {
                 response.clearCookie('connect.sid');
@@ -44,4 +44,3 @@ export function destroyExpressSession(
             reject(error);
         }
     });
-}

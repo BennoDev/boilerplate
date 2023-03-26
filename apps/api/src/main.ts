@@ -1,64 +1,79 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { NestFactory } from '@nestjs/core';
 import {
-    INestApplication,
+    type INestApplication,
     ValidationPipe,
     BadRequestException,
 } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as helmet from 'helmet';
 import * as compression from 'compression';
-import * as rateLimit from 'express-rate-limit';
-import * as redisStore from 'rate-limit-redis';
-import throng from 'throng';
-import * as basicAuth from 'express-basic-auth';
+import RedisStore from 'connect-redis';
+import basicAuth from 'express-basic-auth';
 import * as session from 'express-session';
-import * as redis from 'redis';
-import * as connectRedis from 'connect-redis';
+import helmet from 'helmet';
 
 import { Environment, tryGetEnv } from '@libs/common';
 import { Logger, NestLoggerProxy } from '@libs/logger';
 
+import { apiConfig, type ApiConfig } from './api.config';
 import { ApiModule } from './api.module';
-import { apiConfig, ApiConfig } from './api.config';
+import { getRedisClient } from './redis.client';
 
 const isProductionLikeEnvironment = [
     Environment.Production,
     Environment.Staging,
 ].includes(tryGetEnv('NODE_ENV') as Environment);
 
-const context = 'Bootstrap:Api';
 const API_PREFIX = 'api';
 
-async function bootstrap(): Promise<void> {
-    const app = await NestFactory.create(ApiModule, { bufferLogs: true });
-    const logger = app.get(Logger);
-    app.useLogger(new NestLoggerProxy(logger));
+const bootstrap = async (): Promise<void> => {
+    const app = await NestFactory.create(ApiModule, {
+        bufferLogs: true,
+        autoFlushLogs: true,
+        forceCloseConnections: true,
+    });
 
-    logger.info('Successfully created nest app', { context });
+    const logger = await app.resolve(Logger);
+    logger.setContext('Bootstrap:Api');
+
+    app.useLogger(new NestLoggerProxy(await app.resolve(Logger)));
+
+    logger.info('Successfully created nest app');
 
     app.setGlobalPrefix(API_PREFIX);
     const config = app.get<ApiConfig>(apiConfig.KEY);
 
     if (!isProductionLikeEnvironment) {
-        logger.info('Initializing swagger', { context });
         addSwaggerDocs(app, logger, config);
     }
 
-    logger.info('Initializing middleware', { context });
-    addGlobalMiddleware(app, config);
-    addSessionMiddleware(app, logger, config);
+    addGlobalMiddleware(app, logger, config);
+    addSessionMiddleware(app, config);
+
+    app.enableShutdownHooks();
 
     await app.listen(config.api.port);
-    logger.info(`App running on port [${config.api.port}]`, { context });
-}
+    logger.info('App running', { port: config.api.port });
+};
 
-function addSwaggerDocs(
+const addSwaggerDocs = (
     app: INestApplication,
     logger: Logger,
     config: ApiConfig,
-): void {
-    const fullSwaggerPath = `${API_PREFIX}/${config.swagger.path!}`;
+): void => {
+    logger.info('Initializing Swagger...');
+
+    /*
+     * We cast here to circumvent having to deal with these values being possibly undefined.
+     * If they are truly undefined this will be very easily notice by trying to access the docs.
+     * This is a case where the extra effort for type safety is not worth it.
+     */
+    const { path, username, password } = config.swagger as {
+        path: string;
+        username: string;
+        password: string;
+    };
+
+    const fullSwaggerPath = `${API_PREFIX}/${path}`;
     const isLocalEnvironment = [Environment.Local, Environment.Test].includes(
         config.environment,
     );
@@ -69,7 +84,7 @@ function addSwaggerDocs(
             basicAuth({
                 challenge: true,
                 users: {
-                    [config.swagger.username!]: config.swagger.password!,
+                    [username]: password,
                 },
             }),
         );
@@ -78,27 +93,27 @@ function addSwaggerDocs(
     const options = new DocumentBuilder()
         .setTitle(config.projectName)
         .setDescription('Swagger documentation')
-        .setVersion('1.0')
         .addCookieAuth()
         .build();
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup(fullSwaggerPath, app, document);
 
-    logger.info(`Swagger running at [${fullSwaggerPath}]`, { context });
-}
+    logger.info('Swagger running', { path: fullSwaggerPath });
+};
 
-function addGlobalMiddleware(app: INestApplication, config: ApiConfig): void {
+const addGlobalMiddleware = (
+    app: INestApplication,
+    logger: Logger,
+    config: ApiConfig,
+): void => {
+    logger.info('Initializing global middleware');
+
     app.enableCors({
         origin: config.api.allowedOrigins,
         methods: ['OPTIONS', 'HEAD', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         credentials: true,
     });
-    app.use(
-        rateLimit({
-            max: config.api.rateLimit,
-            store: new redisStore({ redisURL: config.redisUrl }),
-        }),
-    );
+
     app.use(helmet());
     app.useGlobalPipes(
         new ValidationPipe({
@@ -115,17 +130,13 @@ function addGlobalMiddleware(app: INestApplication, config: ApiConfig): void {
         }),
     );
     app.use(compression());
-}
+};
 
-function addSessionMiddleware(
+const addSessionMiddleware = async (
     app: INestApplication,
-    logger: Logger,
     config: ApiConfig,
-) {
-    const RedisStore = connectRedis(session);
-    // Have to mark client as any because of an error in the typings of redis | connect-redis
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const client: any = redis.createClient({ url: config.redisUrl });
+): Promise<void> => {
+    const client = getRedisClient(config);
 
     app.use(
         session({
@@ -136,24 +147,19 @@ function addSessionMiddleware(
                 maxAge: config.session.expiresIn,
                 secure: 'auto',
                 httpOnly: true,
+                sameSite: true,
             },
-            store: new RedisStore({ client }),
+            // @ts-expect-error Bypassing invalid typings in @types/connect-redis
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            store: new RedisStore({ client, prefix: `${config.projectName}:` }),
         }),
     );
 
-    client.on('error', logger.error);
-}
+    const logger = await app.resolve(Logger);
+    logger.setContext('Redis');
+    client.on('error', (error: Error) =>
+        logger.error('Redis error occurred', { error }),
+    );
+};
 
-function run(): void {
-    if (isProductionLikeEnvironment) {
-        throng({
-            workers: process.env.WORKERS || 1,
-            start: bootstrap,
-            lifetime: Infinity,
-        });
-    } else {
-        bootstrap();
-    }
-}
-
-run();
+bootstrap();

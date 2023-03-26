@@ -1,15 +1,42 @@
+import { MissingEnvVar } from './common.errors';
+
 /**
  * Tries to get an environment variable with the given name.
  * Throws an error if the variable was not found.
  *
- * @param envVarName Name of the environment variable to look for
- * @returns Value of the environment variable
+ * @param varName Name of the environment variable to look for
  */
-export function tryGetEnv(envVarName: string): string {
-    const envVar = process.env[envVarName];
+export const tryGetEnv = (varName: string): string => {
+    const envVar = process.env[varName];
     if (envVar) {
         return envVar;
     }
 
-    throw new Error(`Config variable ${envVarName} not found`);
-}
+    throw new MissingEnvVar(varName);
+};
+
+/**
+ * Awaits an array of promises and groups them by fulfilled and rejected.
+ *
+ * @param promises List of promise that will be awaited
+ */
+export const allSettled = async <Result = unknown>(
+    promises: Promise<Result>[],
+): Promise<{
+    fulfilled: PromiseFulfilledResult<Result>[];
+    rejected: PromiseRejectedResult[];
+}> => {
+    const results = await Promise.allSettled(promises);
+
+    const fulfilled: PromiseFulfilledResult<Result>[] = [];
+    const rejected: PromiseRejectedResult[] = [];
+    results.forEach(result => {
+        if (result.status === 'fulfilled') {
+            fulfilled.push(result);
+        } else {
+            rejected.push(result);
+        }
+    });
+
+    return { fulfilled, rejected };
+};

@@ -1,21 +1,22 @@
 import {
     Injectable,
-    NestInterceptor,
-    ExecutionContext,
-    CallHandler,
+    type NestInterceptor,
+    type ExecutionContext,
+    type CallHandler,
     HttpStatus,
+    type HttpException,
 } from '@nestjs/common';
-import { Observable, throwError } from 'rxjs';
+import { type Response, type Request } from 'express';
+import { type Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { Request } from 'express';
 
 import { Logger } from '@libs/logger';
 
-const context = 'Request';
-
 @Injectable()
 export class LoggerInterceptor implements NestInterceptor {
-    constructor(private readonly logger: Logger) {}
+    constructor(private readonly logger: Logger) {
+        this.logger.setContext('Request');
+    }
 
     intercept(
         executionContext: ExecutionContext,
@@ -27,9 +28,9 @@ export class LoggerInterceptor implements NestInterceptor {
         return next.handle().pipe(
             tap(() => {
                 this.logger.info(formatLogMessage, {
-                    context,
-                    status: executionContext.switchToHttp().getResponse()
-                        .statusCode,
+                    status: executionContext
+                        .switchToHttp()
+                        .getResponse<Response>().statusCode,
                     duration: `${this.calculateRequestDuration(startTime)}ms`,
                     params: req.params,
                     query: req.query,
@@ -37,14 +38,19 @@ export class LoggerInterceptor implements NestInterceptor {
                     host: req.hostname,
                 });
             }),
-            catchError(error => {
+            catchError((error: HttpException) => {
+                const errorResponse = error.getResponse() as {
+                    statusCode?: number;
+                    error?: string;
+                    message?: string;
+                };
+
                 this.logger.warn(formatLogMessage, {
-                    context,
                     status:
-                        error?.response?.statusCode ||
+                        errorResponse.statusCode ??
                         HttpStatus.INTERNAL_SERVER_ERROR,
-                    code: error?.response?.error || 'Unknown error',
-                    description: error?.response?.message || 'No description',
+                    code: errorResponse.error ?? 'Unknown error',
+                    description: errorResponse.message ?? 'No description',
                     duration: `${this.calculateRequestDuration(startTime)}ms`,
                     params: req.params,
                     query: req.query,
@@ -52,13 +58,14 @@ export class LoggerInterceptor implements NestInterceptor {
                     host: req.hostname,
                 });
 
-                return throwError(error);
+                return throwError(() => error);
             }),
         );
     }
 
     /**
      * Calculates the amount of time it took to handle a request.
+     *
      * @param startTime UNIX timestamp of when the request came in.
      */
     private calculateRequestDuration(startTime: number): number {

@@ -1,49 +1,26 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { mock, instance, when, anything, reset } from 'ts-mockito';
-import * as faker from 'faker';
-import * as bcrypt from 'bcrypt';
+import { faker } from '@faker-js/faker';
 import { UnauthorizedException } from '@nestjs/common';
+import { hash } from 'bcrypt';
+import { mock, instance, when, anything, reset } from 'ts-mockito';
 
 import { Logger } from '@libs/logger';
 import { UserRepository, UserState } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
-import { UserStateNotAllowed } from '../auth.errors';
-import { LoginHandler } from './login.command';
+import { InvalidUserState } from '../auth.errors';
 import { HashService } from '../services';
 
-describe('LoginHandler', () => {
-    let module: TestingModule;
-    let handler: LoginHandler;
+import { LoginHandler } from './login.command';
 
+describe('LoginHandler', () => {
     const userRepository = mock(UserRepository);
     const hashService = mock(HashService);
 
-    beforeAll(async () => {
-        module = await Test.createTestingModule({
-            providers: [
-                LoginHandler,
-                {
-                    provide: Logger,
-                    useValue: instance(mock(Logger)),
-                },
-                {
-                    provide: UserRepository,
-                    useValue: instance(userRepository),
-                },
-                {
-                    provide: HashService,
-                    useValue: instance(hashService),
-                },
-            ],
-        }).compile();
-
-        handler = module.get(LoginHandler);
-    });
-
-    afterAll(async () => {
-        await module.close();
-    });
+    const handler = new LoginHandler(
+        instance(userRepository),
+        instance(hashService),
+        instance(mock(Logger)),
+    );
 
     afterEach(() => {
         reset(userRepository);
@@ -54,7 +31,7 @@ describe('LoginHandler', () => {
         it('should validate the login credentials correctly', async () => {
             const email = faker.internet.email();
             const password = 'Password1%';
-            const hashedPassword = await bcrypt.hash(password, 10);
+            const hashedPassword = await hash(password, 10);
             const user = createTestUser({
                 email,
                 password: hashedPassword,
@@ -89,13 +66,13 @@ describe('LoginHandler', () => {
                 handler.execute({
                     data: { email, password },
                 }),
-            ).rejects.toThrowError(UserStateNotAllowed);
+            ).rejects.toThrowError(InvalidUserState);
         });
 
         it('should throw an error when the passwords do not match', async () => {
             const email = faker.internet.email();
             const password = 'Password1%';
-            const hashedPassword = await bcrypt.hash(`_${password}`, 10);
+            const hashedPassword = await hash(`_${password}`, 10);
             const user = createTestUser({
                 email,
                 password: hashedPassword,

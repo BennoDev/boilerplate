@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
-import { join } from 'path';
+import { join } from 'node:path';
 
-import { LoggerModule } from '@libs/logger';
+import { Module } from '@nestjs/common';
+import { ConfigModule, type ConfigModuleOptions } from '@nestjs/config';
+
 import { Environment, tryGetEnv } from '@libs/common';
+import { LoggerModule } from '@libs/logger';
 
 import { workerConfig } from './worker.config';
 
@@ -25,6 +26,6 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
     : { envFilePath: [join(__dirname, '.env')], ...baseConfigOptions };
 
 @Module({
-    imports: [ConfigModule.forRoot(configOptions), LoggerModule.register()],
+    imports: [ConfigModule.forRoot(configOptions), LoggerModule],
 })
 export class WorkerModule {}

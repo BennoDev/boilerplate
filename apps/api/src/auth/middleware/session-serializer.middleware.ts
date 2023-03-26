@@ -1,15 +1,14 @@
-import { NestMiddleware, Injectable } from '@nestjs/common';
-import { Response, Request } from 'express';
+import { type NestMiddleware, Injectable } from '@nestjs/common';
+import { type Response, type Request } from 'express';
 
 import { UserRepository } from '@libs/models';
 
-import { UserSession } from '../../common/common.types';
+import { type UserSession } from '../../common';
 
 @Injectable()
 export class SessionSerializer implements NestMiddleware {
     constructor(private readonly userRepository: UserRepository) {}
 
-    // Overwriting session because the merged interfaces are broken in our CI/CD.
     async use(
         req: {
             user: UserSession | null;
@@ -30,7 +29,10 @@ export class SessionSerializer implements NestMiddleware {
     private async composeUserSession(
         userId: string,
     ): Promise<UserSession | null> {
-        const user = await this.userRepository.findOne(userId);
+        const user = await this.userRepository.findOne(userId, {
+            // This request happens outside of a MikroORM request scope, so we disable the identity map.
+            disableIdentityMap: true,
+        });
         if (!user) return null;
         return {
             userId: user.id,

@@ -1,11 +1,15 @@
 import { registerAs } from '@nestjs/config';
 
-import { Environment, tryGetEnv } from '@libs/common';
+import { type Environment, tryGetEnv } from '@libs/common';
 
-export type ApiConfig = {
+export interface ApiConfig {
     environment: Environment;
     projectName: string;
-    redisUrl: string;
+    redis: {
+        host: string;
+        port: number;
+        password: string;
+    };
     session: {
         secret: string;
         expiresIn: number;
@@ -20,12 +24,16 @@ export type ApiConfig = {
         username?: string;
         password?: string;
     };
-};
+}
 
-export const apiConfig = registerAs<ApiConfig>('app', () => ({
+export const apiConfig = registerAs<ApiConfig>('api', () => ({
     environment: tryGetEnv('NODE_ENV') as Environment,
     projectName: tryGetEnv('PROJECT_NAME'),
-    redisUrl: tryGetEnv('REDIS_URL'),
+    redis: {
+        host: tryGetEnv('REDIS_HOST'),
+        port: parseInt(tryGetEnv('REDIS_PORT'), 10),
+        password: tryGetEnv('REDIS_PASSWORD'),
+    },
     session: {
         expiresIn: parseInt(tryGetEnv('SESSION_TTL'), 10),
         secret: tryGetEnv('SESSION_SECRET'),

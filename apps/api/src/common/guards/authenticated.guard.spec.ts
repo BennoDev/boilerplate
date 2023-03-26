@@ -1,29 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { type ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { type HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { mock, when, instance, reset } from 'ts-mockito';
-import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 
 import { UserState } from '@libs/models';
 
 import { AuthenticatedGuard } from './authenticated.guard';
 
 describe('AuthenticationGuard', () => {
-    let module: TestingModule;
-    let guard: AuthenticatedGuard;
     const context = mock<ExecutionContext>();
     const argumentsHost = mock<HttpArgumentsHost>();
 
-    beforeAll(async () => {
-        module = await Test.createTestingModule({
-            providers: [AuthenticatedGuard],
-        }).compile();
-
-        guard = module.get(AuthenticatedGuard);
-    });
-
-    afterAll(async () => {
-        await module.close();
-    });
+    const guard = new AuthenticatedGuard();
 
     afterEach(() => {
         reset(context);
@@ -32,7 +19,7 @@ describe('AuthenticationGuard', () => {
 
     it('should authenticate incoming requests', async () => {
         when(context.switchToHttp()).thenReturn(instance(argumentsHost));
-        when(argumentsHost.getRequest<any>()).thenReturn({
+        when(argumentsHost.getRequest()).thenReturn({
             isAuthenticated: () => true,
             user: {
                 state: UserState.Active,
@@ -46,14 +33,14 @@ describe('AuthenticationGuard', () => {
 
     it('should destroy session and throw error when not authenticated', async () => {
         when(context.switchToHttp()).thenReturn(instance(argumentsHost));
-        when(argumentsHost.getRequest<any>()).thenReturn({
+        when(argumentsHost.getRequest()).thenReturn({
             isAuthenticated: () => false,
             logout: () => null,
             session: {
-                destroy: (cb: Function): void => cb(),
+                destroy: (cb: (...args: any[]) => void): void => cb(),
             },
         });
-        when(argumentsHost.getResponse<any>()).thenReturn({
+        when(argumentsHost.getResponse()).thenReturn({
             clearCookie: (_cookieName: string) => null,
         });
 
@@ -64,17 +51,17 @@ describe('AuthenticationGuard', () => {
 
     it('should destroy session and throw error when not in ACTIVE state', async () => {
         when(context.switchToHttp()).thenReturn(instance(argumentsHost));
-        when(argumentsHost.getRequest<any>()).thenReturn({
+        when(argumentsHost.getRequest()).thenReturn({
             isAuthenticated: () => false,
             logout: () => null,
             user: {
                 state: UserState.Inactive,
             },
             session: {
-                destroy: (cb: Function): void => cb(),
+                destroy: (cb: (...args: any[]) => void): void => cb(),
             },
         });
-        when(argumentsHost.getResponse<any>()).thenReturn({
+        when(argumentsHost.getResponse()).thenReturn({
             clearCookie: (_cookieName: string) => null,
         });
 

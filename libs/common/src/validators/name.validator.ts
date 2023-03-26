@@ -1,15 +1,16 @@
 import {
-    ValidationOptions,
+    type ValidationOptions,
     registerDecorator,
-    ValidationArguments,
-    ValidatorConstraintInterface,
+    type ValidationArguments,
+    type ValidatorConstraintInterface,
     ValidatorConstraint,
 } from 'class-validator';
 
 const validatorName = 'IsName';
 
-export function IsName(validationOptions?: ValidationOptions) {
-    return function (object: object, propertyName: string): void {
+export const IsName =
+    (validationOptions?: ValidationOptions) =>
+    (object: object, propertyName: string): void => {
         registerDecorator({
             name: validatorName,
             target: object.constructor,
@@ -18,7 +19,6 @@ export function IsName(validationOptions?: ValidationOptions) {
             validator: IsNameConstraint,
         });
     };
-}
 
 @ValidatorConstraint({ name: validatorName, async: false })
 class IsNameConstraint implements ValidatorConstraintInterface {
@@ -38,6 +38,11 @@ class IsNameConstraint implements ValidatorConstraintInterface {
     }
 
     defaultMessage?(validationArguments: ValidationArguments): string {
+        /**
+         * Allowed in this context as we are truly dealing with "any" here,
+         * and the worst case is that it would print "[object Object] is not a proper ..." which is valid information for validation purposes.
+         */
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         return `${validationArguments.value} is not a proper name, must be between 1 and 255 characters and can only contain alphanumeric characters, spaces and dashes`;
     }
 }
