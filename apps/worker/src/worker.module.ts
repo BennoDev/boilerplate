@@ -6,6 +6,7 @@ import { ConfigModule, type ConfigModuleOptions } from '@nestjs/config';
 import { Environment, tryGetEnv } from '@libs/common';
 import { LoggerModule } from '@libs/logger';
 
+import { HealthModule } from './health';
 import { workerConfig } from './worker.config';
 
 const isRemoteEnvironment = [
@@ -26,6 +27,6 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
     : { envFilePath: [join(__dirname, '.env')], ...baseConfigOptions };
 
 @Module({
-    imports: [ConfigModule.forRoot(configOptions), LoggerModule],
+    imports: [ConfigModule.forRoot(configOptions), LoggerModule, HealthModule],
 })
 export class WorkerModule {}
