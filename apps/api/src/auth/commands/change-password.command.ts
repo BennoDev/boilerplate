@@ -9,7 +9,7 @@ import { InvalidOldPassword } from '../auth.errors';
 import { type ChangePasswordRequest } from '../dto';
 import { HashService } from '../services';
 
-export interface ChangePasswordCommand {
+export type ChangePasswordCommand = {
     data: ChangePasswordRequest;
     session: UserSession;
 }

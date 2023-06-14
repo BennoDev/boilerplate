@@ -6,7 +6,7 @@ import { UserRepository } from '@libs/models';
 import { UnexpectedNull } from '../../common';
 import { type AuthenticatedUserResponse } from '../dto';
 
-export interface GetAuthenticatedUserQuery {
+export type GetAuthenticatedUserQuery = {
     data: { userId: string };
 }
 

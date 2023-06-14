@@ -8,7 +8,7 @@ import { InvalidUserState } from '../auth.errors';
 import { type LoginRequest } from '../dto';
 import { HashService } from '../services';
 
-export interface LoginCommand {
+export type LoginCommand = {
     data: LoginRequest;
 }
 

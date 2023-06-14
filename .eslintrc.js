@@ -34,6 +34,7 @@ module.exports = {
                 '@typescript-eslint/no-extraneous-class': 'off',
                 '@typescript-eslint/no-use-before-define': 'off',
                 '@typescript-eslint/interface-name-prefix': 'off',
+                '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
                 '@typescript-eslint/no-unused-vars': [
                     'warn',
                     { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },

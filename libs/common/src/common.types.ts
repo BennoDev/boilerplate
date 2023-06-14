@@ -1,3 +1,3 @@
-export interface IHandler<UseCase> {
+export type IHandler<UseCase> = {
     execute(arg: UseCase): unknown;
-}
+};

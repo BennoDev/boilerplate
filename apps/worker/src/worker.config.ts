@@ -2,7 +2,7 @@ import { registerAs } from '@nestjs/config';
 
 import { type Environment, tryGetEnv } from '@libs/common';
 
-export interface WorkerConfig {
+export type WorkerConfig = {
     environment: Environment;
     projectName: string;
     worker: {

@@ -5,7 +5,7 @@ import { type UserState } from '@libs/models';
 /**
  * Deserialized user session for a request.
  */
-export interface UserSession {
+export type UserSession = {
     userId: string;
     email: string;
     state: UserState;
@@ -13,6 +13,6 @@ export interface UserSession {
     lastName: string;
 }
 
-export interface ApiRequest extends Request {
+export type ApiRequest = {
     user?: UserSession;
-}
+} & Request

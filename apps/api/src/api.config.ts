@@ -2,7 +2,7 @@ import { registerAs } from '@nestjs/config';
 
 import { type Environment, tryGetEnv } from '@libs/common';
 
-export interface ApiConfig {
+export type ApiConfig = {
     environment: Environment;
     projectName: string;
     redis: {
