@@ -101,6 +101,7 @@ export class Logger {
     /**
      * Sets a shared context for all messages called for this logger instance.
      * Can be overwritten on a per-log basis by passing ´context´ as part of the log ´meta´.
+     * Defaults to the name of the inquirer (the class that injected this logger instance).
      * @param context The context for the current Logger instance
      */
     setContext(context: string): void {

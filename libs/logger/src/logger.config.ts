@@ -4,7 +4,7 @@ import { type Environment, tryGetEnv } from '@libs/common';
 
 import { type LogLevel } from './logger.types';
 
-export interface LoggerConfig {
+export type LoggerConfig = {
     readonly environment: Environment;
     readonly logLevel: LogLevel;
     /**
@@ -15,15 +15,15 @@ export interface LoggerConfig {
      */
     readonly databaseLogLevel: LogLevel;
     /**
-     * Enable middleware that will add trace id's to all incoming requests, and subsequent logs within the request cycle.
-     * In most cases this enabled is the desired behaviour, however, for hosted / background services, this could be disabled
+     * Enable middleware that will log all incoming requests and responses.
+     * Also creates a request context with a trace id that will automatically be added to all logs within the same request.
      */
-    readonly enableRequestTracing: boolean;
-}
+    readonly enableRequestLogging: boolean;
+};
 
 export const loggerConfig = registerAs<LoggerConfig>('logger', () => ({
     databaseLogLevel: tryGetEnv('DATABASE_LOG_LEVEL') as LogLevel,
-    enableRequestTracing: Boolean(tryGetEnv('ENABLE_REQUEST_TRACING')),
+    enableRequestLogging: Boolean(tryGetEnv('ENABLE_REQUEST_LOGGING')),
     environment: tryGetEnv('NODE_ENV') as Environment,
     logLevel: tryGetEnv('LOG_LEVEL') as LogLevel,
 }));

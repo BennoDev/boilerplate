@@ -2,12 +2,12 @@ import { join } from 'node:path';
 
 import { Module } from '@nestjs/common';
 import { ConfigModule, type ConfigModuleOptions } from '@nestjs/config';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 
 import { Environment, tryGetEnv } from '@libs/common';
-import { LoggerInterceptor, LoggerModule } from '@libs/logger';
+import { LoggerModule } from '@libs/logger';
 
 import { type ApiConfig, apiConfig } from './api.config';
 import { AuthModule } from './auth';
@@ -51,10 +51,6 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
         AuthModule,
     ],
     providers: [
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: LoggerInterceptor,
-        },
         {
             provide: APP_GUARD,
             useClass: ThrottlerGuard,
