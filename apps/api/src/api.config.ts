@@ -24,7 +24,7 @@ export type ApiConfig = {
         username?: string;
         password?: string;
     };
-}
+};
 
 export const apiConfig = registerAs<ApiConfig>('api', () => ({
     environment: tryGetEnv('NODE_ENV') as Environment,
