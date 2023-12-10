@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# Nx cache
+.nx
+
 # Docker volumes
 docker/volumes
 
@@ -8,6 +11,10 @@ docker/volumes
 .env.*
 !.env.example
 !.env.*.example
+
+# Husky
+.husky/_
+
 
 # Compiled Output
 dist
