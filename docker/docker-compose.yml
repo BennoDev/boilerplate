@@ -1,13 +1,15 @@
 version: '3.8'
 services:
     postgres:
-        image: postgres:latest
+        # Replace :latest with desired version when starting a new project
+        image: bitnami/postgresql:latest
         container_name: pgsql_${COMPOSE_PROJECT_NAME}
         ports:
             - 5432:5432
         env_file:
             - ./.env.postgres
     redis:
+        # Replace :latest with desired version when starting a new project
         image: bitnami/redis:latest
         container_name: redis_${COMPOSE_PROJECT_NAME}
         ports:

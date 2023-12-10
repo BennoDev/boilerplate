@@ -1,9 +1,17 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "./tsconfig.json",
     "compilerOptions": {
-        "declaration": false,
-        "outDir": "../../dist/apps/api"
+        "outDir": "../../dist/out-tsc",
+        "module": "commonjs",
+        "types": ["node"],
+        "emitDecoratorMetadata": true,
+        "target": "es2021",
+        "strictNullChecks": true,
+        "noImplicitAny": true,
+        "strictBindCallApply": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true
     },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+    "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
+    "include": ["src/**/*.ts"]
 }

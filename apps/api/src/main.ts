@@ -5,18 +5,18 @@ import {
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as compression from 'compression';
+import compression from 'compression';
 import RedisStore from 'connect-redis';
 import basicAuth from 'express-basic-auth';
-import * as session from 'express-session';
+import session from 'express-session';
 import helmet from 'helmet';
 
-import { Environment, tryGetEnv } from '@libs/common';
+import { Environment, tryGetEnv } from '@libs/core';
 import { Logger, NestLoggerProxy } from '@libs/logger';
 
-import { apiConfig, type ApiConfig } from './api.config';
-import { ApiModule } from './api.module';
-import { getRedisClient } from './redis.client';
+import { apiConfig, type ApiConfig } from './app/api.config';
+import { ApiModule } from './app/api.module';
+import { getRedisClient } from './app/redis.client';
 
 const isProductionLikeEnvironment = [
     Environment.Production,
@@ -149,8 +149,6 @@ const addSessionMiddleware = async (
                 httpOnly: true,
                 sameSite: true,
             },
-            // @ts-expect-error Bypassing invalid typings in @types/connect-redis
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             store: new RedisStore({ client, prefix: `${config.projectName}:` }),
         }),
     );

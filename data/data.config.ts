@@ -1,19 +1,22 @@
-import { join } from 'node:path';
+import { join } from 'path';
 
-import { EntityCaseNamingStrategy, type Options } from '@mikro-orm/core';
-import { type PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { Options, UnderscoreNamingStrategy } from '@mikro-orm/core';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { config } from 'dotenv-safe';
-
-import { migrationFileName, toPascalCase } from './data.utils';
 import { MigrationGenerator } from './migration-generator';
+import { migrationFileName } from './data.utils';
 
-// The environments here have to be the same as mentioned in libs/common/common.constants.ts.
+/**
+ * The environments here have to be the same as mentioned in libs/common/core/src/lib/common.constants.ts.
+ */
 const isRemoteEnvironment = ['staging', 'production'].includes(
-    process.env.NODE_ENV!,
+    process.env.NODE_ENV as string,
 );
 
-// Get the env file according to current environment, if there is no specified, default to LOCAL
+/**
+ * Get the env file according to current environment, if there is no specified, default to LOCAL
+ */
 if (!isRemoteEnvironment) {
     config({
         example: join(__dirname, './.env.example'),
@@ -21,14 +24,11 @@ if (!isRemoteEnvironment) {
     });
 }
 
-type Target = 'migrations' | 'seeds-dev' | 'seeds-stag' | 'seeds-prod';
-const target = (process.env.TARGET ?? 'migrations') as Target;
-
-const migrationsPath = join(__dirname, target.toLowerCase());
 const baseConfig: Options<PostgreSqlDriver> = {
-    namingStrategy: EntityCaseNamingStrategy,
+    namingStrategy: UnderscoreNamingStrategy,
     baseDir: process.cwd(),
     clientUrl: process.env.DATABASE_URL,
+    discovery: { warnWhenNoEntities: false },
     driverOptions: {
         connection: {
             ssl:
@@ -39,20 +39,16 @@ const baseConfig: Options<PostgreSqlDriver> = {
     },
     entities: [],
     forceUtcTimezone: true,
+    persistOnCreate: false,
     migrations: {
         allOrNothing: false,
         disableForeignKeys: false,
-        path: migrationsPath,
-        /*
-         * Change from kebab case to pascal case for the table name, for consistency with casing strategy.
-         * This would change seeds-dev to SeedsDev for example.
-         */
-        tableName: toPascalCase(target.toLowerCase()),
+        path: join(__dirname, 'migrations'),
+        tableName: 'migrations',
         snapshot: false,
-        fileName: () => migrationFileName(migrationsPath),
         generator: MigrationGenerator,
+        fileName: () => migrationFileName(join(__dirname, 'migrations')),
     },
-    seeder: {},
     type: 'postgresql',
 };
 
@@ -64,6 +60,9 @@ const localConfig: Options<PostgreSqlDriver> = {
     debug: true,
     entities: ['./apps/**/*.entity.ts', './libs/**/*.entity.ts'],
     highlighter: new SqlHighlighter(),
+    seeder: {
+        path: join(__dirname, 'seeders'),
+    },
 };
 
 const remoteConfig: Options<PostgreSqlDriver> = {
@@ -74,6 +73,4 @@ const dataConfig: Options<PostgreSqlDriver> = isRemoteEnvironment
     ? { ...baseConfig, ...remoteConfig }
     : { ...baseConfig, ...localConfig };
 
-// We need a default export here for the config, in order for MikroORM to process this.
-// eslint-disable-next-line import/no-default-export
 export default dataConfig;

@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 
 import { Logger, NestLoggerProxy } from '@libs/logger';
 
-import { type WorkerConfig, workerConfig } from './worker.config';
-import { WorkerModule } from './worker.module';
+import { type WorkerConfig, workerConfig } from './app/worker.config';
+import { WorkerModule } from './app/worker.module';
 
 const API_PREFIX = 'api';
 
