@@ -5,6 +5,6 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
     },
-    "jestrunner.jestCommand": "TZ=UTC yarn jest",
+    "jestrunner.jestCommand": "yarn cross-env TZ=UTC yarn jest",
     "eslint.validate": ["json"]
 }

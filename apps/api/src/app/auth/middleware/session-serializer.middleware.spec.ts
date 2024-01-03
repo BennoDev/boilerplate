@@ -4,8 +4,6 @@ import { anything, instance, mock, reset, when } from '@typestrong/ts-mockito';
 import { UserRepository, UserState } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
-import { createTestUserSession } from '../../common';
-
 import { SessionSerializer } from './session-serializer.middleware';
 
 describe('SessionSerializer', () => {
@@ -23,11 +21,7 @@ describe('SessionSerializer', () => {
             firstName: faker.person.firstName(),
             lastName: faker.person.lastName(),
         });
-        const session = createTestUserSession({
-            userId: user.id,
-            ...user,
-        });
-        when(userRepository.findOne(anything())).thenResolve(user);
+        when(userRepository.findOne(anything(), anything())).thenResolve(user);
 
         const mockNext = jest.fn();
         const req: any = {
@@ -41,7 +35,7 @@ describe('SessionSerializer', () => {
         await serializer.use(req, {} as any, mockNext);
 
         expect(mockNext).toHaveBeenCalled();
-        expect(session).toMatchObject(req.user);
+        expect({ userId: user.id, ...user }).toMatchObject(req.user);
     });
 
     it('should continue if no cookie is present', async () => {

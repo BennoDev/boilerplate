@@ -5,7 +5,6 @@ import { Logger } from '@libs/logger';
 import { UserRepository } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
-import { createTestUserSession } from '../../common';
 import { InvalidOldPassword } from '../auth.errors';
 import { type ChangePasswordRequest } from '../dto';
 import { HashService } from '../services';
@@ -43,7 +42,13 @@ describe('ChangePasswordHandler', () => {
 
             await handler.execute({
                 data: request,
-                session: createTestUserSession(),
+                session: {
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    state: user.state,
+                    userId: user.id,
+                },
             });
 
             expect(user.password).toBe('hashed');
@@ -54,15 +59,20 @@ describe('ChangePasswordHandler', () => {
                 oldPassword: 'my_invalid_old_password',
                 newPassword: 'my_new_password',
             };
+            const user = createTestUser({ password: 'my_old_password' });
 
-            when(userRepository.findOneOrFail(anything())).thenResolve(
-                createTestUser({ password: 'my_old_password' }),
-            );
+            when(userRepository.findOneOrFail(anything())).thenResolve(user);
 
             await expect(
                 handler.execute({
                     data: request,
-                    session: createTestUserSession(),
+                    session: {
+                        email: user.email,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        state: user.state,
+                        userId: user.id,
+                    },
                 }),
             ).rejects.toThrowError(InvalidOldPassword);
         });
