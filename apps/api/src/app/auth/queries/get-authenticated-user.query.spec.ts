@@ -1,6 +1,7 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 
-import { ModelsModule } from '@libs/models';
+import { DatabaseModule } from '@libs/database';
+import { User } from '@libs/models';
 
 import { GetAuthenticatedUserHandler } from './get-authenticated-user.query';
 
@@ -10,7 +11,7 @@ describe('GetAuthenticatedUserHandler', () => {
 
     beforeAll(async () => {
         module = await Test.createTestingModule({
-            imports: [ModelsModule.registerTest()],
+            imports: [DatabaseModule.registerTest([User])],
             providers: [GetAuthenticatedUserHandler],
         }).compile();
 

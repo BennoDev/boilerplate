@@ -10,29 +10,23 @@ import { ConfigModule } from '@nestjs/config';
 import { Environment } from '@libs/core';
 import { Logger } from '@libs/logger';
 
-import { User } from './entities';
-import { type ModelsConfig, modelsConfig } from './models.config';
+import { type DatabaseConfig, databaseConfig } from './database.config';
 
-// Add all entities to this array, to register them and their repositories.
-const entities: EntityClass<AnyEntity>[] = [User];
-
-export class ModelsModule {
-    static register(): DynamicModule {
+export class DatabaseModule {
+    static register(entities: Array<EntityClass<AnyEntity>>): DynamicModule {
         return {
-            module: ModelsModule,
+            module: DatabaseModule,
             imports: [
                 MikroOrmModule.forRootAsync({
-                    imports: [ConfigModule.forFeature(modelsConfig)],
-                    inject: [Logger, modelsConfig.KEY],
-                    useFactory: (logger: Logger, config: ModelsConfig) => {
+                    imports: [ConfigModule.forFeature(databaseConfig)],
+                    inject: [Logger, databaseConfig.KEY],
+                    useFactory: (logger: Logger, config: DatabaseConfig) => {
                         logger.setContext('Database');
 
                         return {
                             ...config,
-                            autoLoadEntities: true,
                             logger: message => logger.info(message),
                             debug: this.getDebugOptions(config.environment),
-                            forceUtcTimezone: true,
                             highlighter: this.getHighlighter(
                                 config.environment,
                             ),
@@ -50,19 +44,21 @@ export class ModelsModule {
      * The difference between this and `register` is that there is no
      * custom logger implementation.
      */
-    static registerTest(): DynamicModule {
+    static registerTest(
+        entities: Array<EntityClass<AnyEntity>>,
+    ): DynamicModule {
         return {
-            module: ModelsModule,
+            module: DatabaseModule,
             imports: [
                 MikroOrmModule.forRootAsync({
                     imports: [
                         ConfigModule.forRoot({
-                            load: [modelsConfig],
+                            load: [databaseConfig],
                             envFilePath: join(__dirname, '.env.test'),
                         }),
                     ],
-                    inject: [modelsConfig.KEY],
-                    useFactory: (config: ModelsConfig) => ({
+                    inject: [databaseConfig.KEY],
+                    useFactory: (config: DatabaseConfig) => ({
                         ...config,
                         entities,
                         allowGlobalContext: true,

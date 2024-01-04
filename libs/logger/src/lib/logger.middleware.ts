@@ -6,7 +6,9 @@ import { type LogLevel } from './logger.types';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-    constructor(private readonly logger: Logger) {}
+    constructor(private readonly logger: Logger) {
+        this.logger.setContext('Request');
+    }
 
     use(req: Request, res: Response, next: NextFunction): void {
         const startTime = Date.now();

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 
-import { ModelsModule } from '@libs/models';
+import { DatabaseModule } from '@libs/database';
+import { User } from '@libs/models';
 
 @Module({
-    imports: [ModelsModule.register()],
+    imports: [DatabaseModule.register([User])],
     providers: [],
-    exports: [ModelsModule],
+    exports: [DatabaseModule],
 })
 export class CommonModule {}
