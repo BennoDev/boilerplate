@@ -8,7 +8,7 @@ import {
     type AnyEntity,
 } from '@mikro-orm/core';
 
-export type BaseOptionalProps = 'createdAt' | 'updatedAt';
+export type BaseEntityOptionalProps = 'createdAt' | 'updatedAt';
 
 /**
  * Base class for entities, provides identity and basic created / update auditing fields.
