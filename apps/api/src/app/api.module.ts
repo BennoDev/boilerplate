@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, type ConfigModuleOptions } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { secondsToMilliseconds } from 'date-fns';
+import { minutesToMilliseconds } from 'date-fns';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 
 import { Environment, tryGetEnv } from '@libs/core';
@@ -39,14 +39,13 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
             imports: [ConfigModule.forFeature(apiConfig)],
             inject: [apiConfig.KEY],
             useFactory: (config: ApiConfig) => ({
-                // This is in seconds, we always want to count requests / minute for ease of reasoning.
                 storage: new ThrottlerStorageRedisService(
                     getRedisClient(config),
                 ),
                 throttlers: [
                     {
                         name: 'per-minute',
-                        ttl: secondsToMilliseconds(60),
+                        ttl: minutesToMilliseconds(1),
                         limit: config.api.rateLimit,
                     },
                 ],
