@@ -1,12 +1,7 @@
 schema: 'https://schema.github.com/jobs'
 
-name: commit
-
-on:
-    pull_request:
-        branches:
-            - master
-
+name: main
+on: [push]
 jobs:
     main:
         runs-on: ubuntu-latest
