@@ -1,5 +1,3 @@
-schema: 'https://schema.github.com/jobs'
-
 name: main
 on: [push]
 jobs:
