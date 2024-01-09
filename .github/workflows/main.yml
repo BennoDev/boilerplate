@@ -14,8 +14,7 @@ jobs:
                   node-version: 20
                   cache: 'yarn'
             - run: yarn install --immutable --immutable-cache --check-cache
-            - uses: nrwl/nx-set-shas@v3
-            - run: git branch --track main origin/main
+            - uses: nrwl/nx-set-shas@v4
             - run: yarn nx format:check
             - run: yarn nx affected --target lint
             - run: yarn nx affected --target test
