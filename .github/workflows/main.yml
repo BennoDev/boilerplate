@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:latest
+        image: bitnami/postgresql:latest
         env:
           POSTGRES_USER: developer
           POSTGRES_PASSWORD: developer
@@ -22,11 +22,13 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       redis:
-        image: redis:latest
+        image: bitnami/redis:latest
         ports:
           - 6379:6379
+        env:
+          REDIS_PASSWORD: developer
         options: >-
-          --health-cmd redis-cli ping
+          --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
