@@ -14,6 +14,7 @@ jobs:
           POSTGRES_USER: developer
           POSTGRES_PASSWORD: developer
           POSTGRES_DB: boilerplate
+          PG_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
