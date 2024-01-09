@@ -1,21 +1,23 @@
 name: main
 on:
-    push:
-        branches:
-            - main
-    pull_request:
+  push:
+    branches:
+      - main
+  pull_request:
 jobs:
-    main:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: 20
-                  cache: 'yarn'
-            - run: yarn install --immutable --immutable-cache --check-cache
-            - uses: nrwl/nx-set-shas@v4
-            - run: yarn nx format:check
-            - run: yarn nx affected --target lint
-            - run: yarn nx affected --target test
-            - run: yarn nx affected --target build
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - run: yarn install --immutable --immutable-cache --check-cache
+      - uses: nrwl/nx-set-shas@v4
+      - run: yarn nx format:check
+      - run: yarn nx affected --target lint
+      - run: yarn nx affected --target test
+      - run: yarn nx affected --target build
