@@ -2,4 +2,4 @@
 
 yarn lint-staged
 yarn lint:testing --fix
-yarn nx format:check
+yarn nx format:check --libs-and-apps
