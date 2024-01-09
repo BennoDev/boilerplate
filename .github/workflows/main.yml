@@ -43,6 +43,8 @@ jobs:
       - run: yarn install --immutable --immutable-cache --check-cache
       - uses: nrwl/nx-set-shas@v4
       - run: git branch --track main origin/main
+      - run: yarn db:migrate
+      - run: yarn db:seed
       - run: yarn nx format:check
       - run: yarn nx affected --target lint
       - run: yarn nx affected --target test
