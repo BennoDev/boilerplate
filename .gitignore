@@ -9,6 +9,7 @@ docker/volumes
 # environment files
 .env
 .env.*
+!.env.test
 !.env.example
 !.env.*.example
 
