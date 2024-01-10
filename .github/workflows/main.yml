@@ -51,14 +51,14 @@ jobs:
         uses: nrwl/nx-set-shas@v4
       - name: Track Main Branch
         run: git branch --track main origin/main
-      - name: Migrate Database
-        run: yarn db:migrate
-      - name: Seed Database
-        run: yarn db:seed
       - name: Run formatting
         run: yarn nx format:check
       - name: Run linting
         run: yarn nx affected --target lint
+      - name: Migrate Database
+        run: yarn db:migrate
+      - name: Seed Database
+        run: yarn db:seed
       - name: Run tests
         run: yarn nx affected --target test
       - name: Building app
