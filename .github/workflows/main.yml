@@ -36,19 +36,30 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'yarn'
-      - run: yarn install --immutable --immutable-cache --check-cache
-      - uses: nrwl/nx-set-shas@v4
-      - run: git branch --track main origin/main
-      - run: yarn db:migrate
-      - run: yarn db:seed
-      - run: yarn nx format:check
-      - run: yarn nx affected --target lint
-      - run: yarn nx affected --target test
-      - run: yarn nx affected --target build
+      - name: Install Dependencies
+        run: yarn install --immutable --immutable-cache --check-cache
+      - name: Nx Set Shas
+        uses: nrwl/nx-set-shas@v4
+      - name: Track Main Branch
+        run: git branch --track main origin/main
+      - name: Migrate Database
+        run: yarn db:migrate
+      - name: Seed Database
+        run: yarn db:seed
+      - name: Run formatting
+        run: yarn nx format:check
+      - name: Run linting
+        run: yarn nx affected --target lint
+      - name: Run tests
+        run: yarn nx affected --target test
+      - name: Building app
+        run: yarn nx affected --target build
