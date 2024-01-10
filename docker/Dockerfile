@@ -1,7 +1,7 @@
 # =========================================================
 # Base image running node and setting the working directory
 # =========================================================
-FROM node:20.10.0-alpine AS base
+FROM node:20-slim AS base
 
 WORKDIR /home/node/boilerplate
 
@@ -44,8 +44,6 @@ RUN rm -f .npmrc
 # This image is used to actually run our application
 # ==================================================
 FROM base AS production
-
-RUN apk add --no-cache curl bash
 
 COPY --from=dependencies /home/node/boilerplate/ ./
 COPY --from=compiled /home/node/boilerplate/dist/apps ./dist/apps
