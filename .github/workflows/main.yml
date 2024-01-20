@@ -59,7 +59,7 @@ jobs:
         run: yarn db:migrate
       - name: Seed Database
         run: yarn db:seed
-      - name: Run tests
+      - name: Run Tests
         run: yarn nx affected --target test
-      - name: Building app
+      - name: Building App
         run: yarn nx affected --target build
