@@ -28,8 +28,8 @@
             "\t) {",
             "\t\tthis.logger.setContext($1.name);",
             "\t}",
-            "}\n"
-        ]
+            "}\n",
+        ],
     },
     "NestJS Module": {
         "prefix": "nest-m",
@@ -37,8 +37,8 @@
             "import { Module } from '@nestjs/common';\n",
             "@Module({${2: /* MODULE CONFIGURATION */}})",
             "export class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} {",
-            "}\n"
-        ]
+            "}\n",
+        ],
     },
     "NestJS Config": {
         "prefix": "nest-c",
@@ -49,8 +49,8 @@
             "}\n",
             "export const ${1/(.)/${1:/downcase}/} = registerAs<${1}>('${1/(.)(.*?)Config/${1:/downcase}${2}/}', () => ({",
             "\t${4: /* CONFIG GETTERS */}",
-            "}));\n"
-        ]
+            "}));\n",
+        ],
     },
     "Mikro ORM Entity": {
         "prefix": "mikro-e",
@@ -62,8 +62,8 @@
             "export class ${1:${TM_FILENAME_BASE/([^.]+).*/${1:/pascalcase}/}} extends BaseEntity<${1}> {",
             "\t[OptionalProps]?: BaseEntityOptionalProps;\n",
             "\t[EntityRepositoryType]?: ${1}Repository;",
-            "}\n"
-        ]
+            "}\n",
+        ],
     },
     "Mikro ORM Repository": {
         "prefix": "mikro-r",
@@ -72,8 +72,8 @@
             "// Using an import type statement here to avoid circular import statements in runtime",
             "import type { ${1:${TM_FILENAME_BASE/([^.]+).*/${1:/pascalcase}/}} } from '../entities';\n",
             "export class ${1}Repository extends EntityRepository<${1}>{",
-            "}"
-        ]
+            "}",
+        ],
     },
     "Unit Test": {
         "prefix": "u-test",
@@ -84,15 +84,15 @@
             "\tdescribe('${3:method being tested}', () => {",
             "\t\tit('${4:test description}', async () => {});",
             "\t});",
-            "});\n"
-        ]
+            "});\n",
+        ],
     },
     "Constructor": {
         "prefix": "ctor",
-        "body": ["constructor($1) {}"]
+        "body": ["constructor($1) {}"],
     },
     "Import": {
         "prefix": "imp",
-        "body": ["import { $2 } from '$1';"]
-    }
+        "body": ["import { $2 } from '$1';"],
+    },
 }
