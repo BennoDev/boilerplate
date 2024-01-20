@@ -46,6 +46,20 @@ $ yarn docker:stop # Stops the containers, all data stored in for example a post
 
 In the case of our postgres DB, it will be created the first time we boot up our containers.
 
+### Creating a Docker container for an app
+
+This boilerplate includes a Dockerfile that can be reused for each app. To create a Docker container for an app & run it, execute the following commands:
+
+```sh
+# To build the container
+$ docker build -f './docker/Dockerfile' --build-arg APP_NAME=api --progress=plain -t boilerplate/api .
+
+# TO run the container in the same network as the dependencies
+$ docker run --name api_boilerplate --network boilerplate_default --env-file './apps/api/.env.docker' -p '3001:3001' boilerplate/api
+```
+
+To build the container for for a different app, just change the APP_NAME argument to the name of the app you want to build.
+
 ### Removing a container
 
 In order to remove a container, you'll need to find out it's name or docker id.
