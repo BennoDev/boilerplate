@@ -1,8 +1,5 @@
 name: main
 on:
-  push:
-    branches:
-      - main
   pull_request:
 env:
   DATABASE_URL: postgres://developer:developer@localhost:5432/boilerplate
