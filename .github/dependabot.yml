@@ -10,7 +10,7 @@ updates:
     assignees:
       - "BennoDev"
 
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/"
     commit-message:
       prefix: "[Yarn]"
@@ -26,6 +26,6 @@ updates:
       prefix: "[Docker]"
       include: "scope"
     schedule:
-      interal: "weekly"
+      interval: "weekly"
     assignees:
       - "BennoDev"
