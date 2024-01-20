@@ -15,7 +15,7 @@ describe('core.utils', () => {
         });
 
         it('throws when the env var isnt defined', () => {
-            expect(() => tryGetEnv('TEST_VAR_NOT_FOUND')).toThrowError(
+            expect(() => tryGetEnv('TEST_VAR_NOT_FOUND')).toThrow(
                 MissingEnvVar,
             );
         });

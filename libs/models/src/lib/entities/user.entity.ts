@@ -1,12 +1,6 @@
-import {
-    Property,
-    Entity,
-    Enum,
-    OptionalProps,
-    EntityRepositoryType,
-} from '@mikro-orm/core';
+import { Property, Entity, Enum, EntityRepositoryType } from '@mikro-orm/core';
 
-import { BaseEntity, type BaseEntityOptionalProps } from '@libs/database';
+import { BaseEntity } from '@libs/database';
 
 import { UserRepository } from '../repositories';
 
@@ -16,10 +10,8 @@ export enum UserState {
     Inactive = 'INACTIVE',
 }
 
-@Entity({ customRepository: () => UserRepository })
-export class User extends BaseEntity<User> {
-    [OptionalProps]!: BaseEntityOptionalProps;
-
+@Entity({ repository: () => UserRepository })
+export class User extends BaseEntity {
     [EntityRepositoryType]?: UserRepository;
 
     @Property({ unique: true })

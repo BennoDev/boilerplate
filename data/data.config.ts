@@ -1,11 +1,14 @@
-import { join } from 'path';
+import { join } from 'node:path';
 
 import { Options, UnderscoreNamingStrategy } from '@mikro-orm/core';
+import { Migrator } from '@mikro-orm/migrations';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { SeedManager } from '@mikro-orm/seeder';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { config } from 'dotenv-safe';
-import { MigrationGenerator } from './migration-generator';
+
 import { migrationFileName } from './data.utils';
+import { MigrationGenerator } from './migration-generator';
 
 /**
  * The environments here have to be the same as mentioned in libs/common/core/src/lib/common.constants.ts.
@@ -49,14 +52,11 @@ const baseConfig: Options<PostgreSqlDriver> = {
         generator: MigrationGenerator,
         fileName: () => migrationFileName(join(__dirname, 'migrations')),
     },
-    type: 'postgresql',
+    driver: PostgreSqlDriver,
+    extensions: [Migrator, SeedManager],
 };
 
 const localConfig: Options<PostgreSqlDriver> = {
-    cache: {
-        options: { cacheDir: join(__dirname, 'cache') },
-        pretty: true,
-    },
     debug: true,
     entities: ['./apps/**/*.entity.ts', './libs/**/*.entity.ts'],
     highlighter: new SqlHighlighter(),

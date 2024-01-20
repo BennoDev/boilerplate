@@ -44,7 +44,7 @@ describe('AuthenticationGuard', () => {
             clearCookie: (_cookieName: string) => null,
         });
 
-        await expect(guard.canActivate(instance(context))).rejects.toThrowError(
+        await expect(guard.canActivate(instance(context))).rejects.toThrow(
             UnauthorizedException,
         );
     });
@@ -65,7 +65,7 @@ describe('AuthenticationGuard', () => {
             clearCookie: (_cookieName: string) => null,
         });
 
-        await expect(guard.canActivate(instance(context))).rejects.toThrowError(
+        await expect(guard.canActivate(instance(context))).rejects.toThrow(
             UnauthorizedException,
         );
     });

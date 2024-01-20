@@ -66,7 +66,7 @@ describe('LoginHandler', () => {
                 handler.execute({
                     data: { email, password },
                 }),
-            ).rejects.toThrowError(InvalidUserState);
+            ).rejects.toThrow(InvalidUserState);
         });
 
         it('should throw an error when the passwords do not match', async () => {
@@ -86,7 +86,7 @@ describe('LoginHandler', () => {
                 handler.execute({
                     data: { email, password },
                 }),
-            ).rejects.toThrowError(UnauthorizedException);
+            ).rejects.toThrow(UnauthorizedException);
         });
     });
 });

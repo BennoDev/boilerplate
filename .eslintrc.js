@@ -4,12 +4,6 @@ module.exports = {
     plugins: ['@nx'],
     overrides: [
         {
-            files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
-            rules: {
-                '@nx/enforce-module-boundaries': 'off',
-            },
-        },
-        {
             files: ['*.ts', '*.tsx'],
             extends: ['plugin:@nx/typescript'],
             plugins: ['unicorn', 'import'],

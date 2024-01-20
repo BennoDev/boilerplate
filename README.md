@@ -154,6 +154,16 @@ $ yarn nx run api:serve # Alternative way to invoke targets (https://nx.dev/cli/
 # To run another app, like a theoretical app named "worker", we would use `yarn nx serve worker` or `yarn start worker`.
 ```
 
+If you want to just build the app, you can use the following commands:
+
+```sh
+$ yarn build
+
+# Aliases
+$ yarn nx build api
+$ yarn nx run api:build
+```
+
 ### Debugging locally
 
 Nx helps us by setting up a debugger for us, which we can very easily attach to by running our `yarn start` commands in a JavaScript Debugger Terminal.
@@ -166,6 +176,7 @@ As a test runner we use jest. To run the tests locally just use `yarn test`.
 If you want to narrow which tests you're running, you can supply a name which will be used to filter by.
 For example, to only test the core lib we can run command like this: `yarn test core`.
 To test a specific file in the api app, we can run `yarn test api app --testFile hash.service`.
+To run tests for all applications and libraries, we can use `yarn test:all`
 
 ### Running linting and formatting
 
@@ -174,11 +185,17 @@ We can run linting commands in the following ways:
 
 ```sh
 # Run the linting for a specific app
+yarn lint api
+
+# Aliases
 yarn nx lint api
 yarn nx run api:lint
 
 # Run the formatting for a specific app
 yarn nx format:write api
+
+# Run the linting for all apps
+yarn lint:all
 ```
 
 ### Using affected

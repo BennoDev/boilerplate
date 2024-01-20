@@ -1,4 +1,12 @@
-import { mock, instance, when, anything, reset } from '@typestrong/ts-mockito';
+import { EntityManager } from '@mikro-orm/core';
+import {
+    mock,
+    instance,
+    when,
+    anything,
+    reset,
+    verify,
+} from '@typestrong/ts-mockito';
 import { hash } from 'bcrypt';
 
 import { Logger } from '@libs/logger';
@@ -14,6 +22,7 @@ import { ChangePasswordHandler } from './change-password.command';
 describe('ChangePasswordHandler', () => {
     const userRepository = mock(UserRepository);
     const hashService = mock(HashService);
+    const entityManager = mock(EntityManager);
 
     const handler = new ChangePasswordHandler(
         instance(userRepository),
@@ -21,9 +30,16 @@ describe('ChangePasswordHandler', () => {
         instance(mock(Logger)),
     );
 
+    beforeEach(() => {
+        when(userRepository.getEntityManager()).thenReturn(
+            instance(entityManager),
+        );
+    });
+
     afterEach(() => {
         reset(userRepository);
         reset(hashService);
+        reset(entityManager);
     });
 
     describe('execute', () => {
@@ -52,6 +68,7 @@ describe('ChangePasswordHandler', () => {
             });
 
             expect(user.password).toBe('hashed');
+            verify(entityManager.flush()).once();
         });
 
         it('should fail when the old password is wrong', async () => {
@@ -74,7 +91,7 @@ describe('ChangePasswordHandler', () => {
                         userId: user.id,
                     },
                 }),
-            ).rejects.toThrowError(InvalidOldPassword);
+            ).rejects.toThrow(InvalidOldPassword);
         });
     });
 });

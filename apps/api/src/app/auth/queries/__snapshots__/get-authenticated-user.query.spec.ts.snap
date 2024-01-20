@@ -2,12 +2,12 @@
 
 exports[`GetAuthenticatedUserHandler execute should return the correct user 1`] = `
 {
-  "createdAt": 2020-04-17T12:03:42.124Z,
+  "createdAt": "2020-04-17 12:03:42.124+00",
   "email": "development@boilerplate.com",
   "firstName": "Developer",
   "id": "c4cb4582-1e97-4e3e-9d49-c744c8c1a229",
   "lastName": "McDeveloperson",
   "state": "ACTIVE",
-  "updatedAt": 2020-04-17T12:03:42.124Z,
+  "updatedAt": "2020-04-17 12:03:42.124+00",
 }
 `;

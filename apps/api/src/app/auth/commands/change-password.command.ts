@@ -41,6 +41,6 @@ export class ChangePasswordHandler implements IHandler<ChangePasswordCommand> {
         }
 
         user.password = await this.hashService.hash(data.newPassword);
-        await this.userRepository.flush();
+        await this.userRepository.getEntityManager().flush();
     }
 }

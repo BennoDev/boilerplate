@@ -1,28 +1,24 @@
-import { randomUUID } from 'node:crypto';
+import { type UUID, randomUUID } from 'node:crypto';
 
 import {
     PrimaryKey,
     Property,
     BaseEntity as MikroOrmBaseEntity,
     Entity,
-    type AnyEntity,
+    Opt,
 } from '@mikro-orm/core';
-
-export type BaseEntityOptionalProps = 'createdAt' | 'updatedAt';
 
 /**
  * Base class for entities, provides identity and basic created / update auditing fields.
  */
 @Entity({ abstract: true })
-export abstract class BaseEntity<
-    ConcreteEntity extends AnyEntity,
-> extends MikroOrmBaseEntity<ConcreteEntity, 'id'> {
+export abstract class BaseEntity extends MikroOrmBaseEntity {
     @PrimaryKey({ type: 'uuid', defaultRaw: 'uuid_generate_v4()' })
-    id = randomUUID();
+    id: Opt<UUID> = randomUUID();
 
     @Property({ onCreate: () => new Date(), columnType: 'timestamptz(3)' })
-    createdAt = new Date();
+    createdAt: Opt<Date> = new Date();
 
     @Property({ onUpdate: () => new Date(), columnType: 'timestamptz(3)' })
-    updatedAt = new Date();
+    updatedAt: Opt<Date> = new Date();
 }

@@ -22,8 +22,8 @@ export class LoggerMiddleware implements NestMiddleware {
                 res.statusCode >= 500
                     ? 'error'
                     : res.statusCode >= 400
-                    ? 'warn'
-                    : 'info';
+                      ? 'warn'
+                      : 'info';
 
             this.logger[logLevel](message, {
                 statusCode: res.statusCode,
