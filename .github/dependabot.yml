@@ -19,13 +19,3 @@ updates:
       interval: "weekly"
     assignees:
       - "BennoDev"
-
-  - package-ecosystem: "docker"
-    directory: "/docker"
-    commit-message:
-      prefix: "[Docker]"
-      include: "scope"
-    schedule:
-      interval: "weekly"
-    assignees:
-      - "BennoDev"
