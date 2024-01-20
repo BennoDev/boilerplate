@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "editorconfig.editorconfig",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "firsttris.vscode-jest-runner",
+        "mikestead.dotenv",
+        "ms-vsliveshare.vsliveshare",
+        "nrwl.angular-console",
+        "visualstudioexptteam.vscodeintellicode"
+    ]
+}

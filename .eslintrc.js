@@ -1,28 +1,27 @@
 module.exports = {
     root: true,
+    ignorePatterns: ['**/*'],
+    plugins: ['@nx'],
     overrides: [
         {
-            files: ['*.ts', '*.js'],
-            plugins: ['@typescript-eslint', 'unicorn', 'import'],
-            extends: [
-                'eslint:recommended',
-                'plugin:@typescript-eslint/eslint-recommended',
-                'plugin:@typescript-eslint/recommended',
-                'plugin:@typescript-eslint/recommended-requiring-type-checking',
-                'plugin:@typescript-eslint/strict',
-                'plugin:import/typescript',
-                'plugin:import/recommended',
-                'plugin:import/warnings',
-                'plugin:import/errors',
-            ],
+            files: ['*.ts', '*.tsx'],
+            extends: ['plugin:@nx/typescript'],
+            plugins: ['unicorn', 'import'],
             parserOptions: {
-                project: './tsconfig.json',
-                emitDecoratorMetadata: true,
+                project: [
+                    './tsconfig.base.json',
+                    'apps/**/tsconfig.json',
+                    'libs/**/tsconfig.json',
+                ],
             },
             settings: {
                 'import/resolver': {
                     typescript: {
-                        project: './tsconfig.json',
+                        project: [
+                            'tsconfig.base.json',
+                            'apps/**/tsconfig.json',
+                            'libs/**/tsconfig.json',
+                        ],
                     },
                 },
             },
@@ -34,6 +33,10 @@ module.exports = {
                 '@typescript-eslint/no-extraneous-class': 'off',
                 '@typescript-eslint/no-use-before-define': 'off',
                 '@typescript-eslint/interface-name-prefix': 'off',
+                '@typescript-eslint/consistent-type-definitions': [
+                    'error',
+                    'type',
+                ],
                 '@typescript-eslint/no-unused-vars': [
                     'warn',
                     { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
@@ -49,7 +52,14 @@ module.exports = {
                 'import/first': 'error',
                 'import/no-internal-modules': [
                     'error',
-                    { allow: ['@mikro-orm/**', '@nestjs/**', 'rxjs/**', '@libs/common/*'] },
+                    {
+                        allow: [
+                            'app/*',
+                            '@mikro-orm/**',
+                            '@nestjs/**',
+                            'rxjs/**',
+                        ],
+                    },
                 ],
                 'import/no-unused-modules': 'error',
                 'import/no-default-export': 'error',
@@ -82,11 +92,19 @@ module.exports = {
                 // Misc
                 'prefer-arrow-callback': 'error',
                 eqeqeq: ['error', 'always'],
-                'func-style': ['error', 'expression']
+                'func-style': ['error', 'expression'],
             },
         },
         {
-            files: ['*.spec.ts'],
+            files: ['*.js', '*.jsx'],
+            extends: ['plugin:@nx/javascript'],
+            rules: {},
+        },
+        {
+            files: ['*.spec.ts', '*.spec.tsx', '*.spec.js', '*.spec.jsx'],
+            env: {
+                jest: true,
+            },
             rules: {
                 '@typescript-eslint/no-explicit-any': 'off',
                 '@typescript-eslint/restrict-template-expressions': [
@@ -98,16 +116,5 @@ module.exports = {
                 '@typescript-eslint/no-unsafe-member-access': 'off',
             },
         },
-        {
-            /**
-             * This override exists because migration classes extend an abstract base which demands a type signature of async () => Promise<void>
-             * even if the extending method does not require to be asynchronous. Removing the
-             */
-            files: ['*.migration.ts'],
-            rules: {
-                '@typescript-eslint/require-await': 'off',
-            },
-        },
     ],
-    env: { node: true },
 };

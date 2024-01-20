@@ -1,0 +1,97 @@
+import { EntityManager } from '@mikro-orm/core';
+import {
+    mock,
+    instance,
+    when,
+    anything,
+    reset,
+    verify,
+} from '@typestrong/ts-mockito';
+import { hash } from 'bcrypt';
+
+import { Logger } from '@libs/logger';
+import { UserRepository } from '@libs/models';
+import { createTestUser } from '@libs/testing';
+
+import { InvalidOldPassword } from '../auth.errors';
+import { type ChangePasswordRequest } from '../dto';
+import { HashService } from '../services';
+
+import { ChangePasswordHandler } from './change-password.command';
+
+describe('ChangePasswordHandler', () => {
+    const userRepository = mock(UserRepository);
+    const hashService = mock(HashService);
+    const entityManager = mock(EntityManager);
+
+    const handler = new ChangePasswordHandler(
+        instance(userRepository),
+        instance(hashService),
+        instance(mock(Logger)),
+    );
+
+    beforeEach(() => {
+        when(userRepository.getEntityManager()).thenReturn(
+            instance(entityManager),
+        );
+    });
+
+    afterEach(() => {
+        reset(userRepository);
+        reset(hashService);
+        reset(entityManager);
+    });
+
+    describe('execute', () => {
+        it('should successfully change password', async () => {
+            const request: ChangePasswordRequest = {
+                oldPassword: 'my_old_password',
+                newPassword: 'my_new_password',
+            };
+            const user = createTestUser({
+                password: await hash(request.oldPassword, 10),
+            });
+
+            when(userRepository.findOneOrFail(anything())).thenResolve(user);
+            when(hashService.compare(anything(), anything())).thenResolve(true);
+            when(hashService.hash(anything())).thenResolve('hashed');
+
+            await handler.execute({
+                data: request,
+                session: {
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    state: user.state,
+                    userId: user.id,
+                },
+            });
+
+            expect(user.password).toBe('hashed');
+            verify(entityManager.flush()).once();
+        });
+
+        it('should fail when the old password is wrong', async () => {
+            const request: ChangePasswordRequest = {
+                oldPassword: 'my_invalid_old_password',
+                newPassword: 'my_new_password',
+            };
+            const user = createTestUser({ password: 'my_old_password' });
+
+            when(userRepository.findOneOrFail(anything())).thenResolve(user);
+
+            await expect(
+                handler.execute({
+                    data: request,
+                    session: {
+                        email: user.email,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        state: user.state,
+                        userId: user.id,
+                    },
+                }),
+            ).rejects.toThrow(InvalidOldPassword);
+        });
+    });
+});

@@ -1,153 +1,111 @@
-# Boilerplate
+# Group Reporting
 
-Monorepo for NestJS projects.
+## Git Hooks
 
-## Overview
+The source code for the git hooks is stored in the `.husky` folder, with a filename that represents the hook, like `pre-commit` or `post-update`.
 
-### Folder structure
+### Installation / Updating
 
-```
-|-- apps
-    |-- api
-    |-- worker
-    |-- ... other apps
-|-- data
-    |-- cache # Mikro-ORM metadata cache
-    |-- migrations
-        |-- Migration20210618212853.ts
-    |-- seeds-dev
-        |-- Migration20210618202117.ts
-        |-- users.json # User data to seed the database
-        |-- ... data seeding migration files and accompanying json data for dev environment
-    |-- seeds-stag
-        |-- ... data seeding migration files and accompanying json data for stag environment
-    |-- seeds-prod
-        |-- ... data seeding migration files and accompanying json data for prod environment
-    |-- .env.example
-    |-- data.config.ts # Mikro-ORM CLI configuration, for executing migrations, data seeding, ...
-    |-- data.utils.ts # Data migration / seeding related utilities
-|-- docker
-    |-- volumes
-        |-- postgres
-        |-- redis
-    |-- .env.example
-    |-- .env.postgres.example
-    |-- docker-compose.yml
-|-- libs
-    |-- common # Not a NestJS module, contains utils, types, constants and other potential cross-cutting concerns
-    |-- logger # Powerful structured logging with Pino
-    |-- models # Domain models + database access via Mikro-ORM
-    |-- testing # Not a NestJS module, you can put functions, mocks, anything related to testing that is necessary in more than 1 app in this lib
-    |-- ... other libs
-|-- .editorconfig
-|-- .eslintignore
-|-- .eslintrc.js
-|-- .gitignore
-|-- .nvmrc
-|-- .prettierrc
-|-- nest-cli.json
-|-- package.json
-|-- README.md
-|-- tsconfig.build.json
-|-- tsconfig.json
-|-- yarn.lock
+To install or update your Git hooks, please run `yarn prepare`.
+
+## Runtime Version Management
+
+We manage our runtime versions with [nvm](https://github.com/nvm-sh/nvm), make sure to have this installed.
+
+To install the node version used in the current directory, just run `nvm install` in the root of the repo. To then switch to this version, run `nvm use`.
+Verify that the version in the `.nvmrc` is correctly installed by running `node -v`.
+
+## Docker
+
+We use [Docker](https://www.docker.com/) to run our dependencies, such as postgres, in a predictable and easy to set-up way.
+
+### Configuring the containers
+
+Next, we need to provide the configuration for docker compose, as well as for each container we wish to run.
+In the `docker` folder in the root of the project we can see a few things:
+
+```sh
+.env.example # This file describes the config for docker compose itself
+.env.postgres.example # This file describes the config for the postgres container
+.env.${container-name}.example # This file describes the config for the ${container-name} container
+docker-compose.yml # The compose file that will run our setup
 ```
 
-## Getting started
+Make a copy of each `env.example` and `.env.*.example` file without the `.example` postfix, in the example above it would be `.env, .env.postgres, .env.${container-name}`.
+In most cases just copying these files across will do the trick, since they already contain values that will work for a local setup. However should the container
+need to be configured with any secrets that are not suitable to VCS, fill in the proper value in the copied file.
 
-### Prerequisites
+### Running the containers
 
--   [Node](https://nodejs.org/en/)
--   [NVM](https://github.com/nvm-sh/nvm)
--   [Docker](https://www.docker.com/products/docker-desktop)
+In order to boot up or stop the containers, we have the following scripts:
 
-### Project dependencies
-
-```bash
-# We use yarn for this project
-$ npm i yarn -g
-
-# NestJS CLI is used to generate new apps and libraries
-$ npm i @nestjs/cli -g
-
-# Install project dependencies
-$ yarn
+```sh
+$ yarn docker:start # If the containers don't exist yet, they will be created the first time this command is run.
+$ yarn docker:stop # Stops the containers, all data stored in for example a postgres container will not be erased when using this command.
 ```
 
-### NVM
+In the case of our postgres DB, it will be created the first time we boot up our containers.
 
-After installing NVM, make sure you are running the proper version of node using the following instructions.
+### Creating a Docker container for an app
 
-```bash
-# This will switch active node versions to the one defined in the .nvmrc file, in the root.
-$ nvm use
+This boilerplate includes a Dockerfile that can be reused for each app. To create a Docker container for an app & run it, execute the following commands:
 
-# If that version is not installed, NVM will instruct you to install the correct version.
-$ nvm install 12.18.3 # example
+```sh
+# To build the container
+$ docker build -f './docker/Dockerfile' --build-arg APP_NAME=api --progress=plain -t boilerplate/api .
 
-# After this, you can use `nvm use` again, and it will work properly.
+# TO run the container in the same network as the dependencies
+$ docker run --name api_boilerplate --network boilerplate_default --env-file './apps/api/.env.docker' -p '3001:3001' boilerplate/api
 ```
 
-### Docker setup
+To build the container for for a different app, just change the APP_NAME argument to the name of the app you want to build.
 
-```bash
-# Create and run the container - this will also create our database
-$ yarn docker:start
+### Removing a container
+
+In order to remove a container, you'll need to find out it's name or docker id.
+The name is easy to find given we determine it ourselves, in the `docker/docker-compose.yml` we can see that our database container is named `pgsql_${COMPOSE_PROJECT_NAME}`
+and by reading our `docker/.env` or `docker/.env.example` file, we can determine the full name is `pgsql_boilerplate`.
+
+To remove the container, just run the following command:
+
+```sh
+$ docker rm pgsql_boilerplate
 ```
+
+### Useful commands
+
+If you wish to verify your containers are running, you can either run the CLI command `docker ps` or check the desktop GUI.
+In case it's not running, you can manually call the docker compose command, or temporarily remove the `-d` from the yarn scripts in the package json
+to see more information about what is going wrong on startup.
+
+For further container management use either the Docker desktop GUI, or better yet, check out the [Docker CLI](https://docs.docker.com/engine/reference/commandline/cli/).
+
+## Database
+
+Make sure that you followed the Docker instructions before continuing here.
+The database will be automatically created when the containers spins up.
+
+### Configuring the Mikro-ORM CLI
+
+For our database access, we are using [Mikro ORM](https://mikro-orm.io/)
+
+In order to properly configure the Mikro-ORM CLI, copy the `.env.example` to a `.env` in the data directory.
 
 ### Database setup
 
-We use a Postgres instance for our database.
+In order to initially migrate and seed the database, we have provided the following commands:
 
-Before being able to migrate or seed the database, we'll need to fill in the `.env.example` file inside the data folder.
-Create a new `.env.local` file next to it, and fill in the values. The example file will contain correct values for our local environment.
-
-```bash
-# Run the existing migrations
+```sh
+# Runs the existing migrations
 $ yarn db:migrate
 
-# Seed the database with initial values
+# Runs the database seeds
 $ yarn db:seed
 ```
 
-### Running the applications
+A list of all database related scripts in the package.json:
 
-Before running the applications, every application needs to have a filled in `.env.local`.
-See each applications `.env.example` for their respective required values.
-
-```bash
-# Run the main application (my-gateway)
-$ yarn start
-# OR for watch mode
-$ yarn start:dev
-```
-
-## Scripts
-
-### Building and running
-
-```bash
-# Removes previous build and create new one
-$ yarn build
-
-# For all start commands: append name of project you want to start, defaults to the main app defined in nest-cli.json
-
-# Start application (builds if needed)
-$ yarn start
-
-# Start application in watch mode
-$ yarn start:dev
-
-# Start application in debug mode
-$ yarn start:debug
-
-# Start application in prod mode - separate for different apps
-$ yarn start:prod
-```
-
-### Database
-
-```bash
+```sh
 # General
 # Drop the entire database
 $ yarn db:drop
@@ -157,8 +115,11 @@ $ yarn db:rollup
 
 
 # Migrations
-# Generate a migration based on current models
-$ yarn db:migrate:generate -n <NameOfMigration>
+# Generate a migration based on the diff between the database and current code models
+$ yarn db:migrate:generate # This will ask you for a file name, use kebab case here!
+
+# Creates an empty new migration
+$ yarn db:migrate:create
 
 # Apply all migrations
 $ yarn db:migrate
@@ -167,69 +128,112 @@ $ yarn db:migrate
 $ yarn db:migrate:revert
 
 
-# Seeds
-# Create a new empty dev seed
-$ yarn db:seed:generate -n <NameOfSeed>
+# Seeders
+# Creates a new empty seeder
+$ yarn db:seed:create
 
-# Apply dev seeds
+# Run all seeders
 $ yarn db:seed
-
-# Revert the latest dev seed
-$ yarn db:seed:revert
-
-# Commands exist for production seeds aswell
-$ yarn db:seed:prod:generate -n <NameOfSeed>
-$ yarn db:seed:prod
-$ yarn db:seed:prod:revert
-
-# Convenience command to execute all seeds
-$ yarn db:seed:all
 ```
 
-See [Mikro ORM](https://mikro-orm.io/docs/installation/) docs for more possible commands
+## Developing locally
 
-### Formatting + linting
+To install our dependencies and develop locally, we'll need to have [yarn](https://yarnpkg.com/) installed.
+Follow the instructions [here](https://yarnpkg.com/getting-started/install) to do so. After that we can run `yarn` to install our dependencies.
 
-```bash
-# Check codebase for formatting errors
-$ yarn format:check
+In order to develop locally we need all of the docker containers to be running, as per the instructions above.
+The database schema also needs to be up to date which we do by running `yarn db:migrate`.
 
-# Format codebase
-$ yarn format:fix
+We also need to make sure each app is currently configured with a `.env` file. Each app has it's own `.env.example` file which
+needs to be copied, renamed to `.env` and filled in properly in order to run the app.
 
-# Check codebase for linting errors
-$ yarn lint
+This monorepo is managed by [Nx](https://nx.dev/) so we use the Nx CLI to run it. Reading the following pages will help understand how to work with Nx:
+
+-   [Using the Nx CLI](https://nx.dev/using-nx/nx-cli)
+-   [Using Nx Affected](https://nx.dev/using-nx/affected)
+-   [Using Nx Nest Plugin](https://nx.dev/packages/nest)
+
+A full list of CLI commands can be found in the bottom left of the linked pages under the API / Reference -> CLI.
+
+```sh
+# Builds and runs one of the application
+$ yarn nx serve ${optionalAppName}
+
+# Aliases
+$ yarn start ${optionalAppName} # An alias defined by default in our package.json
+$ yarn nx run api:serve # Alternative way to invoke targets (https://nx.dev/cli/run) - name is required here
+
+# ${optionalAppName} is used to specify which app to run, if not given it will default to what is defined as the
+# root application in our nest-cli.json. In our case this is the api.
+# To run another app, like a theoretical app named "worker", we would use `yarn nx serve worker` or `yarn start worker`.
 ```
 
-### Docker
+If you want to just build the app, you can use the following commands:
 
-```bash
-# Start (and create if necessary) docker containers
-$ yarn docker:start
+```sh
+$ yarn build
 
-# Stop running containers
-$ yarn docker:stop
+# Aliases
+$ yarn nx build api
+$ yarn nx run api:build
 ```
 
-### Testing
+### Debugging locally
 
-```bash
-# Run tests
-$ yarn test
+Nx helps us by setting up a debugger for us, which we can very easily attach to by running our `yarn start` commands in a JavaScript Debugger Terminal.
+To do this in VSCode just open a terminal window, but instead of opening it with `bash` or `zsh`, use the Debugger Terminal.
+You can read how to open one [here](https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_javascript-debug-terminal).
 
-# Append name of files or module you want to test, for example:
-$ yarn test login
-$ yarn test auth
-$ ...
+### Running tests
+
+As a test runner we use jest. To run the tests locally just use `yarn test`.
+If you want to narrow which tests you're running, you can supply a name which will be used to filter by.
+For example, to only test the core lib we can run command like this: `yarn test core`.
+To test a specific file in the api app, we can run `yarn test api app --testFile hash.service`.
+To run tests for all applications and libraries, we can use `yarn test:all`
+
+### Running linting and formatting
+
+Nx also helps us run our linting and formatting for our changed files.
+We can run linting commands in the following ways:
+
+```sh
+# Run the linting for a specific app
+yarn lint api
+
+# Aliases
+yarn nx lint api
+yarn nx run api:lint
+
+# Run the formatting for a specific app
+yarn nx format:write api
+
+# Run the linting for all apps
+yarn lint:all
 ```
 
-### Adding apps or libraries
+### Using affected
 
-```bash
-# Adds a new library (will add necessary code to nest-cli.json, package.json & tsconfig.json)
-$ nest g lib <NameOfLibrary>
-# Example for logger: nest g lib logger
+Make sure to read the [docs](https://nx.dev/using-nx/affected) to understand affected.
 
-# Adds a new application (will add necessary code to nest-cli.json, package.json & tsconfig.json)
-$ nest g app <NameOfApplication>
+If we just want to serve, lint, test, ... only applications that had any changes compared to master, we can use affected with the other commands.
+
+```sh
+# Serves all affected apps
+yarn nx affected --target=serve
+
+# Lints all affected apps
+yarn nx affected --target=lint
+
+# Formats all affected apps
+yarn nx affected --target=format:write
+
+# Tests all affected apps
+yarn nx affected --target=test
 ```
+
+### Extensions
+
+This repository contains an extensions folder, which contains a few extensions that are useful for developing. While most are advised, they are also optional, and are related to formatting, syntax highlighting or linting.
+
+However, the [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner) is extremely useful to be able to conveniently test individual suites, describe blocks or tests.

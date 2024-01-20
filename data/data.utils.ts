@@ -91,8 +91,6 @@ export const toPascalCase = (text: string): string => {
         .replace(
             new RegExp(/\s+(.)(\w*)/, 'g'),
             (_, second, third) =>
-                // Fixing the ESLint issues here is simply not worth the effort as we are dealing with multiple different rules.
-                // eslint-disable-next-line
                 `${second.toUpperCase() + third.toLowerCase()}`,
         )
         .replace(new RegExp(/\w/), s => s.toUpperCase());
