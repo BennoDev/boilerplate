@@ -1,21 +1,26 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/.github"
-    commit-message:
-      prefix: "[Github Actions]"
-      include: "scope"
-    schedule:
-      interval: "weekly"
-    assignees:
-      - "BennoDev"
+    - package-ecosystem: 'github-actions'
+      directory: '/.github'
+      commit-message:
+          prefix: '[Github Actions]'
+          include: 'scope'
+      schedule:
+          interval: 'weekly'
+      assignees:
+          - 'BennoDev'
 
-  - package-ecosystem: "npm"
-    directory: "/"
-    commit-message:
-      prefix: "[Yarn]"
-      include: "scope"
-    schedule:
-      interval: "weekly"
-    assignees:
-      - "BennoDev"
+    - package-ecosystem: 'npm'
+      directory: '/'
+      commit-message:
+          prefix: '[Yarn]'
+          include: 'scope'
+      schedule:
+          interval: 'weekly'
+      groups:
+          production:
+              dependency-type: 'production'
+          development:
+              dependency-type: 'development'
+      assignees:
+          - 'BennoDev'
