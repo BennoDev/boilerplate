@@ -1,4 +1,4 @@
-# Group Reporting
+# NestJS / Nx Boilerplate
 
 ## Git Hooks
 
