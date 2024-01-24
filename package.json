@@ -82,6 +82,7 @@
         "@types/jest": "^29.5.11",
         "@types/node": "20.11.5",
         "@types/ramda": "^0.29.10",
+        "@types/readline-sync": "^1.4.8",
         "@typescript-eslint/eslint-plugin": "^6.19.1",
         "@typescript-eslint/parser": "^6.19.1",
         "@typestrong/ts-mockito": "^2.6.6",
