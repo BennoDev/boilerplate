@@ -1,4 +1,10 @@
-import { Property, Entity, Enum, EntityRepositoryType } from '@mikro-orm/core';
+import {
+    Property,
+    Entity,
+    Enum,
+    EntityRepositoryType,
+    Opt,
+} from '@mikro-orm/core';
 
 import { BaseEntity } from '@libs/database';
 
@@ -20,8 +26,8 @@ export class User extends BaseEntity {
     /**
      * Defaults to REGISTERING.
      */
-    @Enum(() => UserState)
-    state: UserState = UserState.Registering;
+    @Enum({ items: () => UserState, defaultRaw: `'${UserState.Registering}'` })
+    state: Opt<UserState> = UserState.Registering;
 
     @Property()
     password!: string;
