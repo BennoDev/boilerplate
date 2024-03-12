@@ -17,17 +17,15 @@ export abstract class BaseEntity extends MikroOrmBaseEntity {
     id: Opt<UUID> = randomUUID();
 
     @Property({
-        onCreate: () => new Date(),
         columnType: 'timestamptz(3)',
         defaultRaw: 'now()',
     })
-    createdAt!: Opt<Date>;
+    createdAt: Opt<Date> = new Date();
 
     @Property({
-        onCreate: () => new Date(),
-        onUpdate: () => new Date(),
         columnType: 'timestamptz(3)',
         defaultRaw: 'now()',
+        onUpdate: () => new Date(),
     })
-    updatedAt!: Opt<Date>;
+    updatedAt: Opt<Date> = new Date();
 }
