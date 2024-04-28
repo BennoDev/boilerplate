@@ -1,4 +1,3 @@
- 
 export default {
     displayName: 'testing',
     preset: '../../jest.preset.js',
