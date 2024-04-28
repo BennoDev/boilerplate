@@ -18,8 +18,35 @@ updates:
       schedule:
           interval: 'weekly'
       groups:
-          all:
+          nx:
+              patterns:
+                  - '@nx/*'
+          nest:
+              patterns:
+                  - '@nestjs/*'
+          mikro-orm:
+              patterns:
+                  - '@mikro-orm/*'
+          eslint:
+              patterns:
+                  - '*eslint*'
+                  - '*prettier*'
+              exclude-patterns:
+                  - '@nx/*'
+          jest:
+              patterns:
+                  - '*jest*'
+              exclude-patterns:
+                  - '@nx/*'
+          other:
               patterns:
                   - '*'
+              exclude-patterns:
+                - '@nx/*'
+                - '@nestjs/*'
+                - '@mikro-orm/*'
+                - '*eslint*'
+                - '*prettier*'
+                - '*jest*'
       assignees:
           - 'BennoDev'
