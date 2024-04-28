@@ -1,6 +1,6 @@
 import { type ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { type HttpArgumentsHost } from '@nestjs/common/interfaces';
-import { mock, when, instance, reset } from '@typestrong/ts-mockito';
+import { mock, mockReset } from 'jest-mock-extended';
 
 import { UserState } from '@libs/models';
 
@@ -13,45 +13,45 @@ describe('AuthenticationGuard', () => {
     const guard = new AuthenticatedGuard();
 
     afterEach(() => {
-        reset(context);
-        reset(argumentsHost);
+        mockReset(context);
+        mockReset(argumentsHost);
     });
 
     it('should authenticate incoming requests', async () => {
-        when(context.switchToHttp()).thenReturn(instance(argumentsHost));
-        when(argumentsHost.getRequest()).thenReturn({
+        context.switchToHttp.mockReturnValue(argumentsHost);
+        argumentsHost.getRequest.mockReturnValue({
             isAuthenticated: () => true,
             user: {
                 state: UserState.Active,
             },
         });
 
-        const isAuthenticated = await guard.canActivate(instance(context));
+        const isAuthenticated = await guard.canActivate(context);
 
         expect(isAuthenticated).toBe(true);
     });
 
     it('should destroy session and throw error when not authenticated', async () => {
-        when(context.switchToHttp()).thenReturn(instance(argumentsHost));
-        when(argumentsHost.getRequest()).thenReturn({
+        context.switchToHttp.mockReturnValue(argumentsHost);
+        argumentsHost.getRequest.mockReturnValue({
             isAuthenticated: () => false,
             logout: () => null,
             session: {
                 destroy: (cb: (...args: any[]) => void): void => cb(),
             },
         });
-        when(argumentsHost.getResponse()).thenReturn({
+        argumentsHost.getResponse.mockReturnValue({
             clearCookie: (_cookieName: string) => null,
         });
 
-        await expect(guard.canActivate(instance(context))).rejects.toThrow(
+        await expect(guard.canActivate(context)).rejects.toThrow(
             UnauthorizedException,
         );
     });
 
     it('should destroy session and throw error when not in ACTIVE state', async () => {
-        when(context.switchToHttp()).thenReturn(instance(argumentsHost));
-        when(argumentsHost.getRequest()).thenReturn({
+        context.switchToHttp.mockReturnValue(argumentsHost);
+        argumentsHost.getRequest.mockReturnValue({
             isAuthenticated: () => false,
             logout: () => null,
             user: {
@@ -61,11 +61,11 @@ describe('AuthenticationGuard', () => {
                 destroy: (cb: (...args: any[]) => void): void => cb(),
             },
         });
-        when(argumentsHost.getResponse()).thenReturn({
+        argumentsHost.getResponse.mockReturnValue({
             clearCookie: (_cookieName: string) => null,
         });
 
-        await expect(guard.canActivate(instance(context))).rejects.toThrow(
+        await expect(guard.canActivate(context)).rejects.toThrow(
             UnauthorizedException,
         );
     });

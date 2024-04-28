@@ -1,45 +1,36 @@
-import { EntityManager } from '@mikro-orm/core';
-import {
-    mock,
-    instance,
-    when,
-    anything,
-    reset,
-    verify,
-} from '@typestrong/ts-mockito';
+import { type EntityManager } from '@mikro-orm/core';
 import { hash } from 'bcrypt';
+import { mock, mockReset } from 'jest-mock-extended';
 
-import { Logger } from '@libs/logger';
-import { UserRepository } from '@libs/models';
+import { type Logger } from '@libs/logger';
+import { type UserRepository } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
 import { InvalidOldPassword } from '../auth.errors';
 import { type ChangePasswordRequest } from '../dto';
-import { HashService } from '../services';
+import { type HashService } from '../services';
 
 import { ChangePasswordHandler } from './change-password.command';
 
 describe('ChangePasswordHandler', () => {
-    const userRepository = mock(UserRepository);
-    const hashService = mock(HashService);
-    const entityManager = mock(EntityManager);
+    const userRepository = mock<UserRepository>();
+    const hashService = mock<HashService>();
+    const entityManager = mock<EntityManager>();
 
     const handler = new ChangePasswordHandler(
-        instance(userRepository),
-        instance(hashService),
-        instance(mock(Logger)),
+        userRepository,
+        hashService,
+        mock<Logger>(),
     );
 
     beforeEach(() => {
-        when(userRepository.getEntityManager()).thenReturn(
-            instance(entityManager),
-        );
+        userRepository.getEntityManager.mockReturnValue(entityManager);
     });
 
     afterEach(() => {
-        reset(userRepository);
-        reset(hashService);
-        reset(entityManager);
+        mockReset(userRepository);
+        mockReset(hashService);
+        mockReset(entityManager);
     });
 
     describe('execute', () => {
@@ -52,9 +43,9 @@ describe('ChangePasswordHandler', () => {
                 password: await hash(request.oldPassword, 10),
             });
 
-            when(userRepository.findOneOrFail(anything())).thenResolve(user);
-            when(hashService.compare(anything(), anything())).thenResolve(true);
-            when(hashService.hash(anything())).thenResolve('hashed');
+            userRepository.findOneOrFail.mockResolvedValue(user);
+            hashService.compare.mockResolvedValue(true);
+            hashService.hash.mockResolvedValue('hashed');
 
             await handler.execute({
                 data: request,
@@ -68,7 +59,7 @@ describe('ChangePasswordHandler', () => {
             });
 
             expect(user.password).toBe('hashed');
-            verify(entityManager.flush()).once();
+            expect(entityManager.flush).toHaveBeenCalled();
         });
 
         it('should fail when the old password is wrong', async () => {
@@ -78,7 +69,7 @@ describe('ChangePasswordHandler', () => {
             };
             const user = createTestUser({ password: 'my_old_password' });
 
-            when(userRepository.findOneOrFail(anything())).thenResolve(user);
+            userRepository.findOneOrFail.mockResolvedValue(user);
 
             await expect(
                 handler.execute({
