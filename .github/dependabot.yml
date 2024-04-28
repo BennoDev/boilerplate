@@ -42,11 +42,11 @@ updates:
               patterns:
                   - '*'
               exclude-patterns:
-                - '@nx/*'
-                - '@nestjs/*'
-                - '@mikro-orm/*'
-                - '*eslint*'
-                - '*prettier*'
-                - '*jest*'
+                  - '@nx/*'
+                  - '@nestjs/*'
+                  - '@mikro-orm/*'
+                  - '*eslint*'
+                  - '*prettier*'
+                  - '*jest*'
       assignees:
           - 'BennoDev'
