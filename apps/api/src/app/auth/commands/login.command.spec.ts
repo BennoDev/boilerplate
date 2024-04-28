@@ -1,30 +1,30 @@
 import { faker } from '@faker-js/faker';
 import { UnauthorizedException } from '@nestjs/common';
-import { mock, instance, when, anything, reset } from '@typestrong/ts-mockito';
 import { hash } from 'bcrypt';
+import { mock, mockReset } from 'jest-mock-extended';
 
-import { Logger } from '@libs/logger';
-import { UserRepository, UserState } from '@libs/models';
+import { type Logger } from '@libs/logger';
+import { type UserRepository, UserState } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
 import { InvalidUserState } from '../auth.errors';
-import { HashService } from '../services';
+import { type HashService } from '../services';
 
 import { LoginHandler } from './login.command';
 
 describe('LoginHandler', () => {
-    const userRepository = mock(UserRepository);
-    const hashService = mock(HashService);
+    const userRepository = mock<UserRepository>();
+    const hashService = mock<HashService>();
 
     const handler = new LoginHandler(
-        instance(userRepository),
-        instance(hashService),
-        instance(mock(Logger)),
+        userRepository,
+        hashService,
+        mock<Logger>(),
     );
 
     afterEach(() => {
-        reset(userRepository);
-        reset(hashService);
+        mockReset(userRepository);
+        mockReset(hashService);
     });
 
     describe('login', () => {
@@ -37,10 +37,8 @@ describe('LoginHandler', () => {
                 password: hashedPassword,
             });
 
-            when(
-                userRepository.findOneOrFail(anything(), anything()),
-            ).thenResolve(user);
-            when(hashService.compare(anything(), anything())).thenResolve(true);
+            userRepository.findOneOrFail.mockResolvedValue(user);
+            hashService.compare.mockResolvedValue(true);
 
             expect(
                 await handler.execute({
@@ -58,9 +56,7 @@ describe('LoginHandler', () => {
                 state: UserState.Registering,
             });
 
-            when(
-                userRepository.findOneOrFail(anything(), anything()),
-            ).thenResolve(user);
+            userRepository.findOneOrFail.mockResolvedValue(user);
 
             await expect(
                 handler.execute({
@@ -78,9 +74,7 @@ describe('LoginHandler', () => {
                 password: hashedPassword,
             });
 
-            when(
-                userRepository.findOneOrFail(anything(), anything()),
-            ).thenResolve(user);
+            userRepository.findOneOrFail.mockResolvedValue(user);
 
             await expect(
                 handler.execute({

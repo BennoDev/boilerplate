@@ -1,18 +1,18 @@
 import { faker } from '@faker-js/faker';
-import { anything, instance, mock, reset, when } from '@typestrong/ts-mockito';
+import { mock, mockReset } from 'jest-mock-extended';
 
-import { UserRepository, UserState } from '@libs/models';
+import { type UserRepository, UserState } from '@libs/models';
 import { createTestUser } from '@libs/testing';
 
 import { SessionSerializer } from './session-serializer.middleware';
 
 describe('SessionSerializer', () => {
-    const userRepository = mock(UserRepository);
+    const userRepository = mock<UserRepository>();
 
-    const serializer = new SessionSerializer(instance(userRepository));
+    const serializer = new SessionSerializer(userRepository);
 
     afterEach(() => {
-        reset(userRepository);
+        mockReset(userRepository);
     });
 
     it('should deserialize into a session from the cookie', async () => {
@@ -21,7 +21,7 @@ describe('SessionSerializer', () => {
             firstName: faker.person.firstName(),
             lastName: faker.person.lastName(),
         });
-        when(userRepository.findOne(anything(), anything())).thenResolve(user);
+        userRepository.findOne.mockResolvedValue(user);
 
         const mockNext = jest.fn();
         const req: any = {

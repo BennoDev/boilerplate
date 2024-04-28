@@ -1,19 +1,27 @@
-module.exports = {
-    root: true,
-    ignorePatterns: ['**/*'],
-    plugins: ['@nx'],
-    overrides: [
-        {
-            files: ['*.ts', '*.tsx'],
+const { Linter } = require('eslint');
+const { FlatCompat } = require('@eslint/eslintrc');
+const js = require('@eslint/js');
+const nxEslintPlugin = require('@nx/eslint-plugin');
+const parser = require('@typescript-eslint/parser');
+
+const compat = new FlatCompat({
+    baseDirectory: __dirname,
+    recommendedConfig: js.configs.recommended,
+});
+
+/**
+ * We need to use FlatCompat because the following plugins have not yet migrated to Flat Config:
+ * - eslint-import-resolver-typescript
+ * - eslint-plugin-import
+ *
+ * @type {Array<Linter.FlatConfig>}
+ */
+module.exports = [
+    { plugins: { '@nx': nxEslintPlugin } },
+    ...compat
+        .config({
             extends: ['plugin:@nx/typescript'],
             plugins: ['unicorn', 'import'],
-            parserOptions: {
-                project: [
-                    './tsconfig.base.json',
-                    'apps/**/tsconfig.json',
-                    'libs/**/tsconfig.json',
-                ],
-            },
             settings: {
                 'import/resolver': {
                     typescript: {
@@ -25,8 +33,11 @@ module.exports = {
                     },
                 },
             },
+        })
+        .map(config => ({
+            ...config,
+            files: ['**/*.ts', '**/*.tsx'],
             rules: {
-                // TypeScript
                 '@typescript-eslint/explicit-function-return-type': 'error',
                 '@typescript-eslint/no-floating-promises': 'off',
                 '@typescript-eslint/no-non-null-assertion': 'off',
@@ -39,7 +50,10 @@ module.exports = {
                 ],
                 '@typescript-eslint/no-unused-vars': [
                     'warn',
-                    { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+                    {
+                        argsIgnorePattern: '^_',
+                        varsIgnorePattern: '^_',
+                    },
                 ],
                 '@typescript-eslint/consistent-type-imports': [
                     'error',
@@ -48,7 +62,6 @@ module.exports = {
                         fixStyle: 'inline-type-imports',
                     },
                 ],
-                // Imports
                 'import/first': 'error',
                 'import/no-internal-modules': [
                     'error',
@@ -66,7 +79,10 @@ module.exports = {
                 'import/order': [
                     'error',
                     {
-                        alphabetize: { caseInsensitive: true, order: 'asc' },
+                        alphabetize: {
+                            caseInsensitive: true,
+                            order: 'asc',
+                        },
                         groups: [
                             ['builtin'],
                             ['external'],
@@ -84,37 +100,47 @@ module.exports = {
                         'newlines-between': 'always',
                     },
                 ],
-                // Unicorn
                 'unicorn/prefer-node-protocol': 'error',
-                // Comments
                 'no-inline-comments': 'error',
                 'spaced-comment': ['error', 'always'],
-                // Misc
                 'prefer-arrow-callback': 'error',
                 eqeqeq: ['error', 'always'],
                 'func-style': ['error', 'expression'],
             },
-        },
-        {
-            files: ['*.js', '*.jsx'],
-            extends: ['plugin:@nx/javascript'],
-            rules: {},
-        },
-        {
-            files: ['*.spec.ts', '*.spec.tsx', '*.spec.js', '*.spec.jsx'],
-            env: {
-                jest: true,
+            languageOptions: {
+                parser,
+                parserOptions: {
+                    project: [
+                        './tsconfig.base.json',
+                        'apps/**/tsconfig.json',
+                        'libs/**/tsconfig.json',
+                    ],
+                },
             },
-            rules: {
-                '@typescript-eslint/no-explicit-any': 'off',
-                '@typescript-eslint/restrict-template-expressions': [
-                    'error',
-                    { allowAny: true },
-                ],
-                '@typescript-eslint/no-unsafe-assignment': 'off',
-                '@typescript-eslint/no-unsafe-argument': 'off',
-                '@typescript-eslint/no-unsafe-member-access': 'off',
-            },
+        })),
+    ...compat.config({ extends: ['plugin:@nx/javascript'] }).map(config => ({
+        ...config,
+        files: ['**/*.js', '**/*.jsx'],
+        rules: {},
+    })),
+    ...compat.config({ env: { jest: true } }).map(config => ({
+        ...config,
+        files: [
+            '**/*.spec.ts',
+            '**/*.spec.tsx',
+            '**/*.spec.js',
+            '**/*.spec.jsx',
+        ],
+        rules: {
+            '@typescript-eslint/no-explicit-any': 'off',
+            '@typescript-eslint/restrict-template-expressions': [
+                'error',
+                { allowAny: true },
+            ],
+            '@typescript-eslint/no-unsafe-assignment': 'off',
+            '@typescript-eslint/no-unsafe-argument': 'off',
+            '@typescript-eslint/no-unsafe-member-access': 'off',
         },
-    ],
-};
+    })),
+    { ignores: ['/dist', '/node_modules'] },
+];
