@@ -21,6 +21,7 @@ updates:
           nx:
               patterns:
                   - '@nx/*'
+                  - 'nx'
           nest:
               patterns:
                   - '@nestjs/*'
@@ -43,6 +44,7 @@ updates:
                   - '*'
               exclude-patterns:
                   - '@nx/*'
+                  - 'nx'
                   - '@nestjs/*'
                   - '@mikro-orm/*'
                   - '*eslint*'
