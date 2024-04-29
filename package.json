@@ -99,7 +99,7 @@
         "jest-mock-extended": "^3.0.6",
         "lint-staged": "^15.2.1",
         "npm-check-updates": "^16.14.20",
-        "nx": "18.3.3",
+        "nx": "18.3.4",
         "prettier": "^3.2.5",
         "readline-sync": "^1.4.10",
         "ts-jest": "^29.1.2",
