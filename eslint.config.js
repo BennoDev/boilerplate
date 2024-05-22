@@ -39,7 +39,6 @@ module.exports = [
             files: ['**/*.ts', '**/*.tsx'],
             rules: {
                 '@typescript-eslint/explicit-function-return-type': 'error',
-                '@typescript-eslint/no-floating-promises': 'off',
                 '@typescript-eslint/no-non-null-assertion': 'off',
                 '@typescript-eslint/no-extraneous-class': 'off',
                 '@typescript-eslint/no-use-before-define': 'off',
@@ -111,10 +110,15 @@ module.exports = [
                 parser,
                 parserOptions: {
                     project: [
-                        './tsconfig.base.json',
-                        'apps/**/tsconfig.json',
-                        'libs/**/tsconfig.json',
+                        'tsconfig.base.json',
+                        '@(apps|libs|tools)/**/tsconfig?(.*).json',
                     ],
+                    /**
+                     * By default, the Nx Eslint plugin will have the individual project dir as root dir.
+                     * For Nx this is fine, however our VSCode linting setup will not work correctly, as the root dir for that is the repository root.
+                     * To fix this, we need to set the tsconfigRootDir to the repository root to align them.
+                     */
+                    tsconfigRootDir: __dirname,
                 },
             },
         })),

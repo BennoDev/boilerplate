@@ -8,7 +8,6 @@ export type ApiConfig = {
     redis: {
         host: string;
         port: number;
-        password: string;
     };
     session: {
         secret: string;
@@ -32,7 +31,6 @@ export const apiConfig = registerAs<ApiConfig>('api', () => ({
     redis: {
         host: tryGetEnv('REDIS_HOST'),
         port: parseInt(tryGetEnv('REDIS_PORT'), 10),
-        password: tryGetEnv('REDIS_PASSWORD'),
     },
     session: {
         expiresIn: parseInt(tryGetEnv('SESSION_TTL'), 10),

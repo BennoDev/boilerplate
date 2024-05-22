@@ -9,7 +9,6 @@ export const getRedisClient = (config: ApiConfig): IORedis => {
         redisClient = new IORedis({
             host: config.redis.host,
             port: config.redis.port,
-            password: config.redis.password,
         });
     }
 
