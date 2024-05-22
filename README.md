@@ -77,6 +77,10 @@ $ docker build -f './docker/Dockerfile' --build-arg APP_NAME=api --progress=plai
 $ docker run --name api_boilerplate --network boilerplate_default --env-file './apps/api/.env.docker' -p '3001:3001' boilerplate/api
 ```
 
+Note that in the above example, we point to a `.env.docker` file, you can point this to any `.env` file.
+However, it's likely that when running in the same network you'll need to point the redis / postgres / other dependency's hosts to their Docker Compose service name.
+In the default compose file this is just `redis` or `postgres`.
+
 To build the container for for a different app, just change the APP_NAME argument to the name of the app you want to build.
 
 ### Removing a container
@@ -255,4 +259,4 @@ yarn nx affected --target=test
 
 This repository contains an extensions folder, which contains a few extensions that are useful for developing. While most are advised, they are also optional, and are related to formatting, syntax highlighting or linting.
 
-However, the [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner) is extremely useful to be able to conveniently test individual suites, describe blocks or tests.
+However the [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner) is extremely useful to be able to conveniently test individual suites, describe blocks or tests.

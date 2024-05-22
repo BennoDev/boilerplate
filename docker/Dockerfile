@@ -29,13 +29,18 @@ RUN rm -f .npmrc
 # =========================================
 FROM base-dependencies AS compiled
 
+ARG APP_NAME
+
 COPY nx.json nx.json
 COPY tsconfig.base.json tsconfig.base.json
-COPY apps/ apps/
+COPY eslint.config.js eslint.config.js
+COPY jest.preset.js jest.preset.js
+
+COPY apps/${APP_NAME} apps/${APP_NAME}
+# We copy all libs as we don't know which ones we need to build the app
 COPY libs/ libs/
 
 RUN yarn --frozen-lock-file --ignore-scripts
-ARG APP_NAME
 RUN yarn nx run ${APP_NAME}:build:production
 RUN rm -f .npmrc
 
@@ -45,13 +50,14 @@ RUN rm -f .npmrc
 # ==================================================
 FROM base AS production
 
-COPY --from=dependencies /home/node/boilerplate/ ./
-COPY --from=compiled /home/node/boilerplate/dist/apps ./dist/apps
+ARG APP_NAME
 
-COPY tsconfig.base.json ./tsconfig.base.json
+COPY --from=dependencies /home/node/boilerplate/ ./
+COPY --from=compiled /home/node/boilerplate/dist/apps/${APP_NAME} ./dist/apps/${APP_NAME}
+
+# COPY tsconfig.base.json ./tsconfig.base.json
 
 EXPOSE 3000
 
-ARG APP_NAME
 ENV APP_NAME ${APP_NAME}
 CMD node dist/apps/${APP_NAME}/main
