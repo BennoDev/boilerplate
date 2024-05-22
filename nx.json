@@ -2,30 +2,14 @@
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
     "defaultProject": "api",
     "targetDefaults": {
-        "build": {
-            "cache": true,
-            "dependsOn": ["^build"],
-            "inputs": ["production", "^production"]
-        },
-        "lint": {
-            "cache": true,
-            "inputs": ["default", "{workspaceRoot}/eslint.config.js"]
-        },
-        "@nx/jest:jest": {
-            "cache": true,
-            "inputs": [
-                "default",
-                "^production",
-                "{workspaceRoot}/jest.preset.js"
-            ],
+        "test": {
             "options": {
                 "passWithNoTests": true
-            },
-            "configurations": {
-                "ci": {
-                    "ci": true,
-                    "codeCoverage": true
-                }
+            }
+        },
+        "build": {
+            "options": {
+                "tsPlugins": ["@nestjs/swagger/plugin"]
             }
         }
     },
@@ -41,5 +25,27 @@
             "!{projectRoot}/eslint.config.js"
         ],
         "sharedGlobals": []
-    }
+    },
+    "plugins": [
+        {
+            "plugin": "@nx/webpack/plugin",
+            "options": {
+                "buildTargetName": "build",
+                "serveTargetName": "serve",
+                "previewTargetName": "preview"
+            }
+        },
+        {
+            "plugin": "@nx/eslint/plugin",
+            "options": {
+                "targetName": "lint"
+            }
+        },
+        {
+            "plugin": "@nx/jest/plugin",
+            "options": {
+                "targetName": "test"
+            }
+        }
+    ]
 }
