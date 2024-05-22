@@ -1,4 +1,3 @@
-version: '3.8'
 services:
     postgres:
         # Replace :latest with desired version when starting a new project
@@ -14,5 +13,3 @@ services:
         container_name: redis_${COMPOSE_PROJECT_NAME}
         ports:
             - 6379:6379
-        env_file:
-            - ./.env.redis
