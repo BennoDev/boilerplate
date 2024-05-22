@@ -1,5 +1,24 @@
 # NestJS / Nx Boilerplate
 
+-   [Git Hooks](#git-hooks)
+    -   [Installation / Updating](#installation--updating)
+-   [Node Version Management](#node-version-management)
+-   [Docker](#docker)
+    -   [Configuring the containers](#configuring-the-containers)
+    -   [Running the containers](#running-the-containers)
+    -   [Creating a Docker container for an app](#creating-a-docker-container-for-an-app)
+    -   [Removing a container](#removing-a-container)
+    -   [Useful commands](#useful-commands)
+-   [Database](#database)
+    -   [Configuring the Mikro-ORM CLI](#configuring-the-mikro-orm-cli)
+    -   [Database setup](#database-setup)
+-   [Developing locally](#developing-locally)
+    -   [Debugging locally](#debugging-locally)
+    -   [Running tests](#running-tests)
+    -   [Running linting and formatting](#running-linting-and-formatting)
+    -   [Using affected](#using-affected)
+    -   [Extensions](#extensions)
+
 ## Git Hooks
 
 The source code for the git hooks is stored in the `.husky` folder, with a filename that represents the hook, like `pre-commit` or `post-update`.
@@ -8,9 +27,9 @@ The source code for the git hooks is stored in the `.husky` folder, with a filen
 
 To install or update your Git hooks, please run `yarn prepare`.
 
-## Runtime Version Management
+## Node Version Management
 
-We manage our runtime versions with [nvm](https://github.com/nvm-sh/nvm), make sure to have this installed.
+We manage our Node versions with [nvm](https://github.com/nvm-sh/nvm), make sure to have this installed.
 
 To install the node version used in the current directory, just run `nvm install` in the root of the repo. To then switch to this version, run `nvm use`.
 Verify that the version in the `.nvmrc` is correctly installed by running `node -v`.
