@@ -1,7 +1,11 @@
 import { join } from 'node:path';
 
-import { type Highlighter, type LoggerNamespace } from '@mikro-orm/core';
-import { type AnyEntity, type EntityClass } from '@mikro-orm/core/typings';
+import {
+    type Highlighter,
+    type LoggerNamespace,
+    type AnyEntity,
+    type EntityClass,
+} from '@mikro-orm/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { type DynamicModule } from '@nestjs/common';
