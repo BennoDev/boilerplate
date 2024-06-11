@@ -50,5 +50,6 @@ updates:
                   - '*eslint*'
                   - '*prettier*'
                   - '*jest*'
+                  - '@types/node'
       assignees:
           - 'BennoDev'
