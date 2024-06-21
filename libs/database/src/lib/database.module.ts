@@ -46,7 +46,7 @@ export class DatabaseModule {
     /**
      * Use this method to register a database module for an integration test.
      * The difference between this and `register` is that there is no
-     * custom logger implementation & we allow the global context.
+     * custom logger implementation & using global context is allowed.
      */
     static registerTest(
         entities: Array<EntityClass<AnyEntity>>,
