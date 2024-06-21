@@ -46,7 +46,7 @@ export class DatabaseModule {
     /**
      * Use this method to register a database module for an integration test.
      * The difference between this and `register` is that there is no
-     * custom logger implementation.
+     * custom logger implementation & using global context is allowed.
      */
     static registerTest(
         entities: Array<EntityClass<AnyEntity>>,
@@ -64,7 +64,6 @@ export class DatabaseModule {
                     inject: [databaseConfig.KEY],
                     useFactory: (config: DatabaseConfig) => ({
                         ...config,
-                        entities,
                         allowGlobalContext: true,
                     }),
                 }),
