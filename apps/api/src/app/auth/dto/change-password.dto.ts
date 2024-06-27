@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty } from 'class-validator';
 
-import { IsPassword } from '@libs/validators';
+import { IsPassword } from './validators';
 
 export class ChangePasswordRequest {
     @IsNotEmpty()
