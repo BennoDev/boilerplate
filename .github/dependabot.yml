@@ -51,6 +51,6 @@ updates:
                   - '*prettier*'
                   - '*jest*'
       ignore:
-        - dependency-name: '@types/node'
+          - dependency-name: '@types/node'
       assignees:
           - 'BennoDev'
