@@ -50,6 +50,7 @@ updates:
                   - '*eslint*'
                   - '*prettier*'
                   - '*jest*'
-                  - '@types/node'
+      ignore:
+        - dependency-name: '@types/node'
       assignees:
           - 'BennoDev'
