@@ -109,7 +109,6 @@
         "webpack-cli": "^5.1.4"
     },
     "mikro-orm": {
-        "useTsNode": true,
         "tsConfigPath": "./tsconfig.base.json",
         "configPaths": [
             "./data/data.config.ts"
