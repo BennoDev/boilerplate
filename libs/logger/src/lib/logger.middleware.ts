@@ -7,7 +7,7 @@ import { type LogLevel } from './logger.types';
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
     constructor(private readonly logger: Logger) {
-        this.logger.setContext('Request');
+        this.logger.setBindings({ context: 'Request' });
     }
 
     use(req: Request, res: Response, next: NextFunction): void {

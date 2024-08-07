@@ -18,9 +18,7 @@ export class LoginHandler implements IHandler<LoginCommand> {
         private readonly userRepository: UserRepository,
         private readonly hashService: HashService,
         private readonly logger: Logger,
-    ) {
-        this.logger.setContext('LoginHandler');
-    }
+    ) {}
 
     async execute({ data }: LoginCommand): Promise<User> {
         const { email, password } = data;

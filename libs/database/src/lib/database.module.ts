@@ -25,7 +25,7 @@ export class DatabaseModule {
                     imports: [ConfigModule.forFeature(databaseConfig)],
                     inject: [Logger, databaseConfig.KEY],
                     useFactory: (logger: Logger, config: DatabaseConfig) => {
-                        logger.setContext('Database');
+                        logger.setBindings({ context: 'Database' });
 
                         return {
                             ...config,

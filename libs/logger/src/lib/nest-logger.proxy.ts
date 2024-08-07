@@ -21,9 +21,7 @@ import { Logger } from './logger.service';
  */
 @Injectable()
 export class NestLoggerProxy implements NestLoggerService {
-    constructor(private readonly logger: Logger) {
-        this.logger.setContext('Nest');
-    }
+    constructor(private readonly logger: Logger) {}
 
     log(message: string, context?: string): void {
         this.logger.info(message, { context });
@@ -45,6 +43,6 @@ export class NestLoggerProxy implements NestLoggerService {
     }
 
     verbose?(message: string, context?: string): void {
-        this.logger.trace(message, { context });
+        this.logger.debug(message, { context });
     }
 }

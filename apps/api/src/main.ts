@@ -33,7 +33,7 @@ const bootstrap = async (): Promise<void> => {
     });
 
     const logger = await app.resolve(Logger);
-    logger.setContext('Bootstrap:Api');
+    logger.setBindings({ context: 'Bootstrap:Api' });
 
     app.useLogger(new NestLoggerProxy(await app.resolve(Logger)));
 
@@ -154,7 +154,7 @@ const addSessionMiddleware = async (
     );
 
     const logger = await app.resolve(Logger);
-    logger.setContext('Redis');
+    logger.setBindings({ context: 'Redis' });
     client.on('error', (error: Error) =>
         logger.error('Redis error occurred', { error }),
     );
