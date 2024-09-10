@@ -1,5 +1,3 @@
-#!/bin/bash
-
 yarn lint-staged
 yarn lint:testing --fix
 yarn nx format:check
