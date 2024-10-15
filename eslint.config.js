@@ -14,7 +14,7 @@ const compat = new FlatCompat({
  * - eslint-import-resolver-typescript
  * - eslint-plugin-import
  *
- * @type {Array<Linter.FlatConfig>}
+ * @type {Array<Linter.Config>}
  */
 module.exports = [
     { plugins: { '@nx': nxEslintPlugin } },
@@ -37,6 +37,7 @@ module.exports = [
         .map(config => ({
             ...config,
             files: ['**/*.ts', '**/*.tsx'],
+            ignores: ['jest.config.ts'],
             rules: {
                 '@typescript-eslint/explicit-function-return-type': 'error',
                 '@typescript-eslint/no-non-null-assertion': 'off',
