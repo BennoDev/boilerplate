@@ -7,7 +7,6 @@
         "build": "nx build",
         "lint": "nx lint",
         "lint:all": "nx run-many --target=lint --all",
-        "lint:testing": "eslint ./libs/testing --config ./libs/testing/eslint.config.js",
         "test": "nx test",
         "test:all": "nx run-many --target=test --all --parallel=1 --skip-nx-cache",
         "test:raw": "cross-env NODE_ENV=test jest --forceExit",
