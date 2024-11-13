@@ -1,9 +1,9 @@
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { type Options, UnderscoreNamingStrategy } from '@mikro-orm/core';
+import { UnderscoreNamingStrategy } from '@mikro-orm/core';
 import { Migrator } from '@mikro-orm/migrations';
-import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { defineConfig } from '@mikro-orm/postgresql';
 import { SeedManager } from '@mikro-orm/seeder';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { config } from 'dotenv-safe';
@@ -11,7 +11,7 @@ import { config } from 'dotenv-safe';
 import { MigrationGenerator } from './migration-generator';
 
 /**
- * The environments here have to be the same as mentioned in libs/common/core/src/lib/common.constants.ts.
+ * The environments here have to be the same as mentioned in libs/core/src/lib/core.constants.ts.
  */
 const isRemoteEnvironment = ['staging', 'production'].includes(
     process.env.NODE_ENV as string,
@@ -43,7 +43,7 @@ const migrationFileName = (_timestamp: string, name?: string): string => {
     return `${counter.toString().padStart(4, '0')}-${name}.migration`;
 };
 
-const baseConfig: Options<PostgreSqlDriver> = {
+const baseConfig = defineConfig({
     namingStrategy: UnderscoreNamingStrategy,
     baseDir: process.cwd(),
     clientUrl: process.env.DATABASE_URL,
@@ -68,24 +68,21 @@ const baseConfig: Options<PostgreSqlDriver> = {
         generator: MigrationGenerator,
         fileName: migrationFileName,
     },
-    driver: PostgreSqlDriver,
     extensions: [Migrator, SeedManager],
-};
+});
 
-const localConfig: Options<PostgreSqlDriver> = {
+const localConfig = defineConfig({
     debug: true,
     entities: ['./apps/**/*.entity.ts', './libs/**/*.entity.ts'],
     highlighter: new SqlHighlighter(),
     seeder: {
         path: join(__dirname, 'seeders'),
     },
-};
+});
 
-const remoteConfig: Options<PostgreSqlDriver> = {
-    discovery: { warnWhenNoEntities: false },
-};
+const remoteConfig = defineConfig({});
 
-const dataConfig: Options<PostgreSqlDriver> = isRemoteEnvironment
+const dataConfig = isRemoteEnvironment
     ? { ...baseConfig, ...remoteConfig }
     : { ...baseConfig, ...localConfig };
 
