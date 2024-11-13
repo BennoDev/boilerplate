@@ -142,10 +142,10 @@ $ yarn db:rollup
 
 # Migrations
 # Generate a migration based on the diff between the database and current code models
-$ yarn db:migrate:generate # This will ask you for a file name, use kebab case here!
+$ yarn db:migrate:generate --name=my-migration-name # Use kebab case here!
 
 # Creates an empty new migration
-$ yarn db:migrate:create
+$ yarn db:migrate:create --name=my-migration-name # Use kebab case here!
 
 # Apply all migrations
 $ yarn db:migrate
