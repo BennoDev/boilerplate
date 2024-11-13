@@ -130,6 +130,9 @@ A list of all database related scripts in the package.json:
 
 ```sh
 # General
+# Dumps MikroORM related information - useful to debug config issues
+$ yarn db:debug
+
 # Drop the entire database
 $ yarn db:drop
 
@@ -149,6 +152,9 @@ $ yarn db:migrate
 
 # Revert the latest migration
 $ yarn db:migrate:revert
+
+# Shows which migrations are pending
+$ yarn db:migrate:pending
 
 
 # Seeders
