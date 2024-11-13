@@ -130,6 +130,9 @@ A list of all database related scripts in the package.json:
 
 ```sh
 # General
+# Dumps MikroORM related information - useful to debug config issues
+$ yarn db:debug
+
 # Drop the entire database
 $ yarn db:drop
 
@@ -139,16 +142,19 @@ $ yarn db:rollup
 
 # Migrations
 # Generate a migration based on the diff between the database and current code models
-$ yarn db:migrate:generate # This will ask you for a file name, use kebab case here!
+$ yarn db:migrate:generate --name=my-migration-name # Use kebab case here!
 
 # Creates an empty new migration
-$ yarn db:migrate:create
+$ yarn db:migrate:create --name=my-migration-name # Use kebab case here!
 
 # Apply all migrations
 $ yarn db:migrate
 
 # Revert the latest migration
 $ yarn db:migrate:revert
+
+# Shows which migrations are pending
+$ yarn db:migrate:pending
 
 
 # Seeders
