@@ -24,11 +24,9 @@ export class MigrationGenerator extends TSMigrationGenerator {
         diff: { up: string[]; down: string[] },
     ): string {
         return super.generateMigrationFile(
-            /**
-             * MIGRATION_NAME environment variable should have been set before this point,
-             * in the `migrationFileName` function in `data.config.ts`.
-             */
-            toPascalCase(process.env.MIGRATION_NAME ?? className),
+            // The default className is `Migration<Timestamp>_<Name>` which doesn't work with kebab case - which is the preferable file naming convention.
+            // So we transform it to PascalCase which is the preferred class naming convention, and we omit the verbose timestamp & Migration prefix.
+            toPascalCase(className.split('_').slice(1).join('_')),
             diff,
         );
     }

@@ -1,6 +1,10 @@
+import { readFile } from 'node:fs/promises';
+
 import type { EntityManager } from '@mikro-orm/core';
 import { Seeder } from '@mikro-orm/seeder';
-import { readFile } from 'fs/promises';
+
+// This is configuration, not application code, so we can ignore this rule.
+// eslint-disable-next-line import/no-internal-modules
 import { User } from '../../libs/models/src';
 
 // Add more seed data here
