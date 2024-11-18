@@ -7646,10 +7646,10 @@ normalize-range@^0.1.2:
   resolved "https://registry.yarnpkg.com/normalize-range/-/normalize-range-0.1.2.tgz#2d10c06bdfd312ea9777695a4d28439456b75942"
   integrity sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==
 
-npm-check-updates@^17.1.10:
-  version "17.1.10"
-  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-17.1.10.tgz#936f6d7741b226ae5aaed8661551c54e8b6c932f"
-  integrity sha512-GnN6KbUzC8BpwsRYJntuumgCiagZ0+xxorvUJM9m06d7AlyK9lm3iFsAsnXF3VAZZzpD5QjZvWBwNze61Vywkw==
+npm-check-updates@^17.1.11:
+  version "17.1.11"
+  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-17.1.11.tgz#f6d48ca6a9adc0df990f6cd11de3bcd1e48e5c54"
+  integrity sha512-TR2RuGIH7P3Qrb0jfdC/nT7JWqXPKjDlxuNQt3kx4oNVf1Pn5SBRB7KLypgYZhruivJthgTtfkkyK4mz342VjA==
 
 npm-package-arg@11.0.1:
   version "11.0.1"
