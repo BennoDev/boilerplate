@@ -6,7 +6,7 @@ import {
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import compression from 'compression';
-import RedisStore from 'connect-redis';
+import { RedisStore } from 'connect-redis';
 import basicAuth from 'express-basic-auth';
 import session from 'express-session';
 import helmet from 'helmet';
