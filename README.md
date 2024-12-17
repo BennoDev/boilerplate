@@ -1,23 +1,23 @@
 # NestJS / Nx Boilerplate
 
--   [Git Hooks](#git-hooks)
-    -   [Installation / Updating](#installation--updating)
--   [Node Version Management](#node-version-management)
--   [Docker](#docker)
-    -   [Configuring the containers](#configuring-the-containers)
-    -   [Running the containers](#running-the-containers)
-    -   [Creating a Docker container for an app](#creating-a-docker-container-for-an-app)
-    -   [Removing a container](#removing-a-container)
-    -   [Useful commands](#useful-commands)
--   [Database](#database)
-    -   [Configuring the Mikro-ORM CLI](#configuring-the-mikro-orm-cli)
-    -   [Database setup](#database-setup)
--   [Developing locally](#developing-locally)
-    -   [Debugging locally](#debugging-locally)
-    -   [Running tests](#running-tests)
-    -   [Running linting and formatting](#running-linting-and-formatting)
-    -   [Using affected](#using-affected)
-    -   [Extensions](#extensions)
+- [Git Hooks](#git-hooks)
+    - [Installation / Updating](#installation--updating)
+- [Node Version Management](#node-version-management)
+- [Docker](#docker)
+    - [Configuring the containers](#configuring-the-containers)
+    - [Running the containers](#running-the-containers)
+    - [Creating a Docker container for an app](#creating-a-docker-container-for-an-app)
+    - [Removing a container](#removing-a-container)
+    - [Useful commands](#useful-commands)
+- [Database](#database)
+    - [Configuring the Mikro-ORM CLI](#configuring-the-mikro-orm-cli)
+    - [Database setup](#database-setup)
+- [Developing locally](#developing-locally)
+    - [Debugging locally](#debugging-locally)
+    - [Running tests](#running-tests)
+    - [Running linting and formatting](#running-linting-and-formatting)
+    - [Using affected](#using-affected)
+    - [Extensions](#extensions)
 
 ## Git Hooks
 
@@ -165,6 +165,11 @@ $ yarn db:seed:create
 $ yarn db:seed
 ```
 
+### Seed Data
+
+To see the users that are seeded, check the `./data/seeders/users.json` file.
+The password for each seeded user is `Password01!`.
+
 ## Developing locally
 
 To install our dependencies and develop locally, we'll need to have [yarn](https://yarnpkg.com/) installed.
@@ -178,9 +183,9 @@ needs to be copied, renamed to `.env` and filled in properly in order to run the
 
 This monorepo is managed by [Nx](https://nx.dev/) so we use the Nx CLI to run it. Reading the following pages will help understand how to work with Nx:
 
--   [Using the Nx CLI](https://nx.dev/using-nx/nx-cli)
--   [Using Nx Affected](https://nx.dev/using-nx/affected)
--   [Using Nx Nest Plugin](https://nx.dev/packages/nest)
+- [Using the Nx CLI](https://nx.dev/using-nx/nx-cli)
+- [Using Nx Affected](https://nx.dev/using-nx/affected)
+- [Using Nx Nest Plugin](https://nx.dev/packages/nest)
 
 A full list of CLI commands can be found in the bottom left of the linked pages under the API / Reference -> CLI.
 

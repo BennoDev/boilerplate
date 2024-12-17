@@ -1,4 +1,8 @@
+import { UUID } from 'node:crypto';
+
+import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Queue } from 'bullmq';
 
 import { type IHandler } from '@libs/core';
 import { Logger } from '@libs/logger';
@@ -18,6 +22,8 @@ export class LoginHandler implements IHandler<LoginCommand> {
         private readonly userRepository: UserRepository,
         private readonly hashService: HashService,
         private readonly logger: Logger,
+        @InjectQueue('worker')
+        private readonly queue: Queue<{ userId: UUID }>,
     ) {
         this.logger.setContext('LoginHandler');
     }
@@ -46,6 +52,11 @@ export class LoginHandler implements IHandler<LoginCommand> {
             this.logger.warn('Invalid password for login attempt', { email });
             throw new UnauthorizedException();
         }
+
+        this.logger.info('User logged in', {
+            jobs: await this.queue.getJobCounts(),
+        });
+        await this.queue.add('UserLoggedIn', { userId: user.id });
 
         return user;
     }

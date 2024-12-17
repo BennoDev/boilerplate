@@ -1,5 +1,6 @@
 import { join } from 'node:path';
 
+import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, type ConfigModuleOptions } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -49,6 +50,16 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
                         limit: config.api.rateLimit,
                     },
                 ],
+            }),
+        }),
+        BullModule.forRootAsync({
+            imports: [ConfigModule.forFeature(apiConfig)],
+            inject: [apiConfig.KEY],
+            useFactory: (config: ApiConfig) => ({
+                connection: getRedisClient(config),
+                prefix: '[bullmq]',
+                // TODO: Check this!
+                // telemetry: {}
             }),
         }),
         LoggerModule,

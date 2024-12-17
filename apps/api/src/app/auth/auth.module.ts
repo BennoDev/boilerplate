@@ -1,3 +1,4 @@
+import { BullModule } from '@nestjs/bullmq';
 import {
     Module,
     type MiddlewareConsumer,
@@ -13,7 +14,14 @@ import { GetAuthenticatedUserHandler } from './queries';
 import { HashService } from './services';
 
 @Module({
-    imports: [CommonModule],
+    imports: [
+        CommonModule,
+        BullModule.registerQueue({
+            name: 'worker',
+            // TODO: Check this!
+            // telemetry: {}
+        }),
+    ],
     controllers: [AuthController],
     providers: [
         SessionSerializer,

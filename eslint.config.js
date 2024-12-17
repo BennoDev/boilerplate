@@ -37,7 +37,7 @@ module.exports = [
         .map(config => ({
             ...config,
             files: ['**/*.ts', '**/*.tsx'],
-            ignores: ['jest.config.ts'],
+            ignores: ['**/jest.config.ts'],
             rules: {
                 '@typescript-eslint/explicit-function-return-type': 'error',
                 '@typescript-eslint/no-non-null-assertion': 'off',
