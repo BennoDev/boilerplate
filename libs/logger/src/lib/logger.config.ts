@@ -5,6 +5,7 @@ import { type Environment, tryGetEnv } from '@libs/core';
 import { type LogLevel } from './logger.types';
 
 export type LoggerConfig = {
+    readonly projectName: string;
     readonly environment: Environment;
     readonly logLevel: LogLevel;
     /**
@@ -18,4 +19,5 @@ export const loggerConfig = registerAs<LoggerConfig>('logger', () => ({
     enableRequestLogging: Boolean(tryGetEnv('ENABLE_REQUEST_LOGGING')),
     environment: tryGetEnv('NODE_ENV') as Environment,
     logLevel: tryGetEnv('LOG_LEVEL') as LogLevel,
+    projectName: tryGetEnv('PROJECT_NAME'),
 }));

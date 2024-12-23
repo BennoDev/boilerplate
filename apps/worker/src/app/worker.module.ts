@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { ConfigModuleOptions, ConfigModule } from '@nestjs/config';
+import { BullMQOtel } from 'bullmq-otel';
 
 import { Environment, tryGetEnv } from '@libs/core';
 import { DatabaseModule } from '@libs/database';
@@ -39,15 +40,10 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
             useFactory: (config: WorkerConfig) => ({
                 connection: getRedisClient(config),
                 prefix: '[bullmq]',
-                // TODO: Check this!
-                // telemetry: {}
+                telemetry: new BullMQOtel(`login-bull`),
             }),
         }),
-        BullModule.registerQueue({
-            name: 'worker',
-            // TODO: Check this!
-            // telemetry: {}
-        }),
+        BullModule.registerQueue({ name: 'worker' }),
         LoggerModule,
         DatabaseModule.register([User]),
     ],

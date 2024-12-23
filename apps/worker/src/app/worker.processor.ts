@@ -3,11 +3,12 @@ import { UUID } from 'node:crypto';
 import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
+import { BullMQOtel } from 'bullmq-otel';
 
 import { Logger } from '@libs/logger';
 import { UserRepository } from '@libs/models';
 
-@Processor('worker')
+@Processor('worker', { telemetry: new BullMQOtel('login-bull') })
 export class WorkerProcessor extends WorkerHost {
     constructor(
         // Used for CreateRequestContext()
