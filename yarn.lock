@@ -2301,7 +2301,7 @@
     "@opentelemetry/sdk-logs" "0.57.0"
     "@opentelemetry/sdk-trace-base" "1.30.0"
 
-"@opentelemetry/exporter-metrics-otlp-grpc@0.57.0":
+"@opentelemetry/exporter-metrics-otlp-grpc@0.57.0", "@opentelemetry/exporter-metrics-otlp-grpc@^0.57.0":
   version "0.57.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/exporter-metrics-otlp-grpc/-/exporter-metrics-otlp-grpc-0.57.0.tgz#fa2f14d0cc4fa537ccedf9fdc765050c5a3e920d"
   integrity sha512-/x7gkqNlvm+4UZ3c9lZw3zbySE3MUVEwobLNA6QBIDldxuvIqGLL5quLE8B9iSAtdBMAXs9lDh4rYS+EBGAdfg==
@@ -2315,7 +2315,7 @@
     "@opentelemetry/resources" "1.30.0"
     "@opentelemetry/sdk-metrics" "1.30.0"
 
-"@opentelemetry/exporter-metrics-otlp-http@0.57.0", "@opentelemetry/exporter-metrics-otlp-http@^0.57.0":
+"@opentelemetry/exporter-metrics-otlp-http@0.57.0":
   version "0.57.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/exporter-metrics-otlp-http/-/exporter-metrics-otlp-http-0.57.0.tgz#9338a4bc6d4a90f427caa534f66db51c04f96dc3"
   integrity sha512-uxCiTVFAQ1kLy8SS0vyNNXRqH69htbtTxk4EEB2H4CvBFt3pA2N22k6SFF5fOdvDwUvM7Mi9mUfW48rS4Y0F8g==
@@ -2347,7 +2347,7 @@
     "@opentelemetry/resources" "1.30.0"
     "@opentelemetry/sdk-metrics" "1.30.0"
 
-"@opentelemetry/exporter-trace-otlp-grpc@0.57.0":
+"@opentelemetry/exporter-trace-otlp-grpc@0.57.0", "@opentelemetry/exporter-trace-otlp-grpc@^0.57.0":
   version "0.57.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/exporter-trace-otlp-grpc/-/exporter-trace-otlp-grpc-0.57.0.tgz#e1a54c5bf1660005931b5c2bdb676cb799456f1b"
   integrity sha512-QqN+d8IFyu7HUkzAROSRZGB/gfFZ0DM06YAP2J4IvObhk8paTgg1wP+nW+hl0jgSDD/p8cOj7xg5dgPI8m1LnQ==
@@ -2359,7 +2359,7 @@
     "@opentelemetry/resources" "1.30.0"
     "@opentelemetry/sdk-trace-base" "1.30.0"
 
-"@opentelemetry/exporter-trace-otlp-http@0.57.0", "@opentelemetry/exporter-trace-otlp-http@^0.57.0":
+"@opentelemetry/exporter-trace-otlp-http@0.57.0":
   version "0.57.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/exporter-trace-otlp-http/-/exporter-trace-otlp-http-0.57.0.tgz#fee258d502dabda6646dd19029860192115017b6"
   integrity sha512-BJl35PSkwoMlGEOrzjCG1ih6zqZoAZJIR4xyqSKC2BqPtwuRjID0vWBaEdP9xrxxJTEIEQw+gEY/0pUgicX0ew==
