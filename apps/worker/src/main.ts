@@ -1,3 +1,5 @@
+import './init';
+
 import { NestFactory } from '@nestjs/core';
 
 import { Logger, NestLoggerProxy } from '@libs/logger';

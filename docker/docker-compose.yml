@@ -6,6 +6,11 @@
 # https://hub.docker.com/r/prom/prometheus
 # https://grafana.com/docs/loki/latest/setup/install/docker/
 
+# OTEL INSTRUMENTATION:
+# Instrumentation needs to happen at the earliest possible point. Ideally before any framework / libraries are initialized.
+# This is why we have a separate init.ts file for each service currently, but ideally you can export an /init file from a library or something and import that.
+# If not instrumenting early, half of the instrumentations will not work at all.
+#
 # BULLMQ:
 # Adding OTEL support to BullMQ is not difficult; you need to use the bullmq-otel package & BullMQOtel class.
 # For NestJS, we are once again dealing with confusing BullMQ setup, as we have:
@@ -19,6 +24,9 @@
 # DISTRIBUTED TRACING:
 # For distributed tracing, you NEED to have propagation through a textMapPropagator!
 # What the purpose of the SpanProcessor is - not entirely clear. Both with and without processor it works quite well :)
+#
+# LOGGING:
+# OTEL tracing makes own tracing solution redundant.
 #
 # TODO:
 # - Try Grafana Tempo

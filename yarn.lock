@@ -2266,7 +2266,7 @@
   dependencies:
     "@opentelemetry/semantic-conventions" "1.28.0"
 
-"@opentelemetry/exporter-logs-otlp-grpc@0.57.0":
+"@opentelemetry/exporter-logs-otlp-grpc@0.57.0", "@opentelemetry/exporter-logs-otlp-grpc@^0.57.0":
   version "0.57.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/exporter-logs-otlp-grpc/-/exporter-logs-otlp-grpc-0.57.0.tgz#10bdd9ec8d6696a64ebe4f32db2c2d5b7e98be51"
   integrity sha512-KRg87nmpQzHV4nYvoYLT52UvoSP0JCRILfrenFElxHak0lcP7ubCs1kpodMs912qsTNOFvINBB6Pxz5AdE6S6A==
@@ -2856,7 +2856,7 @@
     "@opentelemetry/core" "1.30.0"
     "@opentelemetry/resources" "1.30.0"
 
-"@opentelemetry/sdk-metrics@1.30.0", "@opentelemetry/sdk-metrics@^1.30.0":
+"@opentelemetry/sdk-metrics@1.30.0":
   version "1.30.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/sdk-metrics/-/sdk-metrics-1.30.0.tgz#2a2aaa5d3a67cad5dbbfcf34cf7d990d11d109df"
   integrity sha512-5kcj6APyRMvv6dEIP5plz2qfJAD4OMipBRT11u/pa1a68rHKI2Ln+iXVkAGKgx8o7CXbD7FdPypTUY88ZQgP4Q==
@@ -2899,7 +2899,7 @@
     "@opentelemetry/resources" "1.30.0"
     "@opentelemetry/semantic-conventions" "1.28.0"
 
-"@opentelemetry/sdk-trace-node@1.30.0", "@opentelemetry/sdk-trace-node@^1.30.0":
+"@opentelemetry/sdk-trace-node@1.30.0":
   version "1.30.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/sdk-trace-node/-/sdk-trace-node-1.30.0.tgz#a7de4cdc8102498ede5bddb3c4d075c4a57a2d35"
   integrity sha512-MeXkXEdBs9xq1JSGTr/3P1lHBSUBaVmo1+UpoQhUpviPMzDXy0MNsdTC7KKI6/YcG74lTX6eqeNjlC1jV4Rstw==

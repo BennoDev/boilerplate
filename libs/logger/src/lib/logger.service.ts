@@ -3,7 +3,6 @@ import { pino } from 'pino';
 
 import { Environment } from '@libs/core';
 
-import { ContextStore } from './context-store.service';
 import { LoggerConfig, loggerConfig } from './logger.config';
 
 type LogMeta = Record<string, unknown> & {
@@ -54,7 +53,6 @@ export class Logger {
     constructor(
         @Inject(loggerConfig.KEY)
         private readonly config: LoggerConfig,
-        private readonly contextStore: ContextStore,
     ) {
         this.formattedEnvironment = this.config.environment.toUpperCase();
 
@@ -70,16 +68,16 @@ export class Logger {
                     ? basePropsToRedact
                     : [...basePropsToRedact, ...secretsToRedact],
             },
-            transport: isLocalEnvironment
-                ? {
-                      target: 'pino-pretty',
-                      options: {
-                          translateTime: 'yyyy-mm-dd HH:MM:ss',
-                          messageFormat: '[{context}]: {message}',
-                          messageKey: 'message',
-                      },
-                  }
-                : undefined,
+            // transport: isLocalEnvironment
+            //     ? {
+            //           target: 'pino-pretty',
+            //           options: {
+            //               translateTime: 'yyyy-mm-dd HH:MM:ss',
+            //               messageFormat: '[{context}]: {message}',
+            //               messageKey: 'message',
+            //           },
+            //       }
+            //     : undefined,
             level: this.config.logLevel,
             messageKey: 'message',
             mixin: this.metaMixin.bind(this),
@@ -199,7 +197,6 @@ export class Logger {
         return {
             context: this.context,
             environment: this.formattedEnvironment,
-            traceId: this.contextStore.getContextOrDefault().traceId,
         };
     }
 }
