@@ -68,16 +68,16 @@ export class Logger {
                     ? basePropsToRedact
                     : [...basePropsToRedact, ...secretsToRedact],
             },
-            // transport: isLocalEnvironment
-            //     ? {
-            //           target: 'pino-pretty',
-            //           options: {
-            //               translateTime: 'yyyy-mm-dd HH:MM:ss',
-            //               messageFormat: '[{context}]: {message}',
-            //               messageKey: 'message',
-            //           },
-            //       }
-            //     : undefined,
+            transport: isLocalEnvironment
+                ? {
+                      target: 'pino-pretty',
+                      options: {
+                          translateTime: 'yyyy-mm-dd HH:MM:ss',
+                          messageFormat: '[{context}]: {message}',
+                          messageKey: 'message',
+                      },
+                  }
+                : undefined,
             level: this.config.logLevel,
             messageKey: 'message',
             mixin: this.metaMixin.bind(this),

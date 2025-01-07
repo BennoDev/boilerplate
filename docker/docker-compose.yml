@@ -25,13 +25,14 @@
 # For distributed tracing, you NEED to have propagation through a textMapPropagator!
 # What the purpose of the SpanProcessor is - not entirely clear. Both with and without processor it works quite well :)
 #
-# LOGGING:
+# LOGGING: https://grafana.com/docs/loki/latest/send-data/otel/
 # OTEL tracing makes own tracing solution redundant.
+# HTTP OTEL exporter seems to be the best solution for logging, not sure why.
 #
 # TODO:
 # - Try Grafana Tempo
-# - Figure out Prometheus
-# - Figure out logging solution? Grafana Loki?
+# - Manual instrumentation for clarity
+# - Figure out Prometheus for NodeJS
 
 services:
     postgres:
@@ -75,13 +76,9 @@ services:
         image: grafana/loki:latest
         ports:
             - 3100:3100
+            - 9096:9096
         volumes:
             - ./config/loki-config.yml:/etc/loki/loki-config.yaml
-
-    promtail:
-        image: grafana/promtail:latest
-        volumes:
-            - ./config/promtail-config.yml:/etc/promtail/promtail-config.yaml
 
     # Check UI at http://localhost:3000
     grafana:
@@ -92,3 +89,4 @@ services:
             - GF_SECURITY_ADMIN_PASSWORD=admin
         volumes:
             - ./volumes/grafana-storage:/var/lib/grafana
+            - ./config/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml

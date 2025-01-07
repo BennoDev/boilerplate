@@ -26,7 +26,7 @@ const sdk = new NodeSDK({
         new OTLPLogExporter(),
     ),
     spanProcessor: new tracing.SimpleSpanProcessor(exporter),
-    instrumentations: [getNodeAutoInstrumentations({})],
+    instrumentations: [getNodeAutoInstrumentations()],
     textMapPropagator: new B3Propagator(),
     serviceName: projectName,
 });
