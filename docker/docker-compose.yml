@@ -31,7 +31,6 @@
 # HTTP OTEL exporter seems to be the best solution for logging, not sure why.
 #
 # TODO:
-# - Try Grafana Tempo
 # - Figure out Prometheus for NodeJS
 
 services:
