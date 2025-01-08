@@ -24,6 +24,7 @@
 # DISTRIBUTED TRACING:
 # For distributed tracing, you NEED to have propagation through a textMapPropagator!
 # What the purpose of the SpanProcessor is - not entirely clear. Both with and without processor it works quite well :)
+# Tracing with custom decorators, or via the { trace } import from @opentelemetry/api is straightforward and powerful.
 #
 # LOGGING: https://grafana.com/docs/loki/latest/send-data/otel/
 # OTEL tracing makes own tracing solution redundant.
@@ -31,7 +32,6 @@
 #
 # TODO:
 # - Try Grafana Tempo
-# - Manual instrumentation for clarity
 # - Figure out Prometheus for NodeJS
 
 services:

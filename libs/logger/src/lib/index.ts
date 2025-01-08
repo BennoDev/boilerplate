@@ -4,3 +4,4 @@ export * from './logger.config';
 export * from './logger.constants';
 export * from './logger.types';
 export * from './nest-logger.proxy';
+export * from './trace.decorator';
