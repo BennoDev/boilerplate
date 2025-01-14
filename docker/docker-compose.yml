@@ -76,36 +76,14 @@ services:
         ports:
             - '9090:9090'
 
-    # TODO: See if this is actually necessary.
-    # This has to run prior to the tempo image startup
-    # to set the correct user for the local tempo backend.
-    # Without doing this, tempo will crash on startup.
-    # tempo-init:
-    #     image: &tempo grafana/tempo:latest
-    #     user: root
-    #     entrypoint:
-    #         - 'chown'
-    #         - '10001:10001'
-    #         - '/var/tempo'
-    #     volumes:
-    #         - ./volumes/tempo:/var/tempo
-
     tempo:
-        # TODO: See if this is actually necessary.
-        # image: &tempo grafana/tempo:latest
         image: grafana/tempo:latest
         command: ['-config.file=/etc/tempo/tempo-config.yml']
         ports:
             - 3200:3200
-            # See if necessary - it's not for jaeger.
-            # Maybe Jaeger pulls from OTEL rather than gets pushed to?
-            # - 4319:4317
         volumes:
             - ./config/tempo-config.yml:/etc/tempo/tempo-config.yml
             - ./volumes/tempo:/var/tempo
-        # TODO: See if this is actually necessary.
-        # depends_on:
-        #     - tempo-init
 
     loki:
         image: grafana/loki:latest
