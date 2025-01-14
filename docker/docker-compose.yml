@@ -30,9 +30,21 @@
 # OTEL tracing makes own tracing solution redundant.
 # HTTP OTEL exporter seems to be the best solution for logging, not sure why.
 #
+# GRAFANA LGMT:
+# The LGTM stack is Loki, Grafana, Tempo & (Mimir/Prometheus) for logging, dashboard, tracing & metrics respectively.
+# There is a comprehensive docker image that includes all of these and instruments with OTEL: https://hub.docker.com/r/grafana/otel-lgtm
+#
 # TODO:
 # - Try Grafana Tempo
+#   - Investigate trace to logs https://grafana.com/docs/grafana/latest/datasources/tempo/configure-tempo-data-source/#provision-the-data-source
+# - Try getting application error monitoring in
+# - Check out Grafana pyroscope: https://grafana.com/docs/pyroscope/latest/get-started/
+#   - Investigate profiles to logs
+# - Check out Grafana alloy instead of OTEL collector: https://grafana.com/docs/alloy/latest/set-up/install/docker/
 # - Figure out Prometheus for NodeJS
+#   - Investigate metrics to logs
+# - Less important: check out Grafana Faro? https://github.com/grafana/faro-web-sdk/
+# - Less important: check out Grafana Mimir? https://grafana.com/oss/mimir/
 
 services:
     postgres:
@@ -64,13 +76,36 @@ services:
         ports:
             - '9090:9090'
 
-    # Check UI at http://localhost:16686
-    jaeger:
-        image: jaegertracing/all-in-one:latest
+    # TODO: See if this is actually necessary.
+    # This has to run prior to the tempo image startup
+    # to set the correct user for the local tempo backend.
+    # Without doing this, tempo will crash on startup.
+    # tempo-init:
+    #     image: &tempo grafana/tempo:latest
+    #     user: root
+    #     entrypoint:
+    #         - 'chown'
+    #         - '10001:10001'
+    #         - '/var/tempo'
+    #     volumes:
+    #         - ./volumes/tempo:/var/tempo
+
+    tempo:
+        # TODO: See if this is actually necessary.
+        # image: &tempo grafana/tempo:latest
+        image: grafana/tempo:latest
+        command: ['-config.file=/etc/tempo/tempo-config.yml']
         ports:
-            - 6831:6831/udp # UDP port for Jaeger agent
-            - 16686:16686 # Web UI
-            - 14268:14268 # HTTP port for spans
+            - 3200:3200
+            # See if necessary - it's not for jaeger.
+            # Maybe Jaeger pulls from OTEL rather than gets pushed to?
+            # - 4319:4317
+        volumes:
+            - ./config/tempo-config.yml:/etc/tempo/tempo-config.yml
+            - ./volumes/tempo:/var/tempo
+        # TODO: See if this is actually necessary.
+        # depends_on:
+        #     - tempo-init
 
     loki:
         image: grafana/loki:latest
@@ -88,5 +123,5 @@ services:
         environment:
             - GF_SECURITY_ADMIN_PASSWORD=admin
         volumes:
-            - ./volumes/grafana-storage:/var/lib/grafana
+            - ./volumes/grafana:/var/lib/grafana
             - ./config/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml

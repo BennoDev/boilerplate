@@ -7,3 +7,6 @@ datasources:
     - name: Prometheus
       type: prometheus
       url: http://prometheus:9090
+    - name: Tempo
+      type: tempo
+      url: http://tempo:3200
