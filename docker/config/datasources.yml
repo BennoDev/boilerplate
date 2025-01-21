@@ -5,6 +5,14 @@ datasources:
       uid: loki
       type: loki
       url: http://loki:3100
+      jsonData:
+          derivedFields:
+              - name: trace_id
+                matcherRegex: trace_id
+                matcherType: label
+                datasourceUid: tempo
+                url: $${__value.raw}
+                urlDisplayLabel: View Trace
     - name: Prometheus
       uid: prometheus
       type: prometheus

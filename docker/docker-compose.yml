@@ -5,6 +5,7 @@
 # https://hub.docker.com/r/grafana/grafana
 # https://hub.docker.com/r/prom/prometheus
 # https://grafana.com/docs/loki/latest/setup/install/docker/
+# https://github.com/grafana/intro-to-mltp/blob/main/docker-compose-otel.yml
 
 # OTEL INSTRUMENTATION:
 # Instrumentation needs to happen at the earliest possible point. Ideally before any framework / libraries are initialized.
@@ -34,17 +35,27 @@
 # The LGTM stack is Loki, Grafana, Tempo & (Mimir/Prometheus) for logging, dashboard, tracing & metrics respectively.
 # There is a comprehensive docker image that includes all of these and instruments with OTEL: https://hub.docker.com/r/grafana/otel-lgtm
 #
+# GRAFANA TEMPO + LOKI
+# tracesToLogs is super useful for easily navigating and not having to manually query logs based on span / trace id.
+# By using "derivedFields" in Grafana, you can easily add a "View Trace" link to the logs, essentially adding logs2Traces.
+# Check datasources.yml for how to configure this.
+#
+# OTEL SAMPLING:
+# Because we are using an OTEL collector, we can potentially use that as a lever to sample / adapt volumes.
+# https://opentelemetry.io/docs/concepts/sampling/
+#
 # TODO:
-# - Try Grafana Tempo
-#   - Investigate trace to logs https://grafana.com/docs/grafana/latest/datasources/tempo/configure-tempo-data-source/#provision-the-data-source
-# - Try getting application error monitoring in
-# - Check out Grafana pyroscope: https://grafana.com/docs/pyroscope/latest/get-started/
-#   - Investigate profiles to logs
-# - Check out Grafana alloy instead of OTEL collector: https://grafana.com/docs/alloy/latest/set-up/install/docker/
+# - See what happens in tracing when throwing an error
 # - Figure out Prometheus for NodeJS
 #   - Investigate metrics to logs
+# - Check out Grafana Alloy: https://grafana.com/docs/alloy/latest/set-up/install/docker/ & https://medium.com/@magstherdev/grafana-alloy-opentelemetry-59c171d2ebfc
+#   - Set up Service Graph if possible
+# - Less important: check out Grafana Pyroscope? https://grafana.com/docs/pyroscope/latest/get-started/
+#   - Easier with Alloy
+#   - Investigate profiles to logs
+#   - Doesn't go through OTEL collector, no instrumentation for Node ?yet?.
+# - Less important: check out Grafana Mimir? Make sure to understand Prometheus first
 # - Less important: check out Grafana Faro? https://github.com/grafana/faro-web-sdk/
-# - Less important: check out Grafana Mimir? https://grafana.com/oss/mimir/
 
 services:
     postgres:
@@ -63,18 +74,18 @@ services:
     otel-collector:
         image: otel/opentelemetry-collector:latest
         command: ['--config=/etc/otel-collector-config.yml']
+        ports:
+            - 4317:4317
         volumes:
             - ./config/otel-collector-config.yml:/etc/otel-collector-config.yml
-        ports:
-            - 4317:4317 # OTLP gRPC receiver
 
     # Check UI at http://localhost:9090
     prometheus:
         image: prom/prometheus:latest
-        volumes:
-            - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
         ports:
-            - '9090:9090'
+            - 9090:9090
+        volumes:
+            - ./config/prometheus.yml:/etc/prometheus.yml
 
     tempo:
         image: grafana/tempo:latest
@@ -83,7 +94,6 @@ services:
             - 3200:3200
         volumes:
             - ./config/tempo-config.yml:/etc/tempo/tempo-config.yml
-            - ./volumes/tempo:/var/tempo
 
     loki:
         image: grafana/loki:latest
@@ -101,5 +111,5 @@ services:
         environment:
             - GF_SECURITY_ADMIN_PASSWORD=admin
         volumes:
-            - ./volumes/grafana:/var/lib/grafana
             - ./config/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+            - ./volumes/grafana:/var/lib/grafana
