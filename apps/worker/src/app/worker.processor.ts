@@ -4,14 +4,13 @@ import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { SpanKind, trace } from '@opentelemetry/api';
 import { Job } from 'bullmq';
-import { BullMQOtel } from 'bullmq-otel';
 
 import { Logger } from '@libs/logger';
 import { UserRepository } from '@libs/models';
 
 const tracer = trace.getTracer(process.env['SERVICE_NAME']!);
 
-@Processor('worker', { telemetry: new BullMQOtel('login-bull') })
+@Processor('worker')
 export class WorkerProcessor extends WorkerHost {
     constructor(
         // Used for CreateRequestContext()

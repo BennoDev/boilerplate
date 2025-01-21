@@ -5,7 +5,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, type ConfigModuleOptions } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { BullMQOtel } from 'bullmq-otel';
 import { minutesToMilliseconds } from 'date-fns';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 
@@ -59,7 +58,6 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
             useFactory: (config: ApiConfig) => ({
                 connection: getRedisClient(config),
                 prefix: '[bullmq]',
-                telemetry: new BullMQOtel(`login-bull`),
             }),
         }),
         LoggerModule,

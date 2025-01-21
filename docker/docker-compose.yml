@@ -26,6 +26,9 @@
 # For distributed tracing, you NEED to have propagation through a textMapPropagator!
 # What the purpose of the SpanProcessor is - not entirely clear. Both with and without processor it works quite well :)
 # Tracing with custom decorators, or via the { trace } import from @opentelemetry/api is straightforward and powerful.
+# Errors in tracing:
+#     When they occur in the sync part, aka the immediate request, they are nicely shown in the trace.
+#     When they occur in the async part, aka the job, they are not shown in the trace. Even with BullMQ instrumentation.
 #
 # LOGGING: https://grafana.com/docs/loki/latest/send-data/otel/
 # OTEL tracing makes own tracing solution redundant.
@@ -45,7 +48,6 @@
 # https://opentelemetry.io/docs/concepts/sampling/
 #
 # TODO:
-# - See what happens in tracing when throwing an error
 # - Figure out Prometheus for NodeJS
 #   - Investigate metrics to logs
 # - Check out Grafana Alloy: https://grafana.com/docs/alloy/latest/set-up/install/docker/ & https://medium.com/@magstherdev/grafana-alloy-opentelemetry-59c171d2ebfc
