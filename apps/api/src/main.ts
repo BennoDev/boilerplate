@@ -1,4 +1,4 @@
-import './init';
+import './instrument';
 
 import {
     type INestApplication,

@@ -43,6 +43,10 @@
 # By using "derivedFields" in Grafana, you can easily add a "View Trace" link to the logs, essentially adding logs2Traces.
 # Check datasources.yml for how to configure this.
 #
+# METRICS:
+# Combining prom-client with the OTEL Metrics Exporter seems to be non-trivial currently.
+# We'll have to rely on the metrics from the basic exporter / reader for now.
+#
 # OTEL SAMPLING:
 # Because we are using an OTEL collector, we can potentially use that as a lever to sample / adapt volumes.
 # https://opentelemetry.io/docs/concepts/sampling/
