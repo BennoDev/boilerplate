@@ -46,21 +46,41 @@
 # METRICS:
 # Combining prom-client with the OTEL Metrics Exporter seems to be non-trivial currently.
 # We'll have to rely on the metrics from the basic exporter / reader for now.
+# This means that metrics to traces won't be possible as we don't really have HTTP metrics currently.
+# https://grafana.com/docs/grafana/latest/datasources/tempo/configure-tempo-data-source/#trace-to-metrics
+# Metrics to traces could be a cool feature, but is nowhere near as useful as traces to logs <-> logs to traces.
 #
 # OTEL SAMPLING:
 # Because we are using an OTEL collector, we can potentially use that as a lever to sample / adapt volumes.
 # https://opentelemetry.io/docs/concepts/sampling/
 #
+# GRAFANA ALLOY:
+# Alloy seems complicated compared to the OTEL collector.
+# The documentation and existing examples are not very helpful.
+# It probably has a lot of features, but this is really digging into the infrastructure side.
+# Applications are not affected by this, developer experience could be, as Alloy
+# may enable features such as Profile graphs and Service graphs.
+# In a real, larger production environment that embraces the Grafana stack,
+# this is probably the way to go.
+#
+# GRAFANA BEYLA: https://grafana.com/oss/beyla-ebpf/
+# Beyla is a tool that uses "eBPF" to trace applications down to
+# kernel level interactions, such as HTTP requests. It does this without
+# the need for instrumentation from the application. It's quite powerful,
+# but will still not replace application-level instrumentation as tracing
+# is still best with code-level instrumentation.
+#
 # TODO:
-# - Figure out Prometheus for NodeJS
-#   - Investigate metrics to logs
-# - Check out Grafana Alloy: https://grafana.com/docs/alloy/latest/set-up/install/docker/ & https://medium.com/@magstherdev/grafana-alloy-opentelemetry-59c171d2ebfc
+# - Tracing: what happend with error in job with new BullMQ instrumentation?
+# - Check out full LGTM project: https://github.com/grafana/intro-to-mltp/tree/main
+# - Less important: check out Grafana Alloy: https://grafana.com/docs/alloy/latest/set-up/install/docker/ & https://medium.com/@magstherdev/grafana-alloy-opentelemetry-59c171d2ebfc
 #   - Set up Service Graph if possible
-# - Less important: check out Grafana Pyroscope? https://grafana.com/docs/pyroscope/latest/get-started/
+# - Less important: check out Grafana Pyroscope https://grafana.com/docs/pyroscope/latest/get-started/
 #   - Easier with Alloy
-#   - Investigate profiles to logs
+#   - Investigate profiles to traces
 #   - Doesn't go through OTEL collector, no instrumentation for Node ?yet?.
-# - Less important: check out Grafana Mimir? Make sure to understand Prometheus first
+# - Less important: check out Grafana Mimir?
+#   - Prometheus "replacement"
 # - Less important: check out Grafana Faro? https://github.com/grafana/faro-web-sdk/
 
 services:
