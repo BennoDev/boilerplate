@@ -79,6 +79,9 @@
 # This doesn't solve application metrics. You can also configure the OTEL collector to scrape Prometheus metrics,
 # instead of Prometheus, and then send them there. Honestly don't know what's the advantage of that over having Prometheus scrape.
 #
+# It's also possible to configure OTEL collector to receive metrics from apps, and then use prometheus remote write to send them to Prometheus.
+# While at the same time, Prometheus scrapes OTEL collector for its own metrics.
+#
 # TODO:
 # - Check out full LGTM/MLTP project: https://github.com/grafana/intro-to-mltp/tree/main
 # - Less important: check out Grafana Alloy: https://grafana.com/docs/alloy/latest/set-up/install/docker/ & https://medium.com/@magstherdev/grafana-alloy-opentelemetry-59c171d2ebfc
@@ -116,10 +119,15 @@ services:
     # Check UI at http://localhost:9090
     prometheus:
         image: prom/prometheus:latest
+        command:
+            [
+                '--web.enable-remote-write-receiver',
+                '--enable-feature=native-histograms',
+            ]
         ports:
             - 9090:9090
         volumes:
-            - ./config/prometheus.yml:/etc/prometheus.yml
+            - ./config/prometheus-config.yml:/prometheus/prometheus.yml
 
     tempo:
         image: grafana/tempo:latest
