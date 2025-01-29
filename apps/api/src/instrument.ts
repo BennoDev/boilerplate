@@ -5,13 +5,23 @@ import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-grpc';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { Resource } from '@opentelemetry/resources';
-import { NodeSDK, tracing, logs, metrics } from '@opentelemetry/sdk-node';
+import { NodeSDK, tracing, logs, metrics, api } from '@opentelemetry/sdk-node';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 import { tryGetEnv } from '@libs/core';
 
 const projectName = tryGetEnv('PROJECT_NAME');
 const exporter = new OTLPTraceExporter();
+
+api.metrics.setGlobalMeterProvider(
+    new metrics.MeterProvider({
+        readers: [
+            new metrics.PeriodicExportingMetricReader({
+                exporter: new OTLPMetricExporter(),
+            }),
+        ],
+    }),
+);
 
 console.log('Setting up OpenTelemetry SDK');
 
@@ -20,9 +30,6 @@ const sdk = new NodeSDK({
         [ATTR_SERVICE_NAME]: projectName,
     }),
     traceExporter: exporter,
-    metricReader: new metrics.PeriodicExportingMetricReader({
-        exporter: new OTLPMetricExporter(),
-    }),
     logRecordProcessor: new logs.SimpleLogRecordProcessor(
         new OTLPLogExporter(),
     ),

@@ -4,24 +4,19 @@ import {
     type MiddlewareConsumer,
     type NestModule,
 } from '@nestjs/common';
+import { metrics } from '@opentelemetry/api';
 
 import { CommonModule } from '../common';
 
+import { meterInjectionToken } from './auth.constants';
 import { AuthController } from './auth.controller';
 import { LoginHandler, ChangePasswordHandler } from './commands';
 import { SessionSerializer } from './middleware';
 import { GetAuthenticatedUserHandler } from './queries';
-import { HashService } from './services';
+import { HashService, MetricsService } from './services';
 
 @Module({
-    imports: [
-        CommonModule,
-        BullModule.registerQueue({
-            name: 'worker',
-            // TODO: Check this!
-            // telemetry: {}
-        }),
-    ],
+    imports: [CommonModule, BullModule.registerQueue({ name: 'worker' })],
     controllers: [AuthController],
     providers: [
         SessionSerializer,
@@ -29,6 +24,11 @@ import { HashService } from './services';
         LoginHandler,
         ChangePasswordHandler,
         GetAuthenticatedUserHandler,
+        MetricsService,
+        {
+            provide: meterInjectionToken,
+            useValue: metrics.getMeterProvider().getMeter('auth'),
+        },
     ],
 })
 export class AuthModule implements NestModule {
