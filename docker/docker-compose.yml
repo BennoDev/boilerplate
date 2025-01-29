@@ -73,8 +73,14 @@
 # but will still not replace application-level instrumentation as tracing
 # is still best with code-level instrumentation.
 #
+# METRICS:
+# This is the most complicated part of the stack to configure. Prometheus can be both scraper and datasource, leaving little for OTEL to do.
+# The only part that configuring an exporter for OTEL metrics does in the collector config, is to expose its own metrics on a port.
+# This doesn't solve application metrics. You can also configure the OTEL collector to scrape Prometheus metrics,
+# instead of Prometheus, and then send them there. Honestly don't know what's the advantage of that over having Prometheus scrape.
+#
 # TODO:
-# - Check out full LGTM project: https://github.com/grafana/intro-to-mltp/tree/main
+# - Check out full LGTM/MLTP project: https://github.com/grafana/intro-to-mltp/tree/main
 # - Less important: check out Grafana Alloy: https://grafana.com/docs/alloy/latest/set-up/install/docker/ & https://medium.com/@magstherdev/grafana-alloy-opentelemetry-59c171d2ebfc
 #   - Set up Service Graph if possible
 # - Less important: check out Grafana Pyroscope https://grafana.com/docs/pyroscope/latest/get-started/
