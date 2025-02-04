@@ -36,7 +36,7 @@ module.exports = [
         })
         .map(config => ({
             ...config,
-            files: ['**/*.ts', '**/*.tsx'],
+            files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
             ignores: ['jest.config.ts'],
             rules: {
                 '@typescript-eslint/explicit-function-return-type': 'error',
@@ -125,7 +125,7 @@ module.exports = [
         })),
     ...compat.config({ extends: ['plugin:@nx/javascript'] }).map(config => ({
         ...config,
-        files: ['**/*.js', '**/*.jsx'],
+        files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
         rules: {},
     })),
     ...compat.config({ env: { jest: true } }).map(config => ({
