@@ -6,7 +6,7 @@ updates:
           prefix: '[Github Actions]'
           include: 'scope'
       schedule:
-          interval: 'weekly'
+          interval: 'monthly'
       assignees:
           - 'BennoDev'
 
