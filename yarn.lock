@@ -31,10 +31,10 @@
     rxjs "7.8.1"
     source-map "0.7.4"
 
-"@angular-devkit/core@19.0.1":
-  version "19.0.1"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-19.0.1.tgz#444e99e7684ee07c10d7c4e66377c3a4790e1438"
-  integrity sha512-oXIAV3hXqUW3Pmm95pvEmb+24n1cKQG62FzhQSjOIrMeHiCbGLNuc8zHosIi2oMrcCJJxR6KzWjThvbuzDwWlw==
+"@angular-devkit/core@19.1.7":
+  version "19.1.7"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-19.1.7.tgz#df2367d6cd4f37950ca812cd4675e6b16f7e9fa5"
+  integrity sha512-q0I6L9KTqyQ7D5M8H+fWLT+yjapvMNb7SRdfU6GzmexO66Dpo83q4HDzuDKIPDF29Yl0ELs9ICJqe9yUXh6yDQ==
   dependencies:
     ajv "8.17.1"
     ajv-formats "3.0.1"
@@ -54,14 +54,14 @@
     ora "5.4.1"
     rxjs "7.8.1"
 
-"@angular-devkit/schematics@19.0.1":
-  version "19.0.1"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/schematics/-/schematics-19.0.1.tgz#f6f6e30988c42184cc0ae921ee9747756a723baa"
-  integrity sha512-N9dV8WpNRULykNj8fSxQrta85gPKxb315J3xugLS2uwiFWhz7wo5EY1YeYhoVKoVcNB2ng9imJgC5aO52AHZwg==
+"@angular-devkit/schematics@19.1.7":
+  version "19.1.7"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/schematics/-/schematics-19.1.7.tgz#85fa8a6861373f0815baa9954a98f86b51f3b123"
+  integrity sha512-AP6FvhMybCYs3gs+vzEAzSU1K//AFT3SVTRFv+C3WMO5dLeAHeGzM8I2dxD5EHQQtqIE/8apP6CxGrnpA5YlFg==
   dependencies:
-    "@angular-devkit/core" "19.0.1"
+    "@angular-devkit/core" "19.1.7"
     jsonc-parser "3.3.1"
-    magic-string "0.30.12"
+    magic-string "0.30.17"
     ora "5.4.1"
     rxjs "7.8.1"
 
@@ -1532,10 +1532,10 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@microsoft/tsdoc@0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@microsoft/tsdoc/-/tsdoc-0.15.0.tgz#f29a55df17cb6e87cfbabce33ff6a14a9f85076d"
-  integrity sha512-HZpPoABogPvjeJOdzCOSJsXeL/SMCBgBZMVC3X3d7YYp2gf31MfxhUoYUNwf1ERPJOnQc0wkFn9trqI6ZEdZuA==
+"@microsoft/tsdoc@0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/tsdoc/-/tsdoc-0.15.1.tgz#d4f6937353bc4568292654efb0a0e0532adbcba2"
+  integrity sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==
 
 "@mikro-orm/cli@^6.4.5":
   version "6.4.5"
@@ -1620,10 +1620,10 @@
     "@emnapi/runtime" "^1.1.0"
     "@tybys/wasm-util" "^0.9.0"
 
-"@nestjs/common@^11.0.7":
-  version "11.0.7"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-11.0.7.tgz#a109ab6a60b70d106eee9987da7bf39e91096362"
-  integrity sha512-2HXwaFem0IUCMoruOIC57wSxuRBBRJQwfcuHw6dsL15bqekpgmR8I53zT4RGfX7bgRDr8tINvzRun8PFeSiVgA==
+"@nestjs/common@^11.0.10":
+  version "11.0.10"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-11.0.10.tgz#c300168171896d0ae7d189e5237ab6c30d1b64ef"
+  integrity sha512-pzGXp14KF2Q4CDZGQgPK4l8zEg7i6cNkb+10yc8ZA5K41cLe3ZbWW1YxtY2e/glHauOJwTLSVjH4tiRVtOTizg==
   dependencies:
     uid "2.0.2"
     iterare "1.2.1"
@@ -1638,10 +1638,10 @@
     dotenv-expand "12.0.1"
     lodash "4.17.21"
 
-"@nestjs/core@^11.0.7":
-  version "11.0.7"
-  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-11.0.7.tgz#1074070184c5bc5dafd2ecc4b406ae49417c106d"
-  integrity sha512-LRijT+lXBpWjySJDNI+P18T+JiYOrpIBP/y8B+ObJN+sdaV3AFNT8cdf1U4hnkDbNGuIvVx1yNiRi6QNNVyw3A==
+"@nestjs/core@^11.0.10":
+  version "11.0.10"
+  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-11.0.10.tgz#d75ecbf0a51e3be194c0827812a474d6e97d1c4a"
+  integrity sha512-f0qB8ztNWZeAD4E4fUdHConmNYCa/A78U7WJu5mX9OLYfOAs3ESYCDfsH9MRUvkA4Ft4Y1uMmyJo5L4fg4+beg==
   dependencies:
     uid "2.0.2"
     "@nuxt/opencollective" "0.4.1"
@@ -1655,10 +1655,10 @@
   resolved "https://registry.yarnpkg.com/@nestjs/mapped-types/-/mapped-types-2.1.0.tgz#b9b536b7c3571567aa1d0223db8baa1a51505a19"
   integrity sha512-W+n+rM69XsFdwORF11UqJahn4J3xi4g/ZEOlJNL6KoW5ygWSmBB2p0S2BZ4FQeS/NDH72e6xIcu35SfJnE8bXw==
 
-"@nestjs/platform-express@^11.0.7":
-  version "11.0.7"
-  resolved "https://registry.yarnpkg.com/@nestjs/platform-express/-/platform-express-11.0.7.tgz#72e94e1c1575d98144267baecd4ecdb9996ac00e"
-  integrity sha512-n8CyhzQ6ESvjdvtIg6cwO77MON79TrUp4mHUJ2oOlypx0zU7nGgY2Ak+dMPPYII9OZqS95OPXDZ9wQjlzlYbAw==
+"@nestjs/platform-express@^11.0.10":
+  version "11.0.10"
+  resolved "https://registry.yarnpkg.com/@nestjs/platform-express/-/platform-express-11.0.10.tgz#e11204a517a10579e59ab270194e5bae8df593a1"
+  integrity sha512-UVSf0yaWFBC2Zn2FOWABXxCnyG8XNIXrNnvTFpbUFqaJu1YDdwJ7wQBBqxq9CtJT7ILqSmfhOU7HS0d/0EAxpw==
   dependencies:
     cors "2.8.5"
     express "5.0.1"
@@ -1666,13 +1666,13 @@
     path-to-regexp "8.2.0"
     tslib "2.8.1"
 
-"@nestjs/schematics@^11.0.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/schematics/-/schematics-11.0.0.tgz#8e02e86d6515e57eac72923ebae330f57c0ae390"
-  integrity sha512-wts8lG0GfNWw3Wk9aaG5I/wcMIAdm7HjjeThQfUZhJxeIFT82Z3F5+0cYdHH4ii2pYQGiCSrR1VcuMwPiHoecg==
+"@nestjs/schematics@^11.0.1":
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/schematics/-/schematics-11.0.1.tgz#0bc79a95a533225d3329c32d2c3c7bebefdaa675"
+  integrity sha512-PHPAUk4sXkfCxiMacD1JFC+vEyzXjZJRCu1KT2MmG2hrTiMDMk5KtMprro148JUefNuWbVyN0uLTJVSmWVzhoA==
   dependencies:
-    "@angular-devkit/core" "19.0.1"
-    "@angular-devkit/schematics" "19.0.1"
+    "@angular-devkit/core" "19.1.7"
+    "@angular-devkit/schematics" "19.1.7"
     comment-json "4.2.5"
     jsonc-parser "3.3.1"
     pluralize "8.0.0"
@@ -1687,17 +1687,17 @@
     jsonc-parser "3.2.0"
     pluralize "8.0.0"
 
-"@nestjs/swagger@^11.0.3":
-  version "11.0.3"
-  resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-11.0.3.tgz#27f7d5e7b0835a3430e15c825d4369c1e63a7649"
-  integrity sha512-oyrhrAzVJz1wYefIYDb6Y0f1VYb8BtYxEI7Ex0ApoUsfGZThyhW9elYANcfBXVaTmICrU8lCESF2ygF6s0ThIw==
+"@nestjs/swagger@^11.0.5":
+  version "11.0.5"
+  resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-11.0.5.tgz#438fe7bc3c12513b4519ff59709dd494e770cc71"
+  integrity sha512-3z4rl7FgbLPBvJwR45nBDju4QFH7vufs9Ums8sCoc6T1O1dqpNpxz0sKfXiP5QA6AUljks1jARfOHeHeJ4zWBA==
   dependencies:
-    "@microsoft/tsdoc" "0.15.0"
+    "@microsoft/tsdoc" "0.15.1"
     "@nestjs/mapped-types" "2.1.0"
     js-yaml "4.1.0"
     lodash "4.17.21"
     path-to-regexp "8.2.0"
-    swagger-ui-dist "5.18.2"
+    swagger-ui-dist "5.19.0"
 
 "@nestjs/terminus@^11.0.0":
   version "11.0.0"
@@ -1707,10 +1707,10 @@
     boxen "5.1.2"
     check-disk-space "3.4.0"
 
-"@nestjs/testing@^11.0.7":
-  version "11.0.7"
-  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-11.0.7.tgz#659c92c197c79b9bc9c586f83bb0334683dd11ce"
-  integrity sha512-ZDvfhnPRWwdEBNfS96eYVlMbG/E/4ekHJy7cnbRdyu8wSHGSipdQ2fXEomDFevTY0FOuJGdgMyE+nwy4wsm8AQ==
+"@nestjs/testing@^11.0.10":
+  version "11.0.10"
+  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-11.0.10.tgz#dac884e4162011526e0345077b2087c2b94afdaa"
+  integrity sha512-uZcdnvmHXWnvozYOAwZi1elpRRfqIfYqHglCavjhjcj3cH1MVZkwoTqntW3XOPQlT4lf96InjP1exGaW4B9wUg==
   dependencies:
     tslib "2.8.1"
 
@@ -7011,10 +7011,10 @@ magic-string@0.30.0:
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.4.13"
 
-magic-string@0.30.12:
-  version "0.30.12"
-  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.12.tgz#9eb11c9d072b9bcb4940a5b2c2e1a217e4ee1a60"
-  integrity sha512-Ea8I3sQMVXr8JhN4z+H/d8zwo+tYDgHE9+5G4Wnrwhs0gaK9fXTKx0Tw5Xwsd/bCPTTZNRAdpyzvoeORe9LYpw==
+magic-string@0.30.17:
+  version "0.30.17"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.17.tgz#450a449673d2460e5bbcfba9a61916a1714c7453"
+  integrity sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.5.0"
 
@@ -9497,10 +9497,10 @@ svgo@^3.2.0:
     csso "^5.0.5"
     picocolors "^1.0.0"
 
-swagger-ui-dist@5.18.2, swagger-ui-dist@>=5.0.0:
-  version "5.18.2"
-  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-5.18.2.tgz#62013074374d272c04ed3030704b88db5aa8c0b7"
-  integrity sha512-J+y4mCw/zXh1FOj5wGJvnAajq6XgHOyywsa9yITmwxIlJbMqITq3gYRZHaeqLVH/eV/HOPphE6NjF+nbSNC5Zw==
+swagger-ui-dist@5.19.0, swagger-ui-dist@>=5.0.0:
+  version "5.19.0"
+  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-5.19.0.tgz#618057e1aaec97e016282eeee5c51ce6cf3da448"
+  integrity sha512-bSVZeYaqanMFeW5ZY3+EejFbsjkjazYxm1I7Lz3xayYz5XU3m2aUzvuPC0jI95WCQdduszHYV3ER4buQoy8DXA==
   dependencies:
     "@scarf/scarf" "=1.4.0"
 
