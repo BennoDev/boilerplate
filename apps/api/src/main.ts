@@ -1,8 +1,4 @@
-import {
-    type INestApplication,
-    ValidationPipe,
-    BadRequestException,
-} from '@nestjs/common';
+import { type INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import compression from 'compression';
@@ -10,6 +6,7 @@ import { RedisStore } from 'connect-redis';
 import basicAuth from 'express-basic-auth';
 import session from 'express-session';
 import helmet from 'helmet';
+import { patchNestJsSwagger } from 'nestjs-zod';
 
 import { Environment, tryGetEnv } from '@libs/core';
 import { Logger, NestLoggerProxy } from '@libs/logger';
@@ -61,6 +58,8 @@ const addSwaggerDocs = (
     config: ApiConfig,
 ): void => {
     logger.info('Initializing Swagger...');
+
+    patchNestJsSwagger();
 
     /*
      * We cast here to circumvent having to deal with these values being possibly undefined.
@@ -115,20 +114,6 @@ const addGlobalMiddleware = (
     });
 
     app.use(helmet());
-    app.useGlobalPipes(
-        new ValidationPipe({
-            whitelist: true,
-            transform: true,
-            exceptionFactory: (errors): BadRequestException =>
-                new BadRequestException(
-                    errors.map(error => ({
-                        children: error.children,
-                        constraints: error.constraints,
-                        property: error.property,
-                    })),
-                ),
-        }),
-    );
     app.use(compression());
 };
 

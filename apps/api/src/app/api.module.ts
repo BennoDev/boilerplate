@@ -2,10 +2,11 @@ import { join } from 'node:path';
 
 import { Module } from '@nestjs/common';
 import { ConfigModule, type ConfigModuleOptions } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { minutesToMilliseconds } from 'date-fns';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
+import { ZodValidationPipe } from 'nestjs-zod';
 
 import { Environment, tryGetEnv } from '@libs/core';
 import { LoggerModule } from '@libs/logger';
@@ -59,6 +60,10 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
         {
             provide: APP_GUARD,
             useClass: ThrottlerGuard,
+        },
+        {
+            provide: APP_PIPE,
+            useClass: ZodValidationPipe,
         },
     ],
 })

@@ -1,12 +1,14 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { createZodDto } from 'nestjs-zod';
+import { z } from 'zod';
 
-import { IsPassword } from '@libs/validators';
+const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
 
-export class ChangePasswordRequest {
-    @IsNotEmpty()
-    @IsString()
-    readonly oldPassword!: string;
+const changePasswordRequestSchema = z.object({
+    oldPassword: z.string(),
+    newPassword: z.string().min(8).max(255).regex(passwordRegex),
+});
 
-    @IsPassword()
-    readonly newPassword!: string;
-}
+// Only allow alphanumeric characters, dashes, and spaces
+export class ChangePasswordRequest extends createZodDto(
+    changePasswordRequestSchema,
+) {}

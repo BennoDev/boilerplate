@@ -1,25 +1,20 @@
 import { randomUUID } from 'node:crypto';
 
 import { faker } from '@faker-js/faker';
-import { plainToInstance } from 'class-transformer';
-import { mergeDeepRight } from 'ramda';
 
 import { User, UserState } from '@libs/models';
 
-export const createTestUser = (overrides: Partial<User> = {}): User =>
-    plainToInstance(
-        User,
-        mergeDeepRight(
-            {
-                id: overrides.id ?? randomUUID(),
-                email: overrides.email ?? faker.internet.email(),
-                password: overrides.password ?? faker.internet.password(),
-                state: overrides.state ?? UserState.Active,
-                firstName: overrides.firstName ?? faker.person.firstName(),
-                lastName: overrides.lastName ?? faker.person.lastName(),
-                createdAt: overrides.createdAt ?? new Date(),
-                updatedAt: overrides.updatedAt ?? new Date(),
-            },
-            overrides,
-        ),
-    );
+export const createTestUser = (overrides: Partial<User> = {}): User => {
+    const user = new User();
+
+    user.id = overrides.id ?? randomUUID();
+    user.email = overrides.email ?? faker.internet.email();
+    user.password = overrides.password ?? faker.internet.password();
+    user.state = overrides.state ?? UserState.Active;
+    user.firstName = overrides.firstName ?? faker.person.firstName();
+    user.lastName = overrides.lastName ?? faker.person.lastName();
+    user.createdAt = overrides.createdAt ?? new Date();
+    user.updatedAt = overrides.updatedAt ?? new Date();
+
+    return user;
+};
