@@ -1,3 +1,7 @@
+// This has to be the first import, as subsequent NestJS decorated DTOs are affected at import-time.
+import './patch-zod-openapi';
+
+import { patchNestjsSwagger } from '@anatine/zod-nestjs';
 import { type INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -6,7 +10,6 @@ import { RedisStore } from 'connect-redis';
 import basicAuth from 'express-basic-auth';
 import session from 'express-session';
 import helmet from 'helmet';
-import { patchNestJsSwagger } from 'nestjs-zod';
 
 import { Environment, tryGetEnv } from '@libs/core';
 import { Logger, NestLoggerProxy } from '@libs/logger';
@@ -59,7 +62,7 @@ const addSwaggerDocs = (
 ): void => {
     logger.info('Initializing Swagger...');
 
-    patchNestJsSwagger();
+    patchNestjsSwagger();
 
     /*
      * We cast here to circumvent having to deal with these values being possibly undefined.
