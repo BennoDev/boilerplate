@@ -9,7 +9,7 @@ import {
     Req,
     Res,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { Response, Request } from 'express';
 
 import {
@@ -24,6 +24,7 @@ import {
     LoginRequest,
     ChangePasswordRequest,
     type AuthenticatedUserResponse,
+    TestResponse,
 } from './dto';
 import { GetAuthenticatedUserHandler } from './queries';
 
@@ -81,5 +82,18 @@ export class AuthController {
         @GetUserSession() session: UserSession,
     ): Promise<void> {
         await this.changePasswordHandler.execute({ data: body, session });
+    }
+
+    @Get('test')
+    @ApiResponse({
+        status: HttpStatus.OK,
+        type: TestResponse,
+        description: 'Test response',
+    })
+    test(): TestResponse {
+        return {
+            type: 'foo',
+            foo: 'bar',
+        };
     }
 }

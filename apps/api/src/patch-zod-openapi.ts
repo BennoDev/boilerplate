@@ -11,7 +11,9 @@ export const createZodDtoPatch = <Schema extends OpenApiZodAny>(
 ): ZodDtoStatic<Schema> => {
     const openApiTitle = (schema.metaOpenApi as SchemaObject)?.title;
     if (!openApiTitle) {
-        throw new Error('Title is required');
+        throw new Error(
+            'Title is required, add one using to your zod schema using `.openapi({ title: "Title" })`',
+        );
     }
 
     const zodDto = createZodDto(schema);
