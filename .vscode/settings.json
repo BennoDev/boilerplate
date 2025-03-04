@@ -7,6 +7,5 @@
     },
     "jestrunner.jestCommand": "yarn cross-env TZ=UTC yarn jest",
     "eslint.validate": ["json"],
-    "eslint.experimental.useFlatConfig": true,
     "markdown.extension.toc.levels": "2..6"
 }
