@@ -1,6 +1,5 @@
+import { createZodDto } from '@anatine/zod-nestjs';
 import { z } from 'zod';
-
-import { createZodDtoPatch } from '../../../patch-zod-openapi';
 
 const baseEntityResponseSchema = z
     .object({
@@ -10,5 +9,6 @@ const baseEntityResponseSchema = z
     })
     .openapi({ title: 'BaseEntityResponse' });
 
-export const BaseEntityResponse = createZodDtoPatch(baseEntityResponseSchema);
-export type BaseEntityResponse = z.infer<typeof baseEntityResponseSchema>;
+export class BaseEntityResponse extends createZodDto(
+    baseEntityResponseSchema,
+) {}

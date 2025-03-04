@@ -1,6 +1,6 @@
+import { createZodDto } from '@anatine/zod-nestjs';
 import { z } from 'zod';
 
-import { createZodDtoPatch } from '../../../patch-zod-openapi';
 import { SortDirection } from '../common.constants';
 
 const pagingMetaSchema = z
@@ -11,8 +11,7 @@ const pagingMetaSchema = z
     })
     .openapi({ title: 'PagingMeta' });
 
-export const PagingMeta = createZodDtoPatch(pagingMetaSchema);
-export type PagingMeta = z.infer<typeof pagingMetaSchema>;
+export class PagingMeta extends createZodDto(pagingMetaSchema) {}
 
 const pagingQuerySchema = z
     .object({
@@ -23,5 +22,4 @@ const pagingQuerySchema = z
     })
     .openapi({ title: 'PagingQuery' });
 
-export const PagingQuery = createZodDtoPatch(pagingQuerySchema);
-export type PagingQuery = z.infer<typeof pagingQuerySchema>;
+export class PagingQuery extends createZodDto(pagingQuerySchema) {}

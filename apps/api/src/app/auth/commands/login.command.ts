@@ -23,10 +23,10 @@ export class LoginHandler implements IHandler<LoginCommand> {
     }
 
     async execute({ data }: LoginCommand): Promise<User> {
-        const arg = data.type === 'email' ? data.email : data.username;
+        const { email, password } = data;
 
         const user = await this.userRepository.findOneOrFail(
-            { [data.type]: arg },
+            { email },
             { failHandler: () => new UnauthorizedException() },
         );
 
@@ -39,13 +39,11 @@ export class LoginHandler implements IHandler<LoginCommand> {
         }
 
         const isValidPassword = await this.hashService.compare(
-            data.password,
+            password,
             user.password,
         );
         if (!isValidPassword) {
-            this.logger.warn('Invalid password for login attempt', {
-                emailOrUsername: arg,
-            });
+            this.logger.warn('Invalid password for login attempt', { email });
             throw new UnauthorizedException();
         }
 

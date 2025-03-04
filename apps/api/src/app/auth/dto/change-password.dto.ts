@@ -1,6 +1,5 @@
+import { createZodDto } from '@anatine/zod-nestjs';
 import { z } from 'zod';
-
-import { createZodDtoPatch } from '../../../patch-zod-openapi';
 
 // Only allow alphanumeric characters, dashes, and spaces
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
@@ -17,7 +16,6 @@ const changePasswordRequestSchema = z
     })
     .openapi({ title: 'ChangePasswordRequest' });
 
-export const ChangePasswordRequest = createZodDtoPatch(
+export class ChangePasswordRequest extends createZodDto(
     changePasswordRequestSchema,
-);
-export type ChangePasswordRequest = z.infer<typeof changePasswordRequestSchema>;
+) {}

@@ -1,8 +1,8 @@
+import { createZodDto } from '@anatine/zod-nestjs';
 import { z } from 'zod';
 
 import { UserState } from '@libs/models';
 
-import { createZodDtoPatch } from '../../../patch-zod-openapi';
 import { BaseEntityResponse } from '../../common';
 
 const authenticatedUserResponseSchema = z
@@ -17,9 +17,6 @@ const authenticatedUserResponseSchema = z
     )
     .openapi({ title: 'AuthenticatedUserResponse' });
 
-export const AuthenticatedUserResponse = createZodDtoPatch(
+export class AuthenticatedUserResponse extends createZodDto(
     authenticatedUserResponseSchema,
-);
-export type AuthenticatedUserResponse = z.infer<
-    typeof authenticatedUserResponseSchema
->;
+) {}
