@@ -7,6 +7,7 @@ import {
     type EntityClass,
 } from '@mikro-orm/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { type DynamicModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -29,6 +30,7 @@ export class DatabaseModule {
 
                         return {
                             ...config,
+                            driver: PostgreSqlDriver,
                             logger: message => logger.info(message),
                             debug: this.getDebugOptions(config.environment),
                             highlighter: this.getHighlighter(
