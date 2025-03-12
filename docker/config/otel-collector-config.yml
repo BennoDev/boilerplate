@@ -9,12 +9,12 @@ extensions:
 exporters:
     otlp/tempo:
         endpoint: tempo:4317
+        tls:
+            insecure: true
     prometheusremotewrite:
         endpoint: http://prometheus:9090/api/v1/write
         tls:
             insecure: true
-    prometheus:
-        endpoint: 0.0.0.0:9090
     otlphttp/loki:
         endpoint: http://loki:3100/otlp
         tls:
@@ -26,7 +26,7 @@ service:
             exporters: [otlp/tempo]
         metrics:
             receivers: [otlp]
-            exporters: [prometheus, prometheusremotewrite]
+            exporters: [prometheusremotewrite]
         logs:
             receivers: [otlp]
             exporters: [otlphttp/loki]
