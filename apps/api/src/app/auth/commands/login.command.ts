@@ -10,7 +10,7 @@ import { UserRepository, type User, UserState } from '@libs/models';
 
 import { InvalidUserState } from '../auth.errors';
 import { type LoginRequest } from '../dto';
-import { HashService } from '../services';
+import { HashService, MetricsService } from '../services';
 
 export type LoginCommand = {
     data: LoginRequest;
@@ -24,6 +24,7 @@ export class LoginHandler implements IHandler<LoginCommand> {
         private readonly logger: Logger,
         @InjectQueue('worker')
         private readonly queue: Queue<{ userId: UUID }>,
+        private readonly metricsService: MetricsService,
     ) {
         this.logger.setContext('LoginHandler');
     }
@@ -56,6 +57,7 @@ export class LoginHandler implements IHandler<LoginCommand> {
         this.logger.info('User logged in', {
             jobs: await this.queue.getJobCounts(),
         });
+        this.metricsService.incrementLoginCounter();
         await this.queue.add('UserLoggedIn', { userId: user.id });
 
         return user;

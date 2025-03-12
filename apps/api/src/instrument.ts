@@ -8,7 +8,6 @@ import {
     tracing,
     logs,
     metrics,
-    api,
     resources,
     core,
 } from '@opentelemetry/sdk-node';
@@ -19,16 +18,6 @@ import { tryGetEnv } from '@libs/core';
 const projectName = tryGetEnv('PROJECT_NAME');
 const exporter = new OTLPTraceExporter();
 
-api.metrics.setGlobalMeterProvider(
-    new metrics.MeterProvider({
-        readers: [
-            new metrics.PeriodicExportingMetricReader({
-                exporter: new OTLPMetricExporter(),
-            }),
-        ],
-    }),
-);
-
 console.log('Setting up OpenTelemetry SDK');
 
 const sdk = new NodeSDK({
@@ -36,6 +25,9 @@ const sdk = new NodeSDK({
         [ATTR_SERVICE_NAME]: projectName,
     }),
     traceExporter: exporter,
+    metricReader: new metrics.PeriodicExportingMetricReader({
+        exporter: new OTLPMetricExporter(),
+    }),
     logRecordProcessor: new logs.SimpleLogRecordProcessor(
         new OTLPLogExporter(),
     ),
