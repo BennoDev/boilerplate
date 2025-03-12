@@ -1,4 +1,4 @@
-import { type Attributes, trace } from '@opentelemetry/api';
+import { api } from '@opentelemetry/sdk-node';
 
 type AnyFunction = (...args: any[]) => unknown;
 
@@ -15,7 +15,7 @@ type TraceDecoratorOptions = {
     /**
      * Additional attributes to add to the span
      */
-    attributes?: Attributes;
+    attributes?: api.Attributes;
 };
 
 export const Trace: (options?: TraceDecoratorOptions) => MethodDecorator =
@@ -23,7 +23,7 @@ export const Trace: (options?: TraceDecoratorOptions) => MethodDecorator =
     (target, propertyKey, descriptor) => {
         const originalMethod = descriptor.value as AnyFunction;
 
-        const tracer = trace.getTracer(process.env['SERVICE_NAME']!);
+        const tracer = api.trace.getTracer(process.env['SERVICE_NAME']!);
 
         const defaultOptions: Required<TraceDecoratorOptions> = {
             includeArgsInAttributes: true,

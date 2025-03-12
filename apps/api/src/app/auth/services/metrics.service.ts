@@ -1,13 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Counter, Meter } from '@opentelemetry/api';
+import { api } from '@opentelemetry/sdk-node';
 
 import { meterInjectionToken } from '../auth.constants';
 
 @Injectable()
 export class MetricsService {
-    private readonly counter: Counter;
+    private readonly counter: api.Counter;
 
-    constructor(@Inject(meterInjectionToken) private readonly meter: Meter) {
+    constructor(
+        @Inject(meterInjectionToken) private readonly meter: api.Meter,
+    ) {
         this.counter = this.meter.createCounter('number_of_logins');
     }
 

@@ -28,7 +28,7 @@
 # DISTRIBUTED TRACING:
 # For distributed tracing, you NEED to have propagation through a textMapPropagator!
 # What the purpose of the SpanProcessor is - not entirely clear. Both with and without processor it works quite well :)
-# Tracing with custom decorators, or via the { trace } import from @opentelemetry/api is straightforward and powerful.
+# Tracing with custom decorators, or via the { api } import from @opentelemetry/node-sdk is straightforward and powerful.
 # Errors in tracing:
 #     When they occur in the sync part, aka the immediate request, they are nicely shown in the trace.
 #     When they occur in the async part, aka the job, they are not shown in the trace. Even with BullMQ instrumentation.

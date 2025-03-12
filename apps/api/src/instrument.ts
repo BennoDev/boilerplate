@@ -3,9 +3,15 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-grpc';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-grpc';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
-import { B3Propagator } from '@opentelemetry/propagator-b3';
-import { Resource } from '@opentelemetry/resources';
-import { NodeSDK, tracing, logs, metrics, api } from '@opentelemetry/sdk-node';
+import {
+    NodeSDK,
+    tracing,
+    logs,
+    metrics,
+    api,
+    resources,
+    core,
+} from '@opentelemetry/sdk-node';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 import { tryGetEnv } from '@libs/core';
@@ -26,7 +32,7 @@ api.metrics.setGlobalMeterProvider(
 console.log('Setting up OpenTelemetry SDK');
 
 const sdk = new NodeSDK({
-    resource: new Resource({
+    resource: new resources.Resource({
         [ATTR_SERVICE_NAME]: projectName,
     }),
     traceExporter: exporter,
@@ -45,7 +51,7 @@ const sdk = new NodeSDK({
             // useProducerSpanAsConsumerParent: true,
         }),
     ],
-    textMapPropagator: new B3Propagator(),
+    textMapPropagator: new core.W3CBaggagePropagator(),
     serviceName: projectName,
 });
 

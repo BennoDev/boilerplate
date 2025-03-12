@@ -4,7 +4,7 @@ import {
     type MiddlewareConsumer,
     type NestModule,
 } from '@nestjs/common';
-import { metrics } from '@opentelemetry/api';
+import { api } from '@opentelemetry/sdk-node';
 
 import { CommonModule } from '../common';
 
@@ -27,7 +27,7 @@ import { HashService, MetricsService } from './services';
         MetricsService,
         {
             provide: meterInjectionToken,
-            useValue: metrics.getMeterProvider().getMeter('auth'),
+            useValue: api.metrics.getMeterProvider().getMeter('auth'),
         },
     ],
 })

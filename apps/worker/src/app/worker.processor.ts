@@ -2,13 +2,13 @@ import { UUID } from 'node:crypto';
 
 import { CreateRequestContext, MikroORM } from '@mikro-orm/core';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { SpanKind, trace } from '@opentelemetry/api';
+import { api } from '@opentelemetry/sdk-node';
 import { Job } from 'bullmq';
 
 import { Logger } from '@libs/logger';
 import { UserRepository } from '@libs/models';
 
-const tracer = trace.getTracer(process.env['SERVICE_NAME']!);
+const tracer = api.trace.getTracer(process.env['SERVICE_NAME']!);
 
 @Processor('worker')
 export class WorkerProcessor extends WorkerHost {
@@ -32,7 +32,7 @@ export class WorkerProcessor extends WorkerHost {
 
         return tracer.startActiveSpan(
             'tps call',
-            { attributes: { userId: user.id }, kind: SpanKind.CLIENT },
+            { attributes: { userId: user.id }, kind: api.SpanKind.CLIENT },
             async span => {
                 const url = new URL('http://localhost:3002/api');
                 url.searchParams.append('email', user.email);
