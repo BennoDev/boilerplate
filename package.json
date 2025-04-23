@@ -94,7 +94,7 @@
         "jest-environment-node": "^29.7.0",
         "jest-mock-extended": "^3.0.7",
         "lint-staged": "^15.5.1",
-        "npm-check-updates": "^17.1.18",
+        "npm-check-updates": "^18.0.0",
         "nx": "20.7.1",
         "prettier": "^3.5.3",
         "ts-jest": "^29.3.2",
