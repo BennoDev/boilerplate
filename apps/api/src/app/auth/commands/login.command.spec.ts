@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { UnauthorizedException } from '@nestjs/common';
-import { hash } from 'bcrypt';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { type Logger } from '@libs/logger';
@@ -31,11 +30,7 @@ describe('LoginHandler', () => {
         it('should validate the login credentials correctly', async () => {
             const email = faker.internet.email();
             const password = 'Password1%';
-            const hashedPassword = await hash(password, 10);
-            const user = createTestUser({
-                email,
-                password: hashedPassword,
-            });
+            const user = createTestUser({ email });
 
             userRepository.findOneOrFail.mockResolvedValue(user);
             hashService.compare.mockResolvedValue(true);
@@ -68,11 +63,7 @@ describe('LoginHandler', () => {
         it('should throw an error when the passwords do not match', async () => {
             const email = faker.internet.email();
             const password = 'Password1%';
-            const hashedPassword = await hash(`_${password}`, 10);
-            const user = createTestUser({
-                email,
-                password: hashedPassword,
-            });
+            const user = createTestUser({ email });
 
             userRepository.findOneOrFail.mockResolvedValue(user);
 

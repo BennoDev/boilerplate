@@ -1,5 +1,4 @@
 import { type EntityManager } from '@mikro-orm/core';
-import { hash } from 'bcrypt';
 import { mock, mockReset } from 'jest-mock-extended';
 
 import { type Logger } from '@libs/logger';
@@ -39,9 +38,7 @@ describe('ChangePasswordHandler', () => {
                 oldPassword: 'my_old_password',
                 newPassword: 'my_new_password',
             };
-            const user = createTestUser({
-                password: await hash(request.oldPassword, 10),
-            });
+            const user = createTestUser();
 
             userRepository.findOneOrFail.mockResolvedValue(user);
             hashService.compare.mockResolvedValue(true);
