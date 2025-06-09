@@ -1,7 +1,7 @@
 # =========================================================
 # Base image running node and setting the working directory
 # =========================================================
-FROM node:20-slim AS base
+FROM node:22-slim AS base
 
 WORKDIR /home/node/boilerplate
 
