@@ -38,9 +38,9 @@ const configOptions: ConfigModuleOptions = isRemoteEnvironment
         ThrottlerModule.forRootAsync({
             imports: [ConfigModule.forFeature(apiConfig)],
             inject: [apiConfig.KEY],
-            useFactory: (config: ApiConfig) => ({
+            useFactory: async (config: ApiConfig) => ({
                 storage: new ThrottlerStorageRedisService(
-                    getRedisClient(config),
+                    await getRedisClient(config),
                 ),
                 throttlers: [
                     {

@@ -1,15 +1,17 @@
-import IORedis from 'ioredis';
+import { createClient, type RedisClientType } from 'redis';
 
 import { type ApiConfig } from './api.config';
 
-let redisClient: IORedis | null = null;
+let redisClient: RedisClientType | null = null;
 
-export const getRedisClient = (config: ApiConfig): IORedis => {
+export const getRedisClient = async (
+    config: ApiConfig,
+): Promise<RedisClientType> => {
     if (!redisClient) {
-        redisClient = new IORedis({
-            host: config.redis.host,
-            port: config.redis.port,
+        redisClient = createClient({
+            url: `${config.redis.host}:${config.redis.port}`,
         });
+        await redisClient.connect();
     }
 
     return redisClient;
