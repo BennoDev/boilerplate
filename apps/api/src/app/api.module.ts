@@ -1,11 +1,11 @@
 import { join } from 'node:path';
 
+import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { Module } from '@nestjs/common';
 import { ConfigModule, type ConfigModuleOptions } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { minutesToMilliseconds } from 'date-fns';
-import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 
 import { Environment, tryGetEnv } from '@libs/core';
 import { LoggerModule } from '@libs/logger';
