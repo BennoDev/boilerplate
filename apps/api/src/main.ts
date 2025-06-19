@@ -136,7 +136,7 @@ const addSessionMiddleware = async (
     app: INestApplication,
     config: ApiConfig,
 ): Promise<void> => {
-    const client = getRedisClient(config);
+    const client = await getRedisClient(config);
 
     app.use(
         session({
