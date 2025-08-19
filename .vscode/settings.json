@@ -5,7 +5,8 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
     },
-    "jestrunner.jestCommand": "yarn cross-env TZ=UTC yarn jest",
     "eslint.validate": ["json"],
-    "markdown.extension.toc.levels": "2..6"
+    "jestrunner.jestCommand": "yarn cross-env TZ=UTC yarn jest",
+    "markdown.extension.toc.levels": "2..6",
+    "nxConsole.generateAiAgentRules": true
 }

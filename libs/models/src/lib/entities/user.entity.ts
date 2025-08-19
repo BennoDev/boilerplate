@@ -23,9 +23,6 @@ export class User extends BaseEntity {
     @Property({ unique: true })
     email!: string;
 
-    /**
-     * Defaults to REGISTERING.
-     */
     @Enum({ items: () => UserState, default: UserState.Registering })
     state: Opt<UserState> = UserState.Registering;
 
