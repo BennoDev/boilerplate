@@ -1,5 +1,5 @@
 import { Injectable, Inject, Scope } from '@nestjs/common';
-import { pino } from 'pino';
+import pino from 'pino';
 
 import { Environment } from '@libs/core';
 

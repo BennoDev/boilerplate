@@ -23,6 +23,7 @@ export class DatabaseModule {
             module: DatabaseModule,
             imports: [
                 MikroOrmModule.forRootAsync({
+                    driver: PostgreSqlDriver,
                     imports: [ConfigModule.forFeature(databaseConfig)],
                     inject: [Logger, databaseConfig.KEY],
                     useFactory: (logger: Logger, config: DatabaseConfig) => {
