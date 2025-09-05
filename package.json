@@ -59,7 +59,7 @@
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3.3.1",
-        "@faker-js/faker": "^10.0.0",
+        "@faker-js/faker": "^9.9.0",
         "@mikro-orm/cli": "^6.5.1",
         "@mikro-orm/migrations": "^6.5.1",
         "@mikro-orm/seeder": "^6.5.1",
